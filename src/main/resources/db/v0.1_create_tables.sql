@@ -1,3 +1,5 @@
+-- Create tables
+
 CREATE TABLE IF NOT EXISTS "user" (
   id       SERIAL,
   login    VARCHAR NOT NULL,
@@ -21,6 +23,7 @@ CREATE TABLE IF NOT EXISTS template_field (
   id          SERIAL,
   template_id INTEGER NOT NULL,
   title       VARCHAR NOT NULL,
+  label       VARCHAR NOT NULL,
   type        VARCHAR NOT NULL DEFAULT 'LINE',
   "order"     INTEGER NOT NULL DEFAULT 0,
   active      BOOLEAN NOT NULL DEFAULT TRUE,
@@ -35,10 +38,11 @@ CREATE TABLE IF NOT EXISTS document (
   id          SERIAL,
   template_id INTEGER NOT NULL,
   title       VARCHAR NOT NULL,
+  owner_id    INTEGER NOT NULL,
   active      BOOLEAN NOT NULL DEFAULT TRUE,
   CONSTRAINT document_pk PRIMARY KEY (id),
   CONSTRAINT document_template_fk FOREIGN KEY (template_id) REFERENCES template (id),
-  CONSTRAINT document_title_uk UNIQUE (template_id, title)
+  CONSTRAINT document_title_uk UNIQUE (template_id, title, owner_id)
 );
 
 CREATE TABLE IF NOT EXISTS document_field (
@@ -51,6 +55,8 @@ CREATE TABLE IF NOT EXISTS document_field (
   CONSTRAINT document_field_template_field_fk FOREIGN KEY (template_field_id) REFERENCES template_field (id),
   CONSTRAINT document_field_document_uk UNIQUE (document_id, template_field_id)
 );
+
+-- Rollback all actions
 
 DROP TABLE IF EXISTS document_field CASCADE;
 DROP TABLE IF EXISTS document CASCADE;
