@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS document_field (
   document_id       INTEGER NOT NULL,
   template_field_id INTEGER NOT NULL,
   value             VARCHAR NOT NULL,
+  active            BOOLEAN NOT NULL DEFAULT TRUE,
   CONSTRAINT document_field_pk PRIMARY KEY (id),
   CONSTRAINT document_field_document_fk FOREIGN KEY (document_id) REFERENCES document (id),
   CONSTRAINT document_field_template_field_fk FOREIGN KEY (template_field_id) REFERENCES template_field (id),

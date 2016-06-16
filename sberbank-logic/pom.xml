@@ -11,4 +11,11 @@
 
     <artifactId>sberbank-logic</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>ru.klapatnyuk</groupId>
+            <artifactId>sberbank-model</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
