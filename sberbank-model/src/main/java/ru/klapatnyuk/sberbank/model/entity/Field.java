@@ -1,6 +1,6 @@
-package ru.klapatnyuk.sberbank.model;
+package ru.klapatnyuk.sberbank.model.entity;
 
-import ru.klapatnyuk.sberbank.model.api.EnumType;
+import ru.klapatnyuk.sberbank.model.entity.api.EnumType;
 
 import java.io.Serializable;
 

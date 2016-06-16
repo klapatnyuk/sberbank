@@ -1,4 +1,4 @@
-package ru.klapatnyuk.sberbank.model;
+package ru.klapatnyuk.sberbank.model.entity;
 
 import java.util.List;
 

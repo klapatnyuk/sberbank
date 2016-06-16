@@ -1,6 +1,6 @@
-package ru.klapatnyuk.sberbank.model;
+package ru.klapatnyuk.sberbank.model.entity;
 
-import ru.klapatnyuk.sberbank.model.api.Entity;
+import ru.klapatnyuk.sberbank.model.entity.api.Entity;
 
 /**
  * @author klapatnyuk

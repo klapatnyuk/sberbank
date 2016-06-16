@@ -1,4 +1,4 @@
-package ru.klapatnyuk.sberbank.model.api;
+package ru.klapatnyuk.sberbank.model.entity.api;
 
 /**
  * @author klapatnyuk
