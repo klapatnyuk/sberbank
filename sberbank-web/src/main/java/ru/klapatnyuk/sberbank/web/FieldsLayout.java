@@ -26,11 +26,11 @@ public class FieldsLayout extends VerticalLayout {
 
     private final List<HorizontalLayout> layouts = new ArrayList<>();
     private final BlurListener blurListener = new BlurListener();
+    private final UpListener upListener = new UpListener();
+    private final DownListener downListener = new DownListener();
 
     public FieldsLayout() {
-        HorizontalLayout row = newRow(null);
-        layouts.add(row);
-        addComponent(row);
+        addComponent(newRow(null));
 
 //        // second empty line added for usability
 //        row = newRow(null);
@@ -48,15 +48,79 @@ public class FieldsLayout extends VerticalLayout {
     }
 
     public void setFields(List<Field> fields) {
-        layouts.clear();
         removeAllComponents();
         if (fields != null) {
-            fields.stream().map(this::newRow).forEach(item -> {
-                layouts.add(item);
-                addComponent(item);
-            });
+            fields.stream().map(this::newRow).forEach(this::addComponent);
         }
         addComponent(newRow(null));
+    }
+
+    @Override
+    public void addComponent(Component component) {
+        HorizontalLayout row = (HorizontalLayout) component;
+
+        // add row
+        layouts.add(row);
+        super.addComponent(row);
+
+        // update only neighbors navigate buttons
+        if (layouts.size() <= 2) {
+            return;
+        }
+        int index = layouts.indexOf(row);
+        ((HorizontalLayout) layouts.get(index - 2).getComponent(BUTTONS)).getComponent(DOWN).setEnabled(true);
+        ((HorizontalLayout) layouts.get(index - 1).getComponent(BUTTONS)).getComponent(UP).setEnabled(true);
+    }
+
+    @Override
+    public void addComponent(Component component, int index) {
+        HorizontalLayout row = (HorizontalLayout) component;
+
+        // add row
+        layouts.add(index, row);
+        super.addComponent(row, index);
+
+        // update navigate buttons
+        if (layouts.size() <= 2) {
+            return;
+        }
+        // self
+        ((HorizontalLayout) row.getComponent(BUTTONS)).getComponent(UP).setEnabled(index > 0);
+        ((HorizontalLayout) row.getComponent(BUTTONS)).getComponent(DOWN).setEnabled(index < layouts.size() - 2);
+
+        // neighbors
+        if (index > 0 && index == layouts.size() - 2) {
+            ((HorizontalLayout) layouts.get(index - 1).getComponent(BUTTONS)).getComponent(DOWN).setEnabled(true);
+        }
+        if (index == 0) {
+            ((HorizontalLayout) layouts.get(index + 1).getComponent(BUTTONS)).getComponent(UP).setEnabled(true);
+        }
+    }
+
+    @Override
+    public void removeComponent(Component component) {
+        HorizontalLayout row = (HorizontalLayout) component;
+
+        // update only neighbors navigate buttons
+        if (layouts.size() > 2) {
+            int index = layouts.indexOf(row);
+            if (index > 0 && index == layouts.size() - 2) {
+                ((HorizontalLayout) layouts.get(index - 1).getComponent(BUTTONS)).getComponent(DOWN).setEnabled(false);
+            }
+            if (index == 0) {
+                ((HorizontalLayout) layouts.get(index + 1).getComponent(BUTTONS)).getComponent(UP).setEnabled(false);
+            }
+        }
+
+        // remove row
+        layouts.remove(row);
+        super.removeComponent(row);
+    }
+
+    @Override
+    public void removeAllComponents() {
+        layouts.clear();
+        super.removeAllComponents();
     }
 
     private static boolean isEmptyRow(HorizontalLayout row, FieldEvents.TextChangeEvent event) {
@@ -117,12 +181,14 @@ public class FieldsLayout extends VerticalLayout {
         type.setItemCaption(Field.Type.CHECKBOX, SberbankUI.I18N.getString(SberbankKey.Form.STRINGS_TYPE_CHECKBOX));
 
         Button up = new Button();
+        up.setEnabled(false);
         up.setIcon(new ThemeResource("img/close-16x16.png"));
         up.setWidth(StyleDimensions.WIDTH_XXS_BUTTON);
         up.setStyleName(StyleNames.BUTTON_TRANSPARENT);
         up.setDescription(SberbankUI.I18N.getString(SberbankKey.Form.STRINGS_UP));
 
         Button down = new Button();
+        down.setEnabled(false);
         down.setIcon(new ThemeResource("img/close-16x16.png"));
         down.setWidth(StyleDimensions.WIDTH_XXS_BUTTON);
         down.setStyleName(StyleNames.BUTTON_TRANSPARENT);
@@ -167,9 +233,45 @@ public class FieldsLayout extends VerticalLayout {
         label.addBlurListener(blurListener);
         type.addBlurListener(blurListener);
 
+        up.addClickListener(upListener);
+        down.addClickListener(downListener);
         remove.addClickListener(event -> removeComponent(row));
 
         return row;
+    }
+
+    /**
+     * @author klapatnyuk
+     */
+    private class UpListener implements Button.ClickListener {
+
+        @Override
+        public void buttonClick(Button.ClickEvent event) {
+            HorizontalLayout row = (HorizontalLayout) ((Component) event.getSource()).getParent().getParent();
+            int index = layouts.indexOf(row);
+            if (index < 1) {
+                return;
+            }
+            removeComponent(row);
+            addComponent(row, index - 1);
+        }
+    }
+
+    /**
+     * @author klapatnyuk
+     */
+    private class DownListener implements Button.ClickListener {
+
+        @Override
+        public void buttonClick(Button.ClickEvent event) {
+            HorizontalLayout row = (HorizontalLayout) ((Component) event.getSource()).getParent().getParent();
+            int index = layouts.indexOf(row);
+            if (index > layouts.size() - 3) {
+                return;
+            }
+            removeComponent(row);
+            addComponent(row, index + 1);
+        }
     }
 
     /**
@@ -218,7 +320,6 @@ public class FieldsLayout extends VerticalLayout {
                 return;
             }
             nextRow = newRow(null);
-            layouts.add(nextRow);
             addComponent(nextRow);
         }
     }
