@@ -7,8 +7,6 @@ import com.vaadin.ui.declarative.Design;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -127,10 +125,8 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
     }
 
     private void initCopyright() {
-        String contacts = SberbankUI.I18N.getString(SberbankKey.Header.FOOTER_COPYRIGHT,
-                ZonedDateTime.now().format(DateTimeFormatter.ofPattern("yyyy")));
-        String copyright = SberbankUI.I18N.getString(SberbankKey.Header.FOOTER_PRODUCTION, contacts);
-        copyrightLabel.setValue(copyright);
+        copyrightLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Header.FOOTER_PRODUCTION,
+                SberbankUI.I18N.getString(SberbankKey.Header.FOOTER_COPYRIGHT)));
     }
 
     private void initTabs() {
@@ -277,7 +273,8 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
 
         private static final long serialVersionUID = -5336826706220710041L;
 
-        public MenuCommand() {}
+        public MenuCommand() {
+        }
 
         @Override
         public void menuSelected(MenuBar.MenuItem item) {
@@ -310,7 +307,8 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
 
         private static final long serialVersionUID = 5134839118306122334L;
 
-        public ActionMenuCommand() {}
+        public ActionMenuCommand() {
+        }
 
         @Override
         public void menuSelected(MenuBar.MenuItem item) {

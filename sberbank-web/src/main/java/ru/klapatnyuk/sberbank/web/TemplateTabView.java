@@ -34,6 +34,9 @@ public class TemplateTabView extends TabView {
     private TextField titleField;
 
     @SuppressWarnings("unused")
+    private Label titleSeparatorLabel;
+
+    @SuppressWarnings("unused")
     private Label fieldsLabel;
     @SuppressWarnings("unused")
     private FieldsLayout fieldsLayout;
@@ -126,6 +129,9 @@ public class TemplateTabView extends TabView {
         titleLabel.setWidth(StyleDimensions.WIDTH_S);
         titleField.setWidth("100%");
         titleField.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CHOICE_CUSTOM_PROMPT));
+
+        titleSeparatorLabel.setWidth("100%");
+        titleSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
 
         fieldsLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_FIELDS_LABEL));
         fieldsLabel.setWidth(StyleDimensions.WIDTH_S);

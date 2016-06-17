@@ -133,7 +133,7 @@ public class DocumentTabView extends TabView {
         editSeparatorLabel.setWidth("100%");
         editSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
 
-        editLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_EDIT));
+        editLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_MESSAGE_EDIT));
 
         verticalSeparatorLabel.setWidth("1px");
 

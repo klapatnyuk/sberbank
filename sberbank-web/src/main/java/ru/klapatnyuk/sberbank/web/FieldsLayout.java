@@ -18,6 +18,11 @@ public class FieldsLayout extends VerticalLayout {
         HorizontalLayout row = newRow(null);
         layouts.add(row);
         addComponent(row);
+
+        // second empty line added for usability
+        row = newRow(null);
+        layouts.add(row);
+        addComponent(row);
     }
 
     public void clear() {
