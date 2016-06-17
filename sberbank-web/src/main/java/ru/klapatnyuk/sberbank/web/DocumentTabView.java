@@ -1,7 +1,6 @@
 package ru.klapatnyuk.sberbank.web;
 
 import com.vaadin.annotations.DesignRoot;
-import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.declarative.Design;
 
@@ -11,75 +10,153 @@ import com.vaadin.ui.declarative.Design;
 @DesignRoot
 public class DocumentTabView extends TabView {
 
-    private static final long serialVersionUID = -6068846613188718674L;
+    private static final long serialVersionUID = -2698683814256829227L;
 
-    private Panel pollContainer;
-    private VerticalLayout pollLayout;
-    private Label emptyLabel;
+    private VerticalLayout patternLayout;
+    private Button createButton;
+    private Label editSeparatorLabel;
+    private Label editLabel;
+    private Panel patternContainer;
+    private VerticalLayout editPatternLayout;
     private Label verticalSeparatorLabel;
-    private Label emptySelectionLabel;
-    private Label statusLabel;
     private Label questionLabel;
-    private VerticalLayout choiceLayout;
-    private HorizontalLayout printLayout;
-    private Button printButton;
+    private TextArea bodyField;
+    private Label choiceLabel;
+    private StringSelect choiceSelect;
+    private CheckBox allowCustomField;
+    private HorizontalLayout customLayout;
+    private Label customLabel;
+    private TextField customField;
+    private CheckBox allowMultiplyField;
+    private Label structureSeparatorLabel;
+    private Label folderLabel;
+    private Label currentFolderLabel;
+    private Button folderButton;
+    private Label tagLabel;
+    private StringSelect tagSelect;
+    private Label submitSeparatorLabel;
+    private Button submitButton;
 
     public DocumentTabView() {
         Design.read(this);
         init();
     }
 
-    public AbstractOrderedLayout getPollLayout() {
-        return pollLayout;
+    public Button getCreateButton() {
+        return createButton;
     }
 
-    public Label getEmptySelectionLabel() {
-        return emptySelectionLabel;
+    public Label getEditSeparatorLabel() {
+        return editSeparatorLabel;
     }
 
-    public Label getStatusLabel() {
-        return statusLabel;
+    public Label getEditLabel() {
+        return editLabel;
     }
 
-    public Label getQuestionLabel() {
-        return questionLabel;
+    public SingleComponentContainer getPatternContainer() {
+        return patternContainer;
     }
 
-    public AbstractOrderedLayout getChoiceLayout() {
-        return choiceLayout;
+    public AbstractOrderedLayout getEditPatternLayout() {
+        return editPatternLayout;
     }
 
-    public AbstractOrderedLayout getPrintLayout() {
-        return printLayout;
+    public AbstractTextField getBodyField() {
+        return bodyField;
     }
 
-    public Label getEmptyLabel() {
-        return emptyLabel;
+    public StringSelect getChoiceSelect() {
+        return choiceSelect;
+    }
+
+    public AbstractField<Boolean> getAllowCustomField() {
+        return allowCustomField;
+    }
+
+    public AbstractOrderedLayout getCustomLayout() {
+        return customLayout;
+    }
+
+    public AbstractTextField getCustomField() {
+        return customField;
+    }
+
+    public AbstractField<Boolean> getAllowMultiplyField() {
+        return allowMultiplyField;
+    }
+
+    public Label getCurrentFolderLabel() {
+        return currentFolderLabel;
+    }
+
+    public Button getFolderButton() {
+        return folderButton;
+    }
+
+    public StringSelect getTagSelect() {
+        return tagSelect;
+    }
+
+    public Button getSubmitButton() {
+        return submitButton;
     }
 
     @Override
     protected void init() {
         super.init();
 
-        pollContainer.setWidth("240px");
+        patternLayout.setWidthUndefined();
+        patternLayout.setHeight("100%");
 
-        emptyLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLLS_EMPTY));
-        emptyLabel.setWidth("100%");
+        createButton.setWidth(StyleDimensions.WIDTH_L);
+        createButton.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_CREATE));
+        createButton.addStyleName(StyleNames.BUTTON_ACTIVE);
+
+        editSeparatorLabel.setWidth("100%");
+        editSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
+
+        editLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_EDIT));
 
         verticalSeparatorLabel.setWidth("1px");
 
-        emptySelectionLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLLS_SELECTION_EMPTY));
-        emptySelectionLabel.setWidth("100%");
+        questionLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_QUESTION));
+        questionLabel.setWidth(StyleDimensions.WIDTH_S);
+        bodyField.setHeight("100px");
+        bodyField.setValidationVisible(false);
+        bodyField.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_PROMPT));
 
-        statusLabel.setWidth(StyleDimensions.WIDTH_L);
+        choiceLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CHOICE));
+        choiceLabel.setWidth(StyleDimensions.WIDTH_S);
 
-        questionLabel.setContentMode(ContentMode.HTML);
+        allowCustomField.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CUSTOM));
+        allowCustomField.setHeight(StyleDimensions.HEIGHT_S);
 
-        printButton.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLLS_PRINT));
-        printButton.setStyleName(StyleNames.BUTTON_STANDARD);
-        printButton.setWidth(StyleDimensions.WIDTH);
+        customLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CUSTOM_LABEL));
+        customLabel.setWidth(StyleDimensions.WIDTH_S);
+        customField.setWidth("100%");
+        customField.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CHOICE_CUSTOM_PROMPT));
 
-        // TODO temp
-        printButton.setEnabled(false);
+        allowMultiplyField.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_MULTIPLY));
+        allowMultiplyField.setHeight(StyleDimensions.HEIGHT_S);
+
+        structureSeparatorLabel.setWidth("100%");
+        structureSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
+
+        folderLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_FOLDER));
+        folderLabel.setWidth(StyleDimensions.WIDTH_S);
+        currentFolderLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_FOLDER_EMPTY));
+        currentFolderLabel.setWidthUndefined();
+        folderButton.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_FOLDER_SET));
+        folderButton.setWidth(StyleDimensions.WIDTH);
+
+        tagLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_TAGS));
+        tagLabel.setWidth(StyleDimensions.WIDTH_S);
+
+        submitSeparatorLabel.setWidth("100%");
+        submitSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
+
+        submitButton.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_ADD));
+        submitButton.setWidth(StyleDimensions.WIDTH);
     }
 }

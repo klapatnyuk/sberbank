@@ -1,26 +1,29 @@
 package ru.klapatnyuk.sberbank.web;
 
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vaadin.addons.toggle.ButtonGroupSelectionEvent;
 
-import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author klapatnyuk
  */
-public class DocumentTab extends AbstractTab {
+public class DocumentTab extends AbstractTab implements EditableTab {
 
-    private static final long serialVersionUID = 621247325187983282L;
-    private static final Logger LOG = LoggerFactory.getLogger(DocumentTab.class);
-    private static final int LABEL_LENGTH = Integer.parseInt(SberbankUI.CONFIG.getString(ConfigKey.MESSAGE_SUBJECT_LENGTH.getKey()));
+    private static final long serialVersionUID = 5490116135419202151L;
+    private static final int LENGTH = Integer.parseInt(SberbankUI.CONFIG.getString(ConfigKey.PATTERN_SUBJECT_LENGTH.getKey()));
+    private static final Logger LOGGER = LoggerFactory.getLogger(DocumentTab.class);
 
-    //private final PollService service = new PollService(BrownieSession.get(), BrownieConfiguration.get());
-    //private final Map<Long, PollResponse> pollModels = new TreeMap<>(Collections.reverseOrder());
+    private Integer patternIndex = -1;
+//    private PollPattern pattern;
+//    private Folder folder;
+    private boolean updated = false;
 
-    private Long pollId;
-
-    private ButtonGroup pollButtonGroup = new ButtonGroup();
+    private org.vaadin.addons.toggle.ButtonGroup buttonGroup = new org.vaadin.addons.toggle.ButtonGroup();
     private DocumentTabView design;
 
     public DocumentTab(MenuTab tab, MenuTab actionTab) {
@@ -29,61 +32,106 @@ public class DocumentTab extends AbstractTab {
 
     @Override
     public boolean isUpdated() {
-        return false;
+        return updated;
     }
 
     @Override
     public void update() {
-        /*PollsResponse response;
-        try {
-            response = service.getPolls(nts.trueip.frontend.common.rpc.brownie.poll.PollService.PollBusinessStatus.ALL);
-        } catch (RemoteServiceException e) {
-            BrownieErrorHandler.handle(e, I18N.getString(MSGR_POLLS_RECEIVE_ERROR));
+        /*buttonGroup = new org.vaadin.addons.toggle.ButtonGroup();
+        design.getEditPatternLayout().removeAllComponents();
+        if (BrownieSession.getMasterdata().getPolls() == null) {
             return;
         }
-        pollButtonGroup = new ButtonGroup();
-        design.getPollLayout().removeAllComponents();
-        pollModels.clear();
-
-        final List<String> captions = new ArrayList<>();
-        response.getPolls().sort(new PollComparator());
-        response.getPolls().forEach(poll -> {
-            captions.add(poll.getBody());
-            pollModels.put(poll.getId(), poll);
+        BrownieSession.getMasterdata().getPolls().stream().map(PollPattern::getBody).forEach(body -> {
+            Button button = new Button((body.length() > LENGTH) ? body.substring(0, LENGTH) + ".." : body);
+            button.setDescription(body);
+            button.setWidth("100%");
+            button.addStyleName("pattern-button");
+            button.addClickListener(event -> clickPatternButton(event));
+            buttonGroup.addButton(button);
+            design.getEditPatternLayout().addComponent(button);
         });
-        for (String caption : captions) {
-            final String croppedCaption = (caption.length() > LABEL_LENGTH) ? caption.substring(0, LABEL_LENGTH) + ".." : caption;
-            Button button = new Button(croppedCaption);
-            button.setDescription(caption);
-            pollButtonGroup.addButton(button);
-        }
-        final Button[] buttons = pollButtonGroup.getButtons();
-        pollButtonGroup.addSelectionListener(event -> selectPoll(event));
-        Arrays.asList(buttons).forEach(button -> design.getPollLayout().addComponent(button));
-        if (buttons.length > 0) {
-            design.getPollLayout().removeComponent(design.getEmptyLabel());
-            int index = 0;
-            if (pollId != null && pollModels.containsKey(pollId)) {
-                index = new ArrayList<>(pollModels.keySet()).indexOf(pollId);
+        final boolean nonEmpty = buttonGroup.getButtons().length > 0;
+        design.getEditSeparatorLabel().setVisible(nonEmpty);
+        design.getEditLabel().setVisible(nonEmpty);
+        design.getPatternContainer().setVisible(nonEmpty);
+        if (nonEmpty) {
+            buttonGroup.addSelectionListener(event -> selectPattern(event));
+            if (patternIndex >= 0) {
+                buttonGroup.setSelectedButtonIndex(patternIndex);
+                selectPattern(new ButtonGroupSelectionEvent(buttonGroup, buttonGroup.getButtons()[patternIndex], null));
+            } else if (folder != null) {
+                design.getCurrentFolderLabel().setValue(folder.getTitle());
             }
-            pollButtonGroup.setSelectedButtonIndex(index);
-            selectPoll(new ButtonGroupSelectionEvent(pollButtonGroup, buttons[index], null));
-        } else {
-            design.getPollLayout().addComponent(design.getEmptyLabel());
         }
-
-        boolean empty = buttons.length == 0;
-        design.getEmptySelectionLabel().setVisible(empty);
-        design.getStatusLabel().setVisible(!empty);
-        design.getQuestionLabel().setVisible(!empty);
-        design.getChoiceLayout().setVisible(!empty);
-        design.getPrintLayout().setVisible(!empty);*/
+        updated = true;*/
     }
 
     @Override
     public String getHeader() {
-        return SberbankUI.I18N.getString(SberbankKey.Header.H2, SberbankUI.I18N.getString(SberbankKey.Menu.MSGR),
-                SberbankUI.I18N.getString(SberbankKey.Header.MSGR_POLLS));
+        return SberbankUI.I18N.getString(SberbankKey.Header.PTRN_POLL);
+    }
+
+    @Override
+    public boolean validate() {
+        List<WarningMessage> messages = new ArrayList<>();
+
+        if (design.getBodyField().getValue().trim().isEmpty()) {
+            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_BODY_VALIDATE),
+                    design.getBodyField(), getValidationSource()));
+        }
+
+        if (design.getChoiceSelect().getStrings().size() < 2) {
+            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CHOICES_REQUIRED),
+                    design.getChoiceSelect().getLastField(),
+                    getValidationSource()));
+        } else if (design.getChoiceSelect().hasDuplicates()) {
+            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CHOICES_DUPLICATES),
+                    design.getChoiceSelect().getFirstDuplicateField(),
+                    getValidationSource()));
+        }
+
+        if (design.getAllowCustomField().getValue() && design.getCustomField().getValue().trim().isEmpty()) {
+            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CUSTOM_REQUIRED),
+                    design.getCustomField(), getValidationSource()));
+        }
+
+//        if (folder == null) {
+//            messages.add(new WarningMessage(SberbankUI.I18N.getString(PTRN_FOLDER_VALIDATE), design.getFolderButton(), getValidationSource()));
+//        }
+
+        SberbankUI.getWarningWindow().addAll(messages);
+        return messages.isEmpty();
+    }
+
+    @Override
+    public Component getValidationSource() {
+        return design.getSubmitButton();
+    }
+
+    @Override
+    public void clear() {
+        design.getBodyField().clear();
+        design.getChoiceSelect().clear();
+        design.getAllowCustomField().clear();
+        design.getCustomField().clear();
+        design.getAllowMultiplyField().clear();
+//        folder = null;
+        design.getCurrentFolderLabel().setValue(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_FOLDER_EMPTY));
+        design.getTagSelect().clear();
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+
+//        initFolderWindow();
+
+        design.getCreateButton().addClickListener(event -> clickCreateButton());
+        design.getAllowCustomField()
+                .addValueChangeListener(event -> design.getCustomLayout().setVisible((boolean) event.getProperty().getValue()));
+//        design.getFolderButton().addClickListener(event -> clickFolderButton());
+        design.getSubmitButton().addClickListener(event -> clickSubmitButton());
     }
 
     @Override
@@ -94,79 +142,155 @@ public class DocumentTab extends AbstractTab {
         return design;
     }
 
-    private void selectPoll(ButtonGroupSelectionEvent event) {
-        /*Button previousButton = event.getPreviousButton();
-        if (previousButton != null) {
-            pollButtonGroup.getButton(pollButtonGroup.indexOfButton(previousButton)).removeStyleName("active");
+//    private void initFolderWindow() {
+//        folderWindow = new FolderWindow(SberbankUI.I18N.getString(Header.PTRN_WINDOW_FOLDER));
+//        folderWindow.getLayout().getOkButton().addClickListener(event -> clickFolderOkButton());
+//    }
+
+    private void selectPattern(ButtonGroupSelectionEvent event) {
+        /*if (event.getPreviousButton() != null) {
+            event.getPreviousButton().removeStyleName(StyleNames.BUTTON_ACTIVE);
         }
-        Button selectedButton = event.getSelectedButton();
-        pollButtonGroup.getButton(pollButtonGroup.indexOfButton(selectedButton)).addStyleName("active");
-        pollId = new ArrayList<>(pollModels.keySet()).get(pollButtonGroup.indexOfButton(selectedButton));
-        LOG.debug("Current poll id: " + pollId);
-        updatePollPanel();*/
+        design.getCreateButton().removeStyleName(StyleNames.BUTTON_ACTIVE);
+        event.getSelectedButton().addStyleName(StyleNames.BUTTON_ACTIVE);
+        design.getSubmitButton().setCaption(SberbankUI.I18N.getString(PTRN_POLL_SAVE));
+        patternIndex = buttonGroup.indexOfButton(buttonGroup.getSelectedButton());
+        pattern = BrownieSession.getMasterdata().getPolls().get(patternIndex);
+        design.getBodyField().setValue(pattern.getBody());
+        design.getChoiceSelect().setStrings(pattern.getAnswers().stream().filter(answer -> !answer.isCustom()).map(PollAnswer::getSequence)
+                .collect(Collectors.toList()));
+        final PollAnswer customAnswer = pattern.findCustomAnswer();
+        design.getAllowCustomField().setValue(customAnswer != null);
+        if (customAnswer == null) {
+            design.getCustomField().clear();
+        } else {
+            design.getCustomField().setValue(customAnswer.getSequence());
+        }
+        design.getAllowMultiplyField().setValue(pattern.isMultiple());
+        folder = pattern.getFolder();
+        design.getCurrentFolderLabel().setValue(folder.getTitle());
+        design.getTagSelect().setStrings(pattern.getTags());*/
     }
 
-    private void updatePollPanel() {
-        /*LOG.debug("Poll panel update started");
-
-        PollResponse currentPollModel = pollModels.get(pollId);
-        PollsResponse response;
-        try {
-            response = service.getPollById(currentPollModel.getId(), true);
-        } catch (RemoteServiceException e) {
-            BrownieErrorHandler.handle(e, I18N.getString(MSGR_POLLS_RECEIVE_SPECIFIC_ERROR));
-            return;
-        }
-        PollResponse model = response.getPolls().get(0);
-        design.getStatusLabel().setStyleName("status-label");
-
-        if (model.getPollStatus() == PollStatus.IN_PROGRESS) {
-            design.getStatusLabel().addStyleName(StyleNames.LABEL_ACTIVE);
-            design.getStatusLabel().setValue(I18N.getString(MSGR_POLLS_STATUS_ACTIVE));
-        } else if (model.getPollStatus() == PollStatus.FINISHED) {
-            design.getStatusLabel().addStyleName(StyleNames.LABEL_FINISHED);
-            design.getStatusLabel().setValue(I18N.getString(MSGR_POLLS_STATUS_FINISHED));
-        } else {
-            design.getStatusLabel().addStyleName(StyleNames.LABEL_STOPPED);
-            design.getStatusLabel().setValue(I18N.getString(MSGR_POLLS_STATUS_STOPPED));
-        }
-
-        design.getQuestionLabel().setValue(model.getBody().replaceAll("(\r\n|\n)", "<br />").replaceAll("(<br />){2,}", "<br />"));
-
-        design.getChoiceLayout().removeAllComponents();
-        QuestionResponse question = model.getQuestion();
-        List<ChoiceResponse> choices = question.getChoices();
-
-        // calculate percents
-        double max = 0;
-        for (ChoiceResponse choice : choices) {
-            if (choice.getQuantity() == null) {
-                AbstractUI.getWarningWindow().add(I18N.getString(MSGR_POLLS_RECEIVE_RESULT_ERROR));
-            } else if (choice.getQuantity() > max) {
-                max = choice.getQuantity();
-            }
-        }
-        for (ChoiceResponse choice : choices) {
-            Label choiceLabel = new Label(I18N.getString(MSGR_POLLS_CHOICE, choice.getValue()));
-            choiceLabel.setHeight(StyleDimensions.HEIGHT_S);
-            Component percentComponent;
-            if (choice.getQuantity() == 0) {
-                Label percentLabel = new Label(choice.getQuantity().toString());
-                percentLabel.setHeight(StyleDimensions.HEIGHT_S);
-                percentLabel.setWidthUndefined();
-                percentLabel.setStyleName("label-percent");
-                percentComponent = percentLabel;
+    private void clickPatternButton(Button.ClickEvent event) {
+        /*final Button button = event.getButton();
+        final int index = buttonGroup.indexOfButton(button);
+        if (!patternIndex.equals(index)) {
+            patternIndex = index;
+            design.getCreateButton().removeStyleName(StyleNames.BUTTON_ACTIVE);
+            button.addStyleName(StyleNames.BUTTON_ACTIVE);
+            design.getSubmitButton().setCaption(I18N.getString(PTRN_MESSAGE_SAVE));
+            pattern = BrownieSession.getMasterdata().getPolls().get(patternIndex);
+            design.getBodyField().setValue(pattern.getBody());
+            design.getChoiceSelect().setStrings(pattern.getAnswers().stream().filter(answer -> !answer.isCustom())
+                    .map(PollAnswer::getSequence).collect(Collectors.toList()));
+            final PollAnswer customAnswer = pattern.findCustomAnswer();
+            design.getAllowCustomField().setValue(customAnswer != null);
+            if (customAnswer == null) {
+                design.getCustomField().clear();
             } else {
-                Button percentButton = new Button(choice.getQuantity().toString());
-                percentButton.setHeight(StyleDimensions.HEIGHT_S);
-                percentButton.setWidth(Math.round(choice.getQuantity() / max * 100) + "%");
-                percentComponent = percentButton;
+                design.getCustomField().setValue(customAnswer.getSequence());
             }
-            VerticalLayout choiceLayout = new VerticalLayout();
-            choiceLayout.setStyleName("choice-layout");
-            choiceLayout.addComponent(choiceLabel);
-            choiceLayout.addComponent(percentComponent);
-            design.getChoiceLayout().addComponent(choiceLayout);
+            design.getAllowMultiplyField().setValue(pattern.isMultiple());
+            design.getTagSelect().setStrings(pattern.getTags());
+            folder = pattern.getFolder();
+            design.getCurrentFolderLabel().setValue(folder.getTitle());
         }*/
     }
+
+    private void clickCreateButton() {
+        design.getCreateButton().addStyleName(StyleNames.BUTTON_ACTIVE);
+        if (buttonGroup.getSelectedButton() != null) {
+            buttonGroup.getSelectedButton().removeStyleName(StyleNames.BUTTON_ACTIVE);
+        }
+        design.getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_ADD));
+        if (patternIndex >= 0) {
+            patternIndex = -1;
+            clear();
+        }
+    }
+
+    private void clickSubmitButton() {
+        /*if (!validate()) {
+            return;
+        }
+
+        final PatternService service = new PatternService(BrownieSession.get(), BrownieConfiguration.get());
+        if (patternIndex >= 0) {
+            // edit existed pattern
+            PollPatternRequest model = new PollPatternRequest();
+            model.setSid(pattern.getSid());
+            model.setDeleted(Pattern.DELETED);
+            model.setBody(design.getBodyField().getValue().trim());
+            model.setChoiceType(design.getAllowMultiplyField().getValue() ? PollQuestionType.MULTIPLE_ANSWERS.toString()
+                    : PollQuestionType.SINGLE_ANSWER.toString());
+            model.setAnswers(design.getChoiceSelect().getStrings());
+
+            model.setCustom(design.getAllowCustomField().getValue());
+            if (design.getAllowCustomField().getValue()) {
+                model.setCustomAnswer(design.getCustomField().getValue().trim());
+            }
+            model.setFolderId(folder.getId());
+            model.setTags(design.getTagSelect().getUniqueStrings());
+
+            PollPatternsRequest request = new PollPatternsRequest(Arrays.asList(model));
+            PollPatternsResponse response;
+            try {
+                response = service.setPolls(request);
+            } catch (RemoteServiceException e) {
+                BrownieErrorHandler.handle(e, I18N.getString(PTRN_POLL_EDIT_ERROR));
+                return;
+            }
+            PollPattern pattern = PollPattern.valueOf(response.getData().get(0));
+            List<PollPattern> patterns = BrownieSession.getMasterdata().getPolls();
+            patterns.set(patternIndex, pattern);
+            Collections.sort(patterns);
+            int index = patterns.stream().map(Pattern::getSid).collect(Collectors.toList()).indexOf(pattern.getSid());
+            patternIndex = (index < 0) ? 0 : index;
+            Tray.show(I18N.getString(PTRN_POLL_UPDATED));
+            update();
+        } else {
+            // create new pattern
+            PollPatternRequest model = new PollPatternRequest();
+            model.setBody(design.getBodyField().getValue().trim());
+            model.setChoiceType(design.getAllowMultiplyField().getValue() ? PollQuestionType.MULTIPLE_ANSWERS.toString()
+                    : PollQuestionType.SINGLE_ANSWER.toString());
+            model.setAnswers(design.getChoiceSelect().getStrings());
+            model.setCustom(design.getAllowCustomField().getValue());
+            if (design.getAllowCustomField().getValue()) {
+                model.setCustomAnswer(design.getCustomField().getValue().trim());
+            }
+            model.setFolderId(folder.getId());
+            model.setTags(design.getTagSelect().getUniqueStrings());
+            model.setDeleted(false);
+
+            PollPatternsRequest request = new PollPatternsRequest(Arrays.asList(model));
+            PollPatternsResponse response = null;
+            try {
+                response = service.setPolls(request);
+            } catch (RemoteServiceException e) {
+                BrownieErrorHandler.handle(e, I18N.getString(PTRN_POLL_CREATE_ERROR));
+            }
+            if (response != null) {
+                PollPattern pattern = PollPattern.valueOf(response.getData().get(0));
+                List<PollPattern> patterns = BrownieSession.getMasterdata().getPolls();
+                patterns.add(pattern);
+                Collections.sort(patterns);
+                Tray.show(I18N.getString(PTRN_POLL_CREATED));
+                clear();
+                update();
+            }
+        }*/
+    }
+
+//    private void clickFolderButton() {
+//        folderWindow.getLayout().setFolderId((folder == null) ? null : folder.getId());
+//        UI.getCurrent().addWindow(folderWindow);
+//    }
+
+//    private void clickFolderOkButton() {
+//        folderWindow.close();
+//        folder = BrownieSession.getMasterdata().getFolders().get(folderWindow.getLayout().getFolderId());
+//        design.getCurrentFolderLabel().setValue(folder.getTitle());
+//    }
 }
