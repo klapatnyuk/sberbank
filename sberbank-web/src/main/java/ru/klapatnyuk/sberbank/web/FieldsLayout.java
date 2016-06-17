@@ -110,15 +110,16 @@ public class FieldsLayout extends VerticalLayout {
         buttonsLayout.setExpandRatio(close, 1);
 
         HorizontalLayout row = new HorizontalLayout();
+        row.setWidth("100%");
         row.addComponent(title);
         row.addComponent(label);
         row.addComponent(type);
         row.addComponent(buttonsLayout);
 
-        row.setExpandRatio(title, 3);
-        row.setExpandRatio(label, 3);
-        row.setExpandRatio(type, 2);
-        row.setExpandRatio(buttonsLayout, 2);
+        row.setExpandRatio(title, 6);
+        row.setExpandRatio(label, 6);
+        row.setExpandRatio(type, 3);
+        row.setExpandRatio(buttonsLayout, 4);
 
         return row;
     }

@@ -112,7 +112,7 @@ public class TemplateTabView extends TabView {
         patternLayout.setHeight("100%");
 
         createButton.setWidth(StyleDimensions.WIDTH_L);
-        createButton.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_CREATE));
+        createButton.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_MESSAGE_CREATE));
         createButton.addStyleName(StyleNames.BUTTON_ACTIVE);
 
         editSeparatorLabel.setWidth("100%");
