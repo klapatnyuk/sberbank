@@ -33,16 +33,21 @@ public class DocumentTabView extends TabView {
     @SuppressWarnings("unused")
     private ComboBox templateSelect;
 
-//    private Label choiceLabel;
-//    private StringSelect choiceSelect;
-//    private CheckBox allowCustomField;
-//    private HorizontalLayout customLayout;
-//    private Label customLabel;
-//    private TextField customField;
-//    private CheckBox allowMultiplyField;
-//    private Label structureSeparatorLabel;
-//    private Label tagLabel;
-//    private StringSelect tagSelect;
+    @SuppressWarnings("unused")
+    private Label templateSeparatorLabel;
+
+    @SuppressWarnings("unused")
+    private HorizontalLayout titleLayout;
+    @SuppressWarnings("unused")
+    private Label titleLabel;
+    @SuppressWarnings("unused")
+    private TextField titleField;
+
+    private Label lineLabel;
+    private TextField lineField;
+    private Label areaLabel;
+    private TextArea areaField;
+    private CheckBox checkboxField;
 
     @SuppressWarnings("unused")
     private Label submitSeparatorLabel;
@@ -76,6 +81,14 @@ public class DocumentTabView extends TabView {
 
     public AbstractSelect getTemplateSelect() {
         return templateSelect;
+    }
+
+    public AbstractOrderedLayout getTitleLayout() {
+        return titleLayout;
+    }
+
+    public AbstractTextField getTitleField() {
+        return titleField;
     }
 
 //    public StringSelect getChoiceSelect() {
@@ -130,25 +143,25 @@ public class DocumentTabView extends TabView {
         templateSelect.setFilteringMode(FilteringMode.CONTAINS);
         templateSelect.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_PROMPT));
 
-//        choiceLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CHOICE));
-//        choiceLabel.setWidth(StyleDimensions.WIDTH_S);
-//
-//        allowCustomField.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CUSTOM));
-//        allowCustomField.setHeight(StyleDimensions.HEIGHT_S);
-//
-//        customLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CUSTOM_LABEL));
-//        customLabel.setWidth(StyleDimensions.WIDTH_S);
-//        customField.setWidth("100%");
-//        customField.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CHOICE_CUSTOM_PROMPT));
-//
-//        allowMultiplyField.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_MULTIPLY));
-//        allowMultiplyField.setHeight(StyleDimensions.HEIGHT_S);
-//
-//        structureSeparatorLabel.setWidth("100%");
-//        structureSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
-//
-//        tagLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_TAGS));
-//        tagLabel.setWidth(StyleDimensions.WIDTH_S);
+        templateSeparatorLabel.setWidth("100%");
+        templateSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
+
+        titleLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CUSTOM_LABEL));
+        titleLabel.setWidth(StyleDimensions.WIDTH_S);
+        titleField.setWidth("100%");
+        titleField.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CHOICE_CUSTOM_PROMPT));
+
+        lineLabel.setValue("Line label:");
+        lineLabel.setWidth(StyleDimensions.WIDTH_S);
+        lineField.setWidth("50%");
+        lineField.setInputPrompt("Line prompt..");
+        areaLabel.setValue("Area label:");
+        areaLabel.setWidth(StyleDimensions.WIDTH_S);
+        areaField.setHeight("100px");
+        areaField.setValidationVisible(false);
+        areaField.setInputPrompt("Area prompt..");
+        checkboxField.setCaption("Checkbox caption");
+        checkboxField.setHeight(StyleDimensions.HEIGHT_S);
 
         submitSeparatorLabel.setWidth("100%");
         submitSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
