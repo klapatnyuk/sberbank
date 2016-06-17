@@ -16,8 +16,6 @@ public interface UITemplate {
 
     void setHeader(String header);
 
-    void poll();
-
     void clickMenu(MenuTab tab);
 
     void clickActionMenu(MenuTab tab);

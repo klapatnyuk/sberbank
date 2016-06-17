@@ -177,7 +177,7 @@ public class WarningWindow extends Window {
     }
 
     /**
-     * @author vykla
+     * @author klapatnyuk
      */
     private class RemoveLayoutClickListener implements LayoutEvents.LayoutClickListener {
 
@@ -197,7 +197,7 @@ public class WarningWindow extends Window {
     }
 
     /**
-     * @author vykla
+     * @author klapatnyuk
      */
     private class FocusLayoutClickListener implements LayoutEvents.LayoutClickListener {
 

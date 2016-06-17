@@ -1,7 +1,6 @@
 package ru.klapatnyuk.sberbank.web;
 
 import com.vaadin.annotations.DesignRoot;
-import com.vaadin.server.Resource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.declarative.Design;
@@ -10,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -20,46 +18,51 @@ import java.util.TreeMap;
 @DesignRoot
 public class SberbankUITemplate extends VerticalLayout implements UITemplate {
 
-    protected final Map<MenuTab, Map<MenuTab, AbstractTab>> tabs;
-    protected final MenuCommand menuCommand;
-    protected final MenuBar.Command actionCommand;
-
-    protected MenuTab tab;
-    protected MenuTab actionTab;
-    protected Map<Integer, Resource> icons;
-
-    protected Label headerLabel;
-    protected Label copyrightLabel;
-    protected HorizontalLayout headerLayout;
-    protected HorizontalLayout tabsLayout;
-    protected ProfileLayout profileLayout;
-    protected HorizontalLayout filterLayout;
-    protected MenuBar menuBar;
-    protected MenuBar actionMenuBar;
-
     private static final long serialVersionUID = 4433227540082907242L;
     private static final Logger LOG = LoggerFactory.getLogger(SberbankUITemplate.class);
 
+    private final Map<MenuTab, Map<MenuTab, AbstractTab>> tabs = new TreeMap<>();
+    private final MenuBar.Command actionCommand = new ActionMenuCommand();
+    private final MenuCommand menuCommand = new MenuCommand();
+
+    private MenuTab tab = SberbankMenuTab.EDITOR;
+    private MenuTab actionTab;
+
+    @SuppressWarnings("unused")
+    private Label headerLabel;
+    @SuppressWarnings("unused")
+    private HorizontalLayout headerLayout;
+    @SuppressWarnings("unused")
+    private HorizontalLayout tabsLayout;
+    @SuppressWarnings("unused")
+    private ProfileLayout profileLayout;
+    @SuppressWarnings("unused")
+    private HorizontalLayout filterLayout;
+    @SuppressWarnings("unused")
+    private Label copyrightLabel;
+    @SuppressWarnings("unused")
+    private MenuBar menuBar;
+    @SuppressWarnings("unused")
+    private MenuBar actionMenuBar;
+    @SuppressWarnings("unused")
     private Image logoImage;
+    @SuppressWarnings("unused")
     private HorizontalLayout topSection;
+    @SuppressWarnings("unused")
     private HorizontalLayout headerSection;
+    @SuppressWarnings("unused")
     private HorizontalLayout footerSection;
 
-    private Map<String, Long> quantities;
-
     public SberbankUITemplate() {
-        tabs = new TreeMap<>();
-        menuCommand = new MenuCommand();
-        actionCommand = new ActionMenuCommand();
-        tab = SberbankMenuTab.EDITOR;
-
         Design.read(this);
-        init();
-        clickMenu(tab);
-    }
 
-    public Map<Integer, Resource> getIcons() {
-        return icons;
+        initTabs();
+        initTopSection();
+        initHeaderSection();
+        initMainSection();
+        initFooterSection();
+
+        clickMenu(tab);
     }
 
     @Override
@@ -95,12 +98,6 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
     }
 
     @Override
-    public void poll() {
-        SberbankUI.getWarningWindow().poll();
-        getTab().poll();
-    }
-
-    @Override
     public AbstractTab getTab() {
         return tabs.get(tab).get(actionTab);
     }
@@ -121,23 +118,7 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
         return null;
     }
 
-    protected void init() {
-        icons = new HashMap<>();
-        icons.put(0, new ThemeResource("img/counter/plus-16x16.png"));
-        for (int key = 1; key < 10; key++) {
-            icons.put(key, new ThemeResource("img/counter/" + key + "-16x16.png"));
-        }
-
-        initTabs();
-        initTopSection();
-        initHeaderSection();
-        initMainSection();
-        initFooterSection();
-
-        quantities = new HashMap<>();
-    }
-
-    protected void initProfileBar() {
+    private void initProfileBar() {
         profileLayout.getLogoutButton().addClickListener(event -> SberbankUI.getCurrent().login());
 
         profileLayout.getLogoutButton().addClickListener(event -> {
@@ -145,14 +126,14 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
         });
     }
 
-    protected void initCopyright() {
+    private void initCopyright() {
         String contacts = SberbankUI.I18N.getString(SberbankKey.Header.FOOTER_COPYRIGHT,
                 ZonedDateTime.now().format(DateTimeFormatter.ofPattern("yyyy")));
         String copyright = SberbankUI.I18N.getString(SberbankKey.Header.FOOTER_PRODUCTION, contacts);
         copyrightLabel.setValue(copyright);
     }
 
-    protected void initTabs() {
+    private void initTabs() {
 
         AbstractTab document = new DocumentTab(SberbankMenuTab.EDITOR, EditorMenuTab.DOCUMENT);
         AbstractTab template = new TemplateTab(SberbankMenuTab.EDITOR, EditorMenuTab.TEMPLATE);
@@ -164,11 +145,11 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
         tabs.put(SberbankMenuTab.EDITOR, editorTabs);
     }
 
-    protected void initMenuBar() {
+    private void initMenuBar() {
         menuBar.addItem(SberbankUI.I18N.getString(SberbankKey.Menu.MSGR), menuCommand);
     }
 
-    protected void initFilterBar() {
+    private void initFilterBar() {
         Button button = new Button(SberbankUI.I18N.getString(SberbankKey.Form.FILTER_LIST));
         button.setWidth(StyleDimensions.WIDTH_S);
         button.setHeight(StyleDimensions.HEIGHT_S);
@@ -176,7 +157,7 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
         filterLayout.addComponent(button);
     }
 
-    protected void reloadActionMenuBar() {
+    private void reloadActionMenuBar() {
         actionMenuBar.removeItems();
         actionMenuBar.addItem(SberbankUI.I18N.getString(SberbankKey.Menu.MSGR_IN), actionCommand);
         actionMenuBar.addItem(SberbankUI.I18N.getString(SberbankKey.Menu.MSGR_OUT), actionCommand);
@@ -325,7 +306,7 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
     /**
      * @author klapatnyuk
      */
-    protected class ActionMenuCommand implements MenuBar.Command {
+    private class ActionMenuCommand implements MenuBar.Command {
 
         private static final long serialVersionUID = 5134839118306122334L;
 

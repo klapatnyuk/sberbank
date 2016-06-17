@@ -44,7 +44,7 @@ abstract public class AbstractCenteredWindow extends Window {
     protected abstract void initContent();
 
     /**
-     * @author vykla
+     * @author klapatnyuk
      */
     private class WindowAttachListener implements AttachListener {
 
@@ -58,7 +58,7 @@ abstract public class AbstractCenteredWindow extends Window {
     }
 
     /**
-     * @author vykla
+     * @author klapatnyuk
      */
     private class WindowDetachListener implements DetachListener {
 
@@ -71,7 +71,7 @@ abstract public class AbstractCenteredWindow extends Window {
     }
 
     /**
-     * @author vykla
+     * @author klapatnyuk
      */
     private class WindowResizeListener implements Page.BrowserWindowResizeListener {
 
