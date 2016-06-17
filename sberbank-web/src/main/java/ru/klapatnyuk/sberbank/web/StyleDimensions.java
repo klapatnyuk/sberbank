@@ -18,6 +18,7 @@ public interface StyleDimensions {
     String HEIGHT_XL = "" + HEIGHT_XL_RAW + PX;
 
     Integer WIDTH_XXS_RAW = 16;
+    Integer WIDTH_XXS_BUTTON_RAW = 40;
     Integer WIDTH_XS_RAW = 90;
     Integer WIDTH_S_RAW = 125;
     Integer WIDTH_M_RAW = 150;
@@ -27,6 +28,7 @@ public interface StyleDimensions {
     Integer WIDTH_XXXL_RAW = 700;
 
     String WIDTH_XXS = "" + WIDTH_XXS_RAW + PX;
+    String WIDTH_XXS_BUTTON = "" + WIDTH_XXS_BUTTON_RAW + PX;
     String WIDTH_XS = "" + WIDTH_XS_RAW + PX;
     String WIDTH_S = "" + WIDTH_S_RAW + PX;
     String WIDTH_M = "" + WIDTH_M_RAW + PX;

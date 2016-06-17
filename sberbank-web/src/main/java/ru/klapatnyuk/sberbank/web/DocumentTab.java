@@ -4,6 +4,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vaadin.addons.toggle.ButtonGroup;
 import org.vaadin.addons.toggle.ButtonGroupSelectionEvent;
 
 /**
@@ -17,9 +18,8 @@ public class DocumentTab extends AbstractTab implements EditableTab {
 
     private Integer patternIndex = -1;
 //    private PollPattern pattern;
-    private boolean updated = false;
 
-    private org.vaadin.addons.toggle.ButtonGroup buttonGroup = new org.vaadin.addons.toggle.ButtonGroup();
+    private ButtonGroup buttonGroup = new ButtonGroup();
     private DocumentTabView design;
 
     public DocumentTab(MenuTab tab, MenuTab actionTab) {
@@ -28,7 +28,7 @@ public class DocumentTab extends AbstractTab implements EditableTab {
 
     @Override
     public boolean isUpdated() {
-        return updated;
+        return false;
     }
 
     @Override

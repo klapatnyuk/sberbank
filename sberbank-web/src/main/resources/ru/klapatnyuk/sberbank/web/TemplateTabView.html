@@ -1,51 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset = "UTF-8">
-    <meta name = "package-mapping" content = "sb:ru.klapatnyuk.sberbank.web" />
+    <meta charset="UTF-8">
+    <meta name="package-mapping" content="sb:ru.klapatnyuk.sberbank.web"/>
 </head>
 <body>
-<v-horizontal-layout style-name = "container-poll spacer-top spacer-left" size-full :expand>
-    <v-panel style-name = "panel-poll" size-full>
-        <v-vertical-layout style-name = "spacer-right">
-            <v-horizontal-layout style-name = "layout-row spacer-top-small" size-full>
-                <v-label _id = "recipientLabel" />
-                <!--<nts-recipient-select _id = "recipientSelect" :expand />-->
+<v-horizontal-layout style-name="container-pattern-poll spacer-left spacer-top" size-full :expand>
+    <v-vertical-layout _id="patternLayout" style-name="spacer-right">
+        <v-button _id="createButton" style-name="pattern-button"/>
+        <v-label _id="editSeparatorLabel" style-name="separator"/>
+        <v-label _id="editLabel" style-name="label-edit"/>
+        <v-panel _id="patternContainer" style-name="panel-patterns-edit" size-full :expand>
+            <v-vertical-layout _id="editPatternLayout"/>
+        </v-panel>
+    </v-vertical-layout>
+    <v-label _id="verticalSeparatorLabel" style-name="separator-vertical" size-full/>
+    <v-panel style-name="panel-pattern spacer-left spacer-right" size-full :expand>
+        <v-vertical-layout style-name="spacer-right-small">
+            <v-horizontal-layout _id="titleLayout" style-name="layout-row spacer-top-small" size-full>
+                <v-label _id="titleLabel"/>
+                <v-text-field _id="titleField" size-full :expand/>
             </v-horizontal-layout>
-            <v-label _id = "dateSeparatorLabel" style-name = "separator" />
-            <v-horizontal-layout style-name = "layout-row spacer-top" size-full>
-                <v-label _id = "startsLabel" />
-                <v-date-field _id = "startsField" :expand/>
+            <v-horizontal-layout style-name="layout-row spacer-top" size-full>
+                <v-label _id="fieldsLabel"/>
+                <sb-fields-layout _id="fieldsLayout" style-name="layout-strings" size-full :expand/>
             </v-horizontal-layout>
-            <v-horizontal-layout style-name = "layout-row spacer-top" size-full>
-                <v-label _id = "expiresLabel" />
-                <v-date-field _id = "expiresField" :expand />
-            </v-horizontal-layout>
-            <v-label _id = "patternSeparatorLabel" style-name = "separator" />
-            <v-horizontal-layout style-name = "layout-row spacer-top" size-full>
-                <v-button _id = "patternButton" style-name = "spacer-empty" />
-            </v-horizontal-layout>
-            <v-horizontal-layout style-name = "layout-row spacer-top" size-full>
-                <v-label _id = "questionLabel" />
-                <v-text-area _id = "bodyField" style-name = "body-text-area" size-full :expand />
-            </v-horizontal-layout>
-            <v-horizontal-layout style-name = "layout-row spacer-top" size-full>
-                <v-label _id = "choiceLabel" />
-                <!--<nts-choice-select _id = "choiceSelect" style-name = "layout-strings" size-full :expand />-->
-            </v-horizontal-layout>
-            <v-horizontal-layout style-name = "layout-row spacer-top" size-full>
-                <v-check-box _id = "allowCustomField" style-name = "spacer-empty" size-full :expand />
-            </v-horizontal-layout>
-            <v-horizontal-layout _id = "customLayout" style-name = "layout-row spacer-top" size-full visible = "false">
-                <v-label _id = "customLabel" />
-                <v-text-field _id = "customField" size-full :expand />
-            </v-horizontal-layout>
-            <v-horizontal-layout style-name = "layout-row spacer-top" size-full>
-                <v-check-box _id = "allowMultiplyField" style-name = "spacer-empty" size-full :expand />
-            </v-horizontal-layout>
-            <v-label _id = "submitSeparatorLabel" style-name = "separator" />
-            <v-horizontal-layout style-name = "layout-row spacer-top spacer-bottom" size-full>
-                <v-button _id = "submitButton" style-name = "button-standard spacer-empty" />
+            <v-label _id="submitSeparatorLabel" style-name="separator spacer-empty"/>
+            <v-horizontal-layout style-name="layout-row spacer-top spacer-bottom" size-full>
+                <v-button _id="submitButton" style-name="button-standard spacer-empty"/>
             </v-horizontal-layout>
         </v-vertical-layout>
     </v-panel>

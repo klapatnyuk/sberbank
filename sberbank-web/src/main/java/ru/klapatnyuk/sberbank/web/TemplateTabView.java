@@ -4,10 +4,6 @@ import com.vaadin.annotations.DesignRoot;
 import com.vaadin.ui.*;
 import com.vaadin.ui.declarative.Design;
 
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-
 /**
  * @author klapatnyuk
  */
@@ -15,27 +11,36 @@ import java.util.Date;
 public class TemplateTabView extends TabView {
 
     private static final long serialVersionUID = -6788254175139485486L;
-    private static final String DATE_FORMAT = SberbankUI.CONFIG.getString(ConfigKey.DATE_FORMAT_SHORT.getKey());
+    @SuppressWarnings("unused")
+    private VerticalLayout patternLayout;
+    @SuppressWarnings("unused")
+    private Button createButton;
+    @SuppressWarnings("unused")
+    private Label editSeparatorLabel;
+    @SuppressWarnings("unused")
+    private Label editLabel;
+    @SuppressWarnings("unused")
+    private Panel patternContainer;
+    @SuppressWarnings("unused")
+    private VerticalLayout editPatternLayout;
+    @SuppressWarnings("unused")
+    private Label verticalSeparatorLabel;
 
-    private Label recipientLabel;
-//    private RecipientSelect recipientSelect;
-    private Label dateSeparatorLabel;
-    private Label startsLabel;
-    private DateField startsField;
-    private Label expiresLabel;
-    private DateField expiresField;
-    private Label patternSeparatorLabel;
-    private Button patternButton;
-    private Label questionLabel;
-    private TextArea bodyField;
-    private Label choiceLabel;
-//    private ChoiceSelect choiceSelect;
-    private CheckBox allowCustomField;
-    private HorizontalLayout customLayout;
-    private Label customLabel;
-    private TextField customField;
-    private CheckBox allowMultiplyField;
+    @SuppressWarnings("unused")
+    private HorizontalLayout titleLayout;
+    @SuppressWarnings("unused")
+    private Label titleLabel;
+    @SuppressWarnings("unused")
+    private TextField titleField;
+
+    @SuppressWarnings("unused")
+    private Label fieldsLabel;
+    @SuppressWarnings("unused")
+    private FieldsLayout fieldsLayout;
+
+    @SuppressWarnings("unused")
     private Label submitSeparatorLabel;
+    @SuppressWarnings("unused")
     private Button submitButton;
 
     public TemplateTabView() {
@@ -43,103 +48,93 @@ public class TemplateTabView extends TabView {
         init();
     }
 
-    /*public RecipientSelect getRecipientSelect() {
-        return recipientSelect;
-    }*/
-
-    public DateField getStartsField() {
-        return startsField;
+    public Button getCreateButton() {
+        return createButton;
     }
 
-    public DateField getExpiresField() {
-        return expiresField;
+    public Label getEditSeparatorLabel() {
+        return editSeparatorLabel;
     }
 
-    public AbstractTextField getBodyField() {
-        return bodyField;
+    public Label getEditLabel() {
+        return editLabel;
     }
 
-    /*public ChoiceSelect getChoiceSelect() {
-        return choiceSelect;
-    }*/
-
-    public AbstractOrderedLayout getCustomLayout() {
-        return customLayout;
+    public SingleComponentContainer getPatternContainer() {
+        return patternContainer;
     }
 
-    public AbstractField<Boolean> getAllowCustomField() {
-        return allowCustomField;
+    public AbstractOrderedLayout getEditPatternLayout() {
+        return editPatternLayout;
     }
 
-    public AbstractTextField getCustomField() {
-        return customField;
+    public AbstractOrderedLayout getTitleLayout() {
+        return titleLayout;
     }
+
+    public AbstractTextField getTitleField() {
+        return titleField;
+    }
+
+//    public StringSelect getChoiceSelect() {
+//        return choiceSelect;
+//    }
+//
+//    public AbstractField<Boolean> getAllowCustomField() {
+//        return allowCustomField;
+//    }
+//
+//    public AbstractOrderedLayout getCustomLayout() {
+//        return customLayout;
+//    }
+//
+//    public AbstractTextField getCustomField() {
+//        return customField;
+//    }
+//
+//    public AbstractField<Boolean> getAllowMultiplyField() {
+//        return allowMultiplyField;
+//    }
+//
+//    public StringSelect getTagSelect() {
+//        return tagSelect;
+//    }
 
     public Button getSubmitButton() {
         return submitButton;
-    }
-
-    public AbstractField<Boolean> getAllowMultiplyField() {
-        return allowMultiplyField;
-    }
-
-    public Button getPatternButton() {
-        return patternButton;
     }
 
     @Override
     protected void init() {
         super.init();
 
-        final Date today = Date.from(ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS).toInstant());
+        patternLayout.setWidthUndefined();
+        patternLayout.setHeight("100%");
 
-        recipientLabel.setWidth(StyleDimensions.WIDTH_M);
-        recipientLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_RECIPIENT));
+        createButton.setWidth(StyleDimensions.WIDTH_L);
+        createButton.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_CREATE));
+        createButton.addStyleName(StyleNames.BUTTON_ACTIVE);
 
-        dateSeparatorLabel.setWidth("100%");
-        dateSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
+        editSeparatorLabel.setWidth("100%");
+        editSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
 
-        startsLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_START));
-        startsLabel.setWidth(StyleDimensions.WIDTH_M);
-        startsField.setWidth(StyleDimensions.WIDTH);
-        startsField.setDateFormat(DATE_FORMAT);
-        startsField.setValue(today);
-        startsField.setReadOnly(true);
+        editLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_EDIT));
 
-        expiresLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_EXPIRATION));
-        expiresLabel.setWidth(StyleDimensions.WIDTH_M);
-        expiresField.setWidth(StyleDimensions.WIDTH);
-        expiresField.setDateFormat(DATE_FORMAT);
-        expiresField.setRangeStart(today);
+        verticalSeparatorLabel.setWidth("1px");
 
-        patternSeparatorLabel.setWidth("100%");
-        patternSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
+        titleLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CUSTOM_LABEL));
+        titleLabel.setWidth(StyleDimensions.WIDTH_S);
+        titleField.setWidth("100%");
+        titleField.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CHOICE_CUSTOM_PROMPT));
 
-        patternButton.setWidth(StyleDimensions.WIDTH);
-        patternButton.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_PATTERN));
-
-        questionLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_QUESTION));
-        questionLabel.setWidth(StyleDimensions.WIDTH_M);
-        bodyField.setHeight("100px");
-        bodyField.setValidationVisible(false);
-        bodyField.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_QUESTION_PROMPT));
-
-        choiceLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CHOICE));
-        choiceLabel.setWidth(StyleDimensions.WIDTH_M);
-
-        allowCustomField.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CUSTOM));
-        allowCustomField.setHeight(StyleDimensions.HEIGHT_S);
-        customLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CUSTOM_LABEL));
-        customLabel.setWidth(StyleDimensions.WIDTH_M);
-        customField.setWidth("100%");
-        customField.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CHOICE_CUSTOM_PROMPT));
-
-        allowMultiplyField.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_MULTIPLY));
+        fieldsLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_FIELDS_LABEL));
+        fieldsLabel.setWidth(StyleDimensions.WIDTH_S);
+        fieldsLayout.setWidth("100%");
 
         submitSeparatorLabel.setWidth("100%");
         submitSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
 
+        submitButton.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_ADD));
         submitButton.setWidth(StyleDimensions.WIDTH);
-        submitButton.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_SUBMIT));
     }
 }

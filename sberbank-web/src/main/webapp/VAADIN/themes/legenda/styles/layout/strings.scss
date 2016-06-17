@@ -4,25 +4,31 @@
 
     .layout-strings {
 
-        .v-button {
-            margin-right: 5px;
-            margin-left: 5px;
-            padding: 0 2px;
-        }
+        .v-horizontallayout {
 
-        .v-button:after {
-            width: 18px;
-            padding: 0 2px;
+            .v-slot {
+                margin-left: 5px;
+            }
+
+            .v-button {
+                margin-right: 0;
+            }
+
+            .v-icon {
+                vertical-align: top;
+                padding-top: 6px;
+            }
+
+            .v-horizontallayout {
+
+                .v-slot {
+                    margin-left: 0;
+                }
+            }
         }
 
         .v-slot {
             margin-bottom: 2px;
-        }
-
-        .v-icon {
-            vertical-align: top;
-            padding-top: 6px;
-            margin-left: 0;
         }
     }
 }
