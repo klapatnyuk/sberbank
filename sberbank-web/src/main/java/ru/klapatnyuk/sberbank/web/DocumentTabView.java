@@ -29,9 +29,6 @@ public class DocumentTabView extends TabView {
     private TextField customField;
     private CheckBox allowMultiplyField;
     private Label structureSeparatorLabel;
-    private Label folderLabel;
-    private Label currentFolderLabel;
-    private Button folderButton;
     private Label tagLabel;
     private StringSelect tagSelect;
     private Label submitSeparatorLabel;
@@ -86,14 +83,6 @@ public class DocumentTabView extends TabView {
         return allowMultiplyField;
     }
 
-    public Label getCurrentFolderLabel() {
-        return currentFolderLabel;
-    }
-
-    public Button getFolderButton() {
-        return folderButton;
-    }
-
     public StringSelect getTagSelect() {
         return tagSelect;
     }
@@ -142,13 +131,6 @@ public class DocumentTabView extends TabView {
 
         structureSeparatorLabel.setWidth("100%");
         structureSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
-
-        folderLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_FOLDER));
-        folderLabel.setWidth(StyleDimensions.WIDTH_S);
-        currentFolderLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_FOLDER_EMPTY));
-        currentFolderLabel.setWidthUndefined();
-        folderButton.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_FOLDER_SET));
-        folderButton.setWidth(StyleDimensions.WIDTH);
 
         tagLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_TAGS));
         tagLabel.setWidth(StyleDimensions.WIDTH_S);

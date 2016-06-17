@@ -20,7 +20,6 @@ public class DocumentTab extends AbstractTab implements EditableTab {
 
     private Integer patternIndex = -1;
 //    private PollPattern pattern;
-//    private Folder folder;
     private boolean updated = false;
 
     private org.vaadin.addons.toggle.ButtonGroup buttonGroup = new org.vaadin.addons.toggle.ButtonGroup();
@@ -69,7 +68,8 @@ public class DocumentTab extends AbstractTab implements EditableTab {
 
     @Override
     public String getHeader() {
-        return SberbankUI.I18N.getString(SberbankKey.Header.PTRN_POLL);
+        return SberbankUI.I18N.getString(SberbankKey.Header.H2, SberbankUI.I18N.getString(SberbankKey.Menu.MSGR),
+                SberbankUI.I18N.getString(SberbankKey.Header.PTRN_POLL));
     }
 
     @Override
@@ -96,10 +96,6 @@ public class DocumentTab extends AbstractTab implements EditableTab {
                     design.getCustomField(), getValidationSource()));
         }
 
-//        if (folder == null) {
-//            messages.add(new WarningMessage(SberbankUI.I18N.getString(PTRN_FOLDER_VALIDATE), design.getFolderButton(), getValidationSource()));
-//        }
-
         SberbankUI.getWarningWindow().addAll(messages);
         return messages.isEmpty();
     }
@@ -116,8 +112,6 @@ public class DocumentTab extends AbstractTab implements EditableTab {
         design.getAllowCustomField().clear();
         design.getCustomField().clear();
         design.getAllowMultiplyField().clear();
-//        folder = null;
-        design.getCurrentFolderLabel().setValue(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_FOLDER_EMPTY));
         design.getTagSelect().clear();
     }
 
@@ -125,12 +119,9 @@ public class DocumentTab extends AbstractTab implements EditableTab {
     protected void init() {
         super.init();
 
-//        initFolderWindow();
-
         design.getCreateButton().addClickListener(event -> clickCreateButton());
         design.getAllowCustomField()
                 .addValueChangeListener(event -> design.getCustomLayout().setVisible((boolean) event.getProperty().getValue()));
-//        design.getFolderButton().addClickListener(event -> clickFolderButton());
         design.getSubmitButton().addClickListener(event -> clickSubmitButton());
     }
 
@@ -141,11 +132,6 @@ public class DocumentTab extends AbstractTab implements EditableTab {
         }
         return design;
     }
-
-//    private void initFolderWindow() {
-//        folderWindow = new FolderWindow(SberbankUI.I18N.getString(Header.PTRN_WINDOW_FOLDER));
-//        folderWindow.getLayout().getOkButton().addClickListener(event -> clickFolderOkButton());
-//    }
 
     private void selectPattern(ButtonGroupSelectionEvent event) {
         /*if (event.getPreviousButton() != null) {
@@ -282,15 +268,4 @@ public class DocumentTab extends AbstractTab implements EditableTab {
             }
         }*/
     }
-
-//    private void clickFolderButton() {
-//        folderWindow.getLayout().setFolderId((folder == null) ? null : folder.getId());
-//        UI.getCurrent().addWindow(folderWindow);
-//    }
-
-//    private void clickFolderOkButton() {
-//        folderWindow.close();
-//        folder = BrownieSession.getMasterdata().getFolders().get(folderWindow.getLayout().getFolderId());
-//        design.getCurrentFolderLabel().setValue(folder.getTitle());
-//    }
 }
