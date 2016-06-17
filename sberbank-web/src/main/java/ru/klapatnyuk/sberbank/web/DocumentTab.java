@@ -6,9 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vaadin.addons.toggle.ButtonGroupSelectionEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author klapatnyuk
  */
@@ -74,7 +71,7 @@ public class DocumentTab extends AbstractTab implements EditableTab {
 
     @Override
     public boolean validate() {
-        List<WarningMessage> messages = new ArrayList<>();
+        /*List<WarningMessage> messages = new ArrayList<>();
 
         if (design.getBodyField().getValue().trim().isEmpty()) {
             messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_BODY_VALIDATE),
@@ -97,7 +94,8 @@ public class DocumentTab extends AbstractTab implements EditableTab {
         }
 
         SberbankUI.getWarningWindow().addAll(messages);
-        return messages.isEmpty();
+        return messages.isEmpty();*/
+        return false;
     }
 
     @Override
@@ -107,12 +105,13 @@ public class DocumentTab extends AbstractTab implements EditableTab {
 
     @Override
     public void clear() {
-        design.getBodyField().clear();
-        design.getChoiceSelect().clear();
-        design.getAllowCustomField().clear();
-        design.getCustomField().clear();
-        design.getAllowMultiplyField().clear();
-        design.getTagSelect().clear();
+        design.getTemplateSelect().clear();
+
+//        design.getChoiceSelect().clear();
+//        design.getAllowCustomField().clear();
+//        design.getCustomField().clear();
+//        design.getAllowMultiplyField().clear();
+//        design.getTagSelect().clear();
     }
 
     @Override
@@ -120,8 +119,8 @@ public class DocumentTab extends AbstractTab implements EditableTab {
         super.init();
 
         design.getCreateButton().addClickListener(event -> clickCreateButton());
-        design.getAllowCustomField()
-                .addValueChangeListener(event -> design.getCustomLayout().setVisible((boolean) event.getProperty().getValue()));
+//        design.getAllowCustomField()
+//                .addValueChangeListener(event -> design.getCustomLayout().setVisible((boolean) event.getProperty().getValue()));
         design.getSubmitButton().addClickListener(event -> clickSubmitButton());
     }
 
