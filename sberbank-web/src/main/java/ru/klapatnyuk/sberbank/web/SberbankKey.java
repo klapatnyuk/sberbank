@@ -34,11 +34,143 @@ public interface SberbankKey {
         MESSAGE_FULL_CLICK,
         MESSAGE_READ_CLICK,
         MESSAGE_NEXT,
-        MESSAGE_PREVIOUS;
+        MESSAGE_PREVIOUS,
+        MSGR_MASTERDATA,
+        MSGR_MASTERDATA_FLOOR,
+        MSGR_PORCH_CAPTION,
+        MSGR_FLOOR_CAPTION,
+        MSGR_FLOOR_CAPTION_FULL,
+
+        MSGR_PATTERN,
+        MSGR_PATTERN_FILTER_FOLDER,
+        MSGR_PATTERN_FILTER_TAG,
+        MSGR_PATTERN_EMPTY,
+        MSGR_FOLDER_EMPTY,
+        MSGR_FOLDER_NESTED,
+        MSGR_TAG_PROMPT,
+
+        MSGR_IN_WRITE,
+        MSGR_IN_EMPTY,
+        MSGR_IN_EMPTY_RECIPIENT,
+
+        MSGR_OUT_SIMPLE,
+        MSGR_OUT_ADVERT,
+        MSGR_OUT_RECIPIENT,
+        MSGR_OUT_PORCH,
+        MSGR_OUT_PORCH_PROMPT,
+        MSGR_OUT_FLOOR,
+        MSGR_OUT_FLOOR_PROMPT,
+        MSGR_OUT_FLAT,
+        MSGR_OUT_FLAT_PROMPT,
+        MSGR_OUT_STARTS,
+        MSGR_OUT_EXPIRES,
+        MSGR_OUT_BODY,
+        MSGR_OUT_BODY_ADVERT,
+        MSGR_OUT_BODY_PROMPT,
+        MSGR_OUT_BODY_LIMIT,
+        MSGR_OUT_INTERCOM,
+        MSGR_OUT_SUBMIT,
+        MSGR_OUT_SUBMIT_SAVE,
+        // TODO needs to be renamed
+        MSGR_OUT_PRINT_CONFIRM,
+        MSGR_OUT_SUBJECT,
+        MSGR_OUT_SUBJECT_PROMPT,
+        // TODO needs to be renamed
+        MSGR_OUT_SUBJECT_VALUE,
+        MSGR_OUT_CANCEL,
+        MSGR_OUT_OK,
+
+        MSGR_POLLS_EMPTY,
+        MSGR_POLLS_SELECTION_EMPTY,
+        MSGR_POLLS_STATUS_ACTIVE,
+        MSGR_POLLS_STATUS_STOPPED,
+        MSGR_POLLS_STATUS_FINISHED,
+        MSGR_POLLS_CHOICE,
+        MSGR_POLLS_PRINT,
+
+        MSGR_POLL_RECIPIENT,
+        MSGR_POLL_RECIPIENT_GROUPING_FLOOR,
+        MSGR_POLL_RECIPIENT_GROUPING_PORCH,
+        MSGR_POLL_RECIPIENT_GROUPING_HOUSE,
+        MSGR_POLL_RECIPIENT_REMOVE,
+        MSGR_POLL_RECIPIENT_PROMPT,
+        MSGR_POLL_START,
+        MSGR_POLL_EXPIRATION,
+        MSGR_POLL_CHOICE,
+        MSGR_POLL_CHOICE_CUSTOM_PROMPT,
+        MSGR_POLL_CUSTOM,
+        MSGR_POLL_CUSTOM_LABEL,
+        MSGR_POLL_MULTIPLY,
+        MSGR_POLL_QUESTION,
+        MSGR_POLL_QUESTION_PROMPT,
+        MSGR_POLL_SUBMIT,
+
+        MSGR_REQUESTS_EMPTY,
+        MSGR_REQUESTS_RECIPIENT_EMPTY,
+
+        MSGR_HISTORY_EMPTY,
+        MSGR_HISTORY_SELECTION_EMPTY,
+        MSGR_HISTORY_REMOVE,
+        MSGR_HISTORY_PRINT,
+        MSGR_HISTORY_SUBJECT,
+        MSGR_HISTORY_BODY,
+
+        PTRN_FOLDER,
+        PTRN_FOLDER_EMPTY,
+        PTRN_FOLDER_SET,
+        PTRN_FOLDER_CREATE,
+        PTRN_FOLDER_CREATE_PROMPT,
+        PTRN_FOLDER_RENAME,
+        PTRN_FOLDER_RENAME_PROMPT,
+        PTRN_TAGS,
+
+        PTRN_MESSAGE_CREATE,
+        PTRN_MESSAGE_EDIT,
+        PTRN_MESSAGE_SUBJECT,
+        PTRN_MESSAGE_SUBJECT_PROMPT,
+        PTRN_MESSAGE_BODY,
+        PTRN_MESSAGE_ADD,
+        PTRN_MESSAGE_SAVE,
+        PTRN_MESSAGE_PROMPT,
+
+        PTRN_POLL_CREATE,
+        PTRN_POLL_EDIT,
+        PTRN_POLL_ADD,
+        PTRN_POLL_SAVE,
+        PTRN_POLL_PROMPT,
+
+        PTRN_STYLE_LIST,
+        PTRN_STYLE_LIST_DESCRIPTION,
+        PTRN_STYLE_TREE,
+        PTRN_STYLE_TREE_DESCRIPTION,
+        PTRN_STYLE_TAG,
+        PTRN_STYLE_TAG_DESCRIPTION;
 
         @Override
         public String getKey() {
             return "form." + KeyConverter.convert(this);
+        }
+    }
+
+    enum Menu implements ResourceKey {
+
+        MSGR,
+
+        MSGR_IN,
+        MSGR_OUT,
+        MSGR_POLLS,
+        MSGR_POLL,
+        MSGR_REQUESTS,
+        MSGR_HISTORY,
+
+        PTRN,
+        PTRN_MESSAGE,
+        PTRN_POLL,
+        PTRN_STYLE;
+
+        @Override
+        public String getKey() {
+            return "menu." + KeyConverter.convert(this);
         }
     }
 
@@ -136,7 +268,26 @@ public interface SberbankKey {
         WINDOW_LOGIN,
         WINDOW_LOGIN_LAZY,
         WINDOW_LOGOUT,
-        REGISTRATION_WINDOW;
+        REGISTRATION_WINDOW,
+
+        MSGR_IN,
+        MSGR_OUT_SIMPLE,
+        MSGR_OUT_ADVERT,
+        MSGR_OUT_WINDOW_PATTERN,
+        // TODO needs to be renamed
+        MSGR_OUT_WINDOW_PRINT,
+        MSGR_POLLS,
+        MSGR_POLL,
+        MSGR_POLL_WINDOW_CONFIRM,
+        MSGR_POLL_WINDOW_PATTERN,
+        MSGR_HISTORY,
+
+        MSGR_REQUESTS,
+
+        PTRN_MESSAGE,
+        PTRN_POLL,
+        PTRN_STYLE,
+        PTRN_WINDOW_FOLDER;
 
         @Override
         public String getKey() {

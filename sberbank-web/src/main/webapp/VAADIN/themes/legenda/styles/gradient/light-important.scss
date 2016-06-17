@@ -1,0 +1,12 @@
+@charset "UTF-8";
+
+%gradient-light-important {
+    background: $color-gradient-light-from; /* Old browsers */
+    background: -moz-linear-gradient(top, $color-gradient-light-from 2%, $color-gradient-light-to 98%) !important; /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(2%, $color-gradient-light-from), color-stop(98%, $color-gradient-light-to)) !important; /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, $color-gradient-light-from 2%, $color-gradient-light-to 98%) !important; /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, $color-gradient-light-from 2%, $color-gradient-light-to 98%) !important; /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, $color-gradient-light-from 2%, $color-gradient-light-to 98%) !important; /* IE10+ */
+    background: linear-gradient(to bottom, $color-gradient-light-from 2%, $color-gradient-light-to 98%) !important; /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color-gradient-light-from', endColorstr='$color-gradient-light-to', GradientType=0); /* IE6-9 */
+}

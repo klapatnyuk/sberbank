@@ -1,0 +1,42 @@
+@charset "UTF-8";
+
+@import "styles/gradient.scss";
+@import "styles/button.scss";
+@import "styles/container.scss";
+@import "styles/font.scss";
+@import "styles/label.scss";
+@import "styles/layout.scss";
+@import "styles/notification.scss";
+@import "styles/panel.scss";
+@import "styles/section.scss";
+@import "styles/spacer.scss";
+@import "styles/template.scss";
+@import "styles/window.scss";
+
+@mixin legenda {
+
+    @include valo;
+
+    @include button;
+    @include container;
+    @include font;
+    @include label;
+    @include layout;
+    @include notification;
+    @include panel;
+    @include section;
+    @include spacer;
+    @include template;
+    @include window;
+
+    .v-filterselect-suggestpopup {
+
+        .v-filterselect-suggestmenu {
+
+            .gwt-MenuItem {
+                font-size: 13px;
+                white-space: pre !important;
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+@import "label/center.scss";
+@import "label/left.scss";
+@import "label/right.scss";
+
+@mixin label {
+    @include label-center;
+    @include label-left;
+    @include label-right;
+}

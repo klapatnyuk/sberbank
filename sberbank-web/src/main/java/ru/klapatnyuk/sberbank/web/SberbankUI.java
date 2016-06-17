@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 /**
  * @author klapatnyuk
  */
-@Theme("mytheme")
+@Theme("legenda")
 public class SberbankUI extends UI {
 
     public static final ResourceProvider I18N = ResourceFactory.getProvider(SberbankUI.class);

@@ -1,0 +1,37 @@
+@charset "UTF-8";
+
+@mixin layout-incoming-poll {
+
+    .layout-incoming-poll {
+        font-size: 13px;
+        padding: $padding-v $padding-h;
+
+        .layout-choices {
+            border-bottom: 1px solid $color-main;
+            padding-bottom: $padding-v;
+            font-size: 12px;
+
+            .v-select-optiongroup {
+                padding-left: 50px;
+
+                label {
+                    padding-left: 10px;
+                    line-height: 22px;
+                }
+
+                label:before,
+                label:after {
+                    line-height: 18px;
+                }
+            }
+
+            .v-caption {
+                font-size: 13px;
+            }
+
+            .v-textfield {
+                margin-left: 82px;
+            }
+        }
+    }
+}

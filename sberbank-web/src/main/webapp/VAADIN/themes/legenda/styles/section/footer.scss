@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+@mixin section-footer {
+
+    .section-footer {
+        @extend .section-wrapper;
+        padding: 0 $padding-h;
+        background-color: $color-second;
+        font-size: $font-size-small;
+
+        .copyright-label {
+            color: white;
+            padding-right: $padding-h;
+        }
+    }
+}

@@ -1,0 +1,17 @@
+@charset "UTF-8";
+
+@import "layout/application.scss";
+@import "layout/incoming-poll.scss";
+@import "layout/recipients.scss";
+@import "layout/row.scss";
+@import "layout/strings.scss";
+@import "layout/table.scss";
+
+@mixin layout {
+    @include layout-application;
+    @include layout-incoming-poll;
+    @include layout-recipients;
+    @include layout-row;
+    @include layout-strings;
+    @include layout-table;
+}

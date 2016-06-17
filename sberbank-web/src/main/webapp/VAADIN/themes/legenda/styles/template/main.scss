@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+@mixin template-main {
+
+    .template-main {
+        overflow: auto;
+        min-height: $app-min-height;
+    }
+}

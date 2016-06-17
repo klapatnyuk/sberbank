@@ -1,0 +1,8 @@
+@charset "UTF-8";
+
+@mixin spacer-top-small {
+
+    .spacer-top-small {
+        padding-top: $padding-v-small;
+    }
+}

@@ -1,0 +1,42 @@
+@charset "UTF-8";
+
+@import "window/activation-code.scss";
+@import "window/confirm.scss";
+@import "window/folder.scss";
+@import "window/login.scss";
+@import "window/logout.scss";
+@import "window/pattern.scss";
+@import "window/request.scss";
+@import "window/settings.scss";
+@import "window/video.scss";
+@import "window/warning.scss";
+
+@mixin window {
+
+    .v-window {
+        -webkit-box-shadow: 10px 10px 60px 0px rgba(0, 0, 0, 0.5);
+        -moz-box-shadow: 10px 10px 60px 0px rgba(0, 0, 0, 0.5);
+        box-shadow: 10px 10px 60px 0px rgba(0, 0, 0, 0.5);
+    }
+
+    .v-window-header {
+        padding: $padding-v $padding-h;
+    }
+
+    .v-window-closebox {
+        width: 63px !important;
+        height: 45px !important;
+        padding: 13px 20px 35px 25px !important;
+    }
+
+    @include window-activation-code;
+    @include window-confirm;
+    @include window-folder;
+    @include window-login;
+    @include window-logout;
+    @include window-pattern;
+    @include window-request;
+    @include window-settings;
+    @include window-video;
+    @include window-warning;
+}

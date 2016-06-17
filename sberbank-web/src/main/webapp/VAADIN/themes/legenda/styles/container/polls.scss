@@ -1,0 +1,144 @@
+@charset "UTF-8";
+
+@mixin container-polls {
+
+    .container-polls {
+
+        .label-empty {
+            text-align: center;
+            color: $color-label-gray;
+            padding-top: 30px;
+        }
+
+        .v-slot-separator-vertical {
+            width: 1px;
+
+            .separator-vertical {
+                margin-left: 1px;
+                border-left: 1px dotted $color-separator;
+            }
+        }
+
+        .panel-polls {
+            font-size: 13px;
+            border-width: 0;
+            background-color: transparent;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+
+            .v-slot {
+                margin-bottom: 5px;
+            }
+
+            .v-button {
+                text-align: left;
+                border: none;
+                background: rgb(250, 250, 250) none;
+                -webkit-box-shadow: none;
+                box-shadow: none;
+                color: $color-main-font-inactive;
+            }
+
+            .v-button:focus:after {
+                border: none;
+                box-shadow: none;
+                -webkit-box-shadow: none;
+            }
+
+            .active {
+                color: $color-main-font;
+                background-color: $color-button-transparent;
+            }
+        }
+
+        .panel-poll {
+            border-width: 0;
+            background-color: transparent;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            font-size: 13px;
+
+            .v-verticallayout {
+
+                .v-slot {
+                    margin-bottom: 15px;
+                }
+
+                .status-label {
+                    border: 2px solid;
+                    background-color: white;
+                    text-align: center;
+                    line-height: 26px;
+                    vertical-align: middle;
+                }
+
+                .label-active {
+                    color: $color-green;
+                    border-color: $color-green;
+                }
+
+                .label-finished {
+                    color: $color-blue;
+                    border-color: $color-blue;
+                }
+
+                .label-stopped {
+                    color: $color-red;
+                    border-color: $color-red;
+                }
+
+                .question-label {
+                    word-wrap: break-word;
+                }
+
+                .choices-layout {
+
+                    .v-slot {
+                        margin-bottom: 10px;
+                    }
+                }
+
+                .choice-layout {
+
+                    .v-slot {
+                        margin-bottom: 0;
+                    }
+
+                    .v-button {
+                        background: $color-gradient-poll-from; /* Old browsers */
+                        background: -moz-linear-gradient(top, $color-gradient-poll-from 0%, $color-gradient-poll-through 20%, $color-gradient-poll-to 100%); /* FF3.6+ */
+                        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, $color-gradient-poll-from), color-stop(20%, $color-gradient-poll-through), color-stop(100%, $color-gradient-poll-to)); /* Chrome,Safari4+ */
+                        background: -webkit-linear-gradient(top, $color-gradient-poll-from 0%, $color-gradient-poll-through 20%, $color-gradient-poll-to 100%); /* Chrome10+,Safari5.1+ */
+                        background: -o-linear-gradient(top, $color-gradient-poll-from 0%, $color-gradient-poll-through 20%, $color-gradient-poll-to 100%); /* Opera 11.10+ */
+                        background: -ms-linear-gradient(top, $color-gradient-poll-from 0%, $color-gradient-poll-through 20%, $color-gradient-poll-to 100%); /* IE10+ */
+                        background: linear-gradient(to bottom, $color-gradient-poll-from 0%, $color-gradient-poll-through 20%, $color-gradient-poll-to 100%); /* W3C */
+                        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$color-gradient-poll-from', endColorstr='$color-gradient-poll-to',GradientType=0 ); /* IE6-9 */
+                        border: none;
+                        color: white;
+                        -webkit-box-shadow: 2px 2px 3px $color-message-shadow;
+                        box-shadow: 2px 2px 3px $color-message-shadow;
+                        padding: 0;
+                    }
+
+                    .v-button:focus:after {
+                        border: none;
+                        box-shadow: none;
+                        -webkit-box-shadow: none;
+                        padding: 0;
+                    }
+
+                    .v-label {
+                        
+                    }
+
+                    .label-percent {
+                        line-height: 24px;
+                        vertical-align: middle;
+                        background-color: rgb(230, 230, 230);
+                        padding: 0 15px;
+                    }
+                }
+            }
+        }
+    }
+}

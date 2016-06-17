@@ -1,0 +1,7 @@
+@charset "UTF-8";
+
+@import "font/monospace.scss";
+
+@mixin font {
+    @include font-monospace;
+}

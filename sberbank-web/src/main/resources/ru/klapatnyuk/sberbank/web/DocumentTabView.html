@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset = "UTF-8">
+</head>
+<body>
+<v-horizontal-layout style-name = "container-polls spacer-top" size-full :expand>
+    <v-panel _id = "pollContainer" style-name = "panel-polls spacer-left spacer-right-small" size-full>
+        <v-vertical-layout _id = "pollLayout">
+            <v-label _id = "emptyLabel" style-name = "label-empty" />
+        </v-vertical-layout>
+    </v-panel>
+    <v-label _id = "verticalSeparatorLabel" style-name = "separator-vertical" size-full />
+    <v-vertical-layout style-name = "spacer-left" size-full :expand>
+        <v-panel style-name = "panel-poll" size-full :expand>
+            <v-vertical-layout style-name = "spacer-right">
+                <v-label _id = "emptySelectionLabel" style-name = "label-empty" />
+                <v-label _id = "statusLabel" />
+                <v-label _id = "questionLabel" style-name = "question-label" />
+                <v-vertical-layout _id = "choiceLayout" style-name = "choices-layout" />
+            </v-vertical-layout>
+        </v-panel>
+        <v-horizontal-layout _id = "printLayout" style-name = "panel-submit" width = "100%" height = "58px" visible = "false">
+            <v-button _id = "printButton" style-name = "button-standard" :middle :right />
+        </v-horizontal-layout>
+    </v-vertical-layout>
+</v-horizontal-layout>
+</body>
+</html>

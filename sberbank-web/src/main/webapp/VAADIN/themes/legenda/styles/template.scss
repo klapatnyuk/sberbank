@@ -1,0 +1,7 @@
+@charset "UTF-8";
+
+@import "template/main.scss";
+
+@mixin template {
+    @include template-main;
+}

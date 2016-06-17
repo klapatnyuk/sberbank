@@ -1,0 +1,68 @@
+@charset "UTF-8";
+
+@mixin panel-chat {
+
+    .panel-chat {
+        border-width: 0;
+        background-color: transparent;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+
+        .chat-layout {
+            padding: 0 $padding-h $padding-v $padding-h;
+
+            .chat-message {
+                @extend %gradient-light;
+                font-size: 13px;
+                padding: $padding-v $padding-h;
+                border-radius: 5px;
+                border: 1px solid $color-main;
+                -webkit-box-shadow: 2px 2px 3px $color-message-shadow;
+                box-shadow: 2px 2px 3px $color-message-shadow;
+                max-width: 75%;
+
+                .time-label {
+                    color: $color-label-gray;
+                    font-size: $font-size-small;
+                }
+
+                .menuitem-active {
+                    color: $color-main;
+                    font-weight: bold;
+                }
+
+                .body-label {
+                    font-size: $font-size-small;
+                    text-align: justify;
+                    word-wrap: break-word;
+                }
+            }
+
+            .layout-message-out {
+                @extend %gradient-dark-important;
+            }
+
+            .v-slot-chat-message {
+                margin-top: 10px;
+            }
+
+            .v-slot-chat-message:first-child {
+                margin-top: 0;
+            }
+
+            .v-slot-out + .v-slot-out {
+            }
+
+            .v-slot-in + .v-slot-out,
+            .v-slot-out + .v-slot-in {
+                margin-top: 16px;
+            }
+
+            .empty-label {
+                text-align: center;
+                color: $color-label-gray;
+                padding-top: 30px;
+            }
+        }
+    }
+}

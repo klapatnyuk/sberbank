@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+@mixin window-logout {
+
+    .window-logout {
+        -webkit-box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+
+        .window-logout-layout {
+            font-size: 13px;
+            padding: $padding-v $padding-h $padding-v * 2 $padding-h;
+            background-color: $color-window-bg;
+
+            .v-horizontallayout {
+                padding: $padding-v $padding-h;
+                background-color: white;
+                margin-top: 10px;
+
+                .v-label {
+                    text-align: center;
+                }
+            }
+        }
+    }
+}

@@ -1,5 +1,6 @@
 package ru.klapatnyuk.sberbank.web;
 
+import com.vaadin.annotations.DesignRoot;
 import com.vaadin.server.Resource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
@@ -16,6 +17,7 @@ import java.util.TreeMap;
 /**
  * @author klapatnyuk
  */
+@DesignRoot
 public class SberbankUITemplate extends VerticalLayout implements UITemplate {
 
     protected final Map<MenuTab, Map<MenuTab, AbstractTab>> tabs;
@@ -43,11 +45,13 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
     private HorizontalLayout headerSection;
     private HorizontalLayout footerSection;
 
-    public SberbankUITemplate(MenuTab defaultTab) {
+    private Map<String, Long> quantities;
+
+    public SberbankUITemplate() {
         tabs = new TreeMap<>();
         menuCommand = new MenuCommand();
         actionCommand = new ActionMenuCommand();
-        tab = defaultTab;
+        tab = SberbankMenuTab.EDITOR;
 
         Design.read(this);
         init();
@@ -129,10 +133,16 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
         initHeaderSection();
         initMainSection();
         initFooterSection();
+
+        quantities = new HashMap<>();
     }
 
     protected void initProfileBar() {
         profileLayout.getLogoutButton().addClickListener(event -> SberbankUI.getCurrent().login());
+
+        profileLayout.getLogoutButton().addClickListener(event -> {
+            // TODO add LoginService invocation
+        });
     }
 
     protected void initCopyright() {
@@ -144,59 +154,22 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
 
     protected void initTabs() {
 
-        /*// init location tab layouts
+        AbstractTab document = new DocumentTab(SberbankMenuTab.EDITOR, EditorMenuTab.DOCUMENT);
+        AbstractTab template = new TemplateTab(SberbankMenuTab.EDITOR, EditorMenuTab.TEMPLATE);
 
-        final AbstractTab review = new ReviewTab(ConciergeMenuTab.LOCATION, LocationMenuTab.REVIEW);
-        final AbstractTab advert = new AdvertTab(ConciergeMenuTab.LOCATION, LocationMenuTab.ADVERT);
-        final AbstractTab polls = new PollsTab(ConciergeMenuTab.LOCATION, LocationMenuTab.POLLS);
-        final AbstractTab poll = new PollTab(ConciergeMenuTab.LOCATION, LocationMenuTab.POLL);
-        final AbstractTab requests = new RequestsTab(ConciergeMenuTab.LOCATION, LocationMenuTab.REQUESTS);
-        final AbstractTab history = new HistoryTab(ConciergeMenuTab.LOCATION, LocationMenuTab.HISTORY);
+        Map<MenuTab, AbstractTab> editorTabs = new TreeMap<>();
+        editorTabs.put(EditorMenuTab.DOCUMENT, document);
+        editorTabs.put(EditorMenuTab.TEMPLATE, template);
 
-        // init pattern tab layouts
-
-        final AbstractTab message = new MessagePatternTab(ConciergeMenuTab.PATTERN, PatternMenuTab.MESSAGE);
-        final AbstractTab pollPattern = new PollPatternTab(ConciergeMenuTab.PATTERN, PatternMenuTab.POLL);
-        final AbstractTab style = new StyleTab(ConciergeMenuTab.PATTERN, PatternMenuTab.STYLE);
-
-        // init all action tab maps
-
-        final Map<MenuTab, AbstractTab> locationTabs = new TreeMap<>();
-        locationTabs.put(LocationMenuTab.REVIEW, review);
-        locationTabs.put(LocationMenuTab.ADVERT, advert);
-        locationTabs.put(LocationMenuTab.POLLS, polls);
-        locationTabs.put(LocationMenuTab.POLL, poll);
-        locationTabs.put(LocationMenuTab.REQUESTS, requests);
-        locationTabs.put(LocationMenuTab.HISTORY, history);
-
-        final Map<MenuTab, AbstractTab> patternTabs = new TreeMap<>();
-        patternTabs.put(PatternMenuTab.MESSAGE, message);
-        patternTabs.put(PatternMenuTab.POLL, pollPattern);
-        patternTabs.put(PatternMenuTab.STYLE, style);
-
-        // init tab map
-
-        tabs.put(ConciergeMenuTab.LOCATION, locationTabs);
-        tabs.put(ConciergeMenuTab.PATTERN, patternTabs);
-
-        // init poll action menu commends
-
-        pollMenuCommands.put(ConciergeMenuTab.LOCATION, new LocationPollCommand());
-        pollMenuCommands.put(ConciergeMenuTab.PATTERN, new ClearPollCommand());*/
+        tabs.put(SberbankMenuTab.EDITOR, editorTabs);
     }
 
     protected void initMenuBar() {
-        String addressDisplayName = BrownieSession.get().getAddressDisplayName();
-        if (addressDisplayName == null || addressDisplayName.isEmpty()) {
-            menuBar.addItem(SberbankUI.I18N.getString(MSGR), menuCommand);
-        } else {
-            menuBar.addItem(addressDisplayName, menuCommand);
-        }
-        menuBar.addItem(SberbankUI.I18N.getString(PTRN), menuCommand);
+        menuBar.addItem(SberbankUI.I18N.getString(SberbankKey.Menu.MSGR), menuCommand);
     }
 
     protected void initFilterBar() {
-        Button button = new Button(SberbankUI.I18N.getString(FILTER_LIST));
+        Button button = new Button(SberbankUI.I18N.getString(SberbankKey.Form.FILTER_LIST));
         button.setWidth(StyleDimensions.WIDTH_S);
         button.setHeight(StyleDimensions.HEIGHT_S);
         button.addClickListener(this::clickFilterButton);
@@ -205,19 +178,70 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
 
     protected void reloadActionMenuBar() {
         actionMenuBar.removeItems();
-        if (tab == ConciergeMenuTab.LOCATION) {
-            actionMenuBar.addItem(SberbankUI.I18N.getString(MSGR_IN), actionCommand);
-            actionMenuBar.addItem(SberbankUI.I18N.getString(MSGR_OUT), actionCommand);
-            actionMenuBar.addItem(SberbankUI.I18N.getString(MSGR_POLLS), actionCommand);
-            actionMenuBar.addItem(SberbankUI.I18N.getString(MSGR_POLL), actionCommand);
-            actionMenuBar.addItem(SberbankUI.I18N.getString(MSGR_REQUESTS), actionCommand);
-            actionMenuBar.addItem(SberbankUI.I18N.getString(MSGR_HISTORY), actionCommand);
+        actionMenuBar.addItem(SberbankUI.I18N.getString(SberbankKey.Menu.MSGR_IN), actionCommand);
+        actionMenuBar.addItem(SberbankUI.I18N.getString(SberbankKey.Menu.MSGR_OUT), actionCommand);
+    }
 
-        } else if (tab == ConciergeMenuTab.PATTERN) {
-            actionMenuBar.addItem(SberbankUI.I18N.getString(PTRN_MESSAGE), actionCommand);
-            actionMenuBar.addItem(SberbankUI.I18N.getString(PTRN_POLL), actionCommand);
-            actionMenuBar.addItem(SberbankUI.I18N.getString(PTRN_STYLE), actionCommand);
-        }
+    private void clickFilterButton(Button.ClickEvent event) {
+
+        /*if (getTab() instanceof ReviewTab) {
+            ReviewTab layout = (ReviewTab) getTab();
+            boolean filter = layout.isFilter();
+            filter = !filter;
+
+            layout.setFilter(filter);
+            layout.getTreePanel().setVisible(filter);
+            layout.getSubmitPanel().setVisible(filter && !StringUtils.isEmpty(layout.getRecipient()));
+            layout.getVerticalSeparator().setVisible(filter);
+
+            if (filter) {
+                event.getButton().setCaption(AbstractUI.I18N.getString(FILTER_LIST));
+            } else {
+                event.getButton().setCaption(AbstractUI.I18N.getString(FILTER_GROUP));
+            }
+
+            headerLabel.setValue(layout.getHeader());
+
+            SimpleMonologComponent dialog = layout.getDialog();
+            dialog.clear();
+            if (filter) {
+                layout.clear();
+            } else {
+                layout.setRecipient(RequestConstant.FROM_ALL);
+                dialog.setRecipient(RequestConstant.FROM_ALL);
+                layout.getDialogContainer().setContent(dialog);
+                layout.update();
+            }
+            layout.setFilter(filter);
+
+        } else if (getTab() instanceof RequestsTab) {
+            RequestsTab layout = (RequestsTab) getTab();
+            boolean filter = layout.isFilter();
+            filter = !filter;
+
+            layout.setFilter(filter);
+            layout.getTreePanel().setVisible(filter);
+            layout.getVerticalSeparator().setVisible(filter);
+
+            if (filter) {
+                event.getButton().setCaption(AbstractUI.I18N.getString(FILTER_LIST));
+            } else {
+                event.getButton().setCaption(AbstractUI.I18N.getString(FILTER_GROUP));
+            }
+            headerLabel.setValue(layout.getHeader());
+
+            TaskListedComponent dialog = layout.getDialog();
+            dialog.clear();
+            if (filter) {
+                layout.clear();
+            } else {
+                layout.setRecipient(RequestConstant.FROM_ALL);
+                dialog.setRecipient(RequestConstant.FROM_ALL);
+                layout.getDialogContainer().setContent(dialog);
+                layout.update();
+            }
+            layout.setFilter(filter);
+        }*/
     }
 
     private void initTopSection() {
@@ -265,6 +289,9 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
         actionMenuBar.getItems().get(actionTab.getIndex()).setStyleName(StyleNames.MENU_ITEM_ACTIVE);
     }
 
+    /**
+     * @author klapatnyuk
+     */
     protected class MenuCommand implements MenuBar.Command {
 
         private static final long serialVersionUID = -5336826706220710041L;
@@ -292,10 +319,12 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
             }
 
             clickActionMenu(actionTab);
-            pollMenuCommands.get(tab).poll();
         }
     }
 
+    /**
+     * @author klapatnyuk
+     */
     protected class ActionMenuCommand implements MenuBar.Command {
 
         private static final long serialVersionUID = 5134839118306122334L;
@@ -316,20 +345,6 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
             headerLabel.setValue(getTab(tab, actionTab).getHeader());
             updateActionMenuBar(oldIndex);
             updateTabsLayout(oldActionTab);
-        }
-    }
-
-    /**
-     * @author vykla
-     */
-    protected class ClearPollCommand implements PollMenuCommand {
-
-        public ClearPollCommand() {}
-
-        @Override
-        public void poll() {
-            LOG.debug("Clear poll command started");
-            actionMenuBar.getItems().forEach(item -> item.setIcon(null));
         }
     }
 }

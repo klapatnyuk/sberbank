@@ -1,0 +1,20 @@
+@charset "UTF-8";
+
+@mixin window-settings {
+
+    .window-settings {
+        font-size: 13px;
+        padding: $padding-v $padding-h $padding-v * 2 $padding-h;
+        background-color: $color-window-bg;
+
+        .layout-row {
+            padding: $padding-v $padding-h;
+            background-color: white;
+            margin-top: 10px;
+
+            .v-checkbox {
+                padding-right: 0;
+            }
+        }
+    }
+}

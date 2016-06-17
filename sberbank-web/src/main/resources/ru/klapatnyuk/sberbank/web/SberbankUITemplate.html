@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="package-mapping" content="sb:ru.klapatnyuk.sberbank.web" />
+</head>
+<body>
+<v-vertical-layout size-full style-name="template-main">
+
+    <!-- TOP SECTION -->
+    <v-horizontal-layout _id="topSection" style-name="section-top" size-full>
+        <v-horizontal-layout style-name="wrapper" size-full :center>
+            <sb-profile-layout _id="profileLayout" :right :middle />
+        </v-horizontal-layout>
+    </v-horizontal-layout>
+
+    <!-- HEADER SECTION -->
+    <v-horizontal-layout _id="headerSection" style-name="section-header" size-full>
+        <v-horizontal-layout style-name="wrapper" size-full :center>
+            <v-image _id="logoImage" />
+            <v-menu-bar _id="menuBar" :bottom :expand />
+        </v-horizontal-layout>
+    </v-horizontal-layout>
+
+    <!-- MAIN SECTION -->
+    <v-horizontal-layout style-name="section-main" size-full :expand>
+        <v-vertical-layout style-name="wrapper" size-full :center>
+            <v-menu-bar _id="actionMenuBar" />
+            <v-horizontal-layout _id="headerLayout" style-name="header" size-full>
+                <v-label _id="headerLabel" style-name="header-label" :middle :left :expand />
+                <v-horizontal-layout _id="filterLayout" style-name="layout-filter" :middle :right />
+            </v-horizontal-layout>
+            <v-horizontal-layout _id="tabsLayout" size-full :expand />
+        </v-vertical-layout>
+    </v-horizontal-layout>
+
+    <!-- FOOTER SECTION -->
+    <v-horizontal-layout _id="footerSection" style-name="section-footer" size-full>
+        <v-horizontal-layout style-name="wrapper" size-full :center>
+            <v-label _id="copyrightLabel" style-name="copyright-label" :middle :right />
+        </v-horizontal-layout>
+    </v-horizontal-layout>
+</v-vertical-layout>
+</body>
+</html>

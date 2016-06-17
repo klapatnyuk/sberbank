@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+@mixin window-activation-code {
+
+    .window-activation-code {
+        font-size: 13px;
+        padding: $padding-v $padding-h $padding-v * 2 $padding-h;
+        background-color: $color-window-bg;
+
+        .layout-row {
+            padding: $padding-v $padding-h;
+            background-color: white;
+            margin-top: 10px;
+
+            .code-label {
+                font-family: Consolas, serif;
+                font-size: 24px;
+                text-align: center;
+            }
+        }
+    }
+}

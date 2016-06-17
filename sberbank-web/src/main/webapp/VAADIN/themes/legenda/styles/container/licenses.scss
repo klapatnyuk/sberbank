@@ -1,0 +1,65 @@
+@charset "UTF-8";
+
+@mixin container-licenses {
+
+    .container-licenses {
+
+        .panel-settings-all {
+            border-width: 0;
+            background-color: transparent;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            font-size: 13px;
+
+            .v-panel {
+                border-width: 0;
+                background-color: transparent;
+                -webkit-box-shadow: none;
+                box-shadow: none;
+
+                .grid-settings {
+                    word-wrap: break-word;
+
+                    .v-gridlayout-spacing-on {
+                        padding-top: 3px;
+                        padding-left: 3px;
+                    }
+
+                    .v-gridlayout-slot {
+                        background: white;
+
+                        .v-label {
+                            padding: 3px 5px;
+                        }
+
+                        .v-button {
+                            margin: 2px 5px;
+                        }
+
+                        .label-header {
+                            font-weight: bold;
+                            text-align: center;
+                            vertical-align: middle;
+                            line-height: 40px;
+                            background-color: $color-window-bg;
+                            padding: 0;
+                        }
+                    }
+                }
+
+                .v-gridlayout-margin-top {
+                    padding: 0;
+                }
+                .v-gridlayout-margin-bottom {
+                    padding: 0;
+                }
+                .v-gridlayout-margin-left {
+                    padding: 0;
+                }
+                .v-gridlayout-margin-right {
+                    padding: 0;
+                }
+            }
+        }
+    }
+}

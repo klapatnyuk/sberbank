@@ -1,0 +1,8 @@
+@charset "UTF-8";
+
+@mixin spacer-left-small {
+
+    .spacer-left-small {
+        padding-left: $padding-h-small;
+    }
+}

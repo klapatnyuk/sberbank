@@ -99,7 +99,7 @@ public class WarningWindow extends Window {
             }
         }
         if (changed) {
-            if (AbstractUI.getCurrent().isModalWindowAttached()) {
+            if (SberbankUI.getCurrent().isModalWindowAttached()) {
                 clear();
             } else {
                 reload();
@@ -154,12 +154,12 @@ public class WarningWindow extends Window {
     private VerticalLayout newMessageLayout(WarningMessage message) {
         VerticalLayout messageLayout = new VerticalLayout();
         messageLayout.setSizeFull();
-        if (!StringUtils.isEmpty(message.getCaption())) {
+        if (message.getCaption() != null && !message.getCaption().isEmpty()) {
             Label captionLabel = new Label(message.getCaption());
             captionLabel.setStyleName("label-caption");
             messageLayout.addComponent(captionLabel);
         }
-        if (!StringUtils.isEmpty(message.getDescription())) {
+        if (message.getDescription() != null && !message.getDescription().isEmpty()) {
             Label descriptionLabel = new Label(message.getDescription());
             descriptionLabel.setStyleName("label-description");
             descriptionLabel.setContentMode(ContentMode.HTML);

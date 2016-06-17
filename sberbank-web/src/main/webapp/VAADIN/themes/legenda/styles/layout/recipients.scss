@@ -1,0 +1,94 @@
+@charset "UTF-8";
+
+@mixin layout-recipients {
+
+    .layout-recipients {
+
+        .panel-recipients {
+            border-width: 0;
+            background-color: transparent;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+
+            .v-panel {
+                border-width: 0;
+                background-color: transparent;
+                -webkit-box-shadow: none;
+                box-shadow: none;
+
+                .grid-recipients {
+                    word-wrap: break-word;
+
+                    .v-gridlayout-spacing-on {
+                        padding-top: 0;
+                        padding-left: 3px;
+                    }
+
+                    .v-gridlayout-slot {
+                        background: transparent;
+
+                        .layout-recipient {
+                            border: 1px $color-second solid;
+                            margin-bottom: 8px;
+
+                            .v-slot {
+                                margin-top: 0;
+                            }
+
+                            .v-label {
+                                padding: 2px 8px;
+                                background-color: $color-button-transparent;
+                                line-height: 18px;
+                                vertical-align: middle;
+                                text-align: left;
+                                font-size: 11px;
+                                white-space: nowrap;
+                            }
+
+                            .v-button {
+                                margin: 0;
+                                padding: 0;
+                            }
+
+                            .v-button:focus:after {
+                                border: none;
+                                -webkit-box-shadow: none;
+                                box-shadow: none;
+                            }
+
+                            .v-icon {
+                                vertical-align: top;
+                                padding-top: 3px;
+                                margin-left: 0;
+                            }
+                        }
+                    }
+                }
+
+                .v-gridlayout-margin-top {
+                    padding: 0;
+                }
+                .v-gridlayout-margin-bottom {
+                    padding: 0;
+                }
+                .v-gridlayout-margin-left {
+                    padding: 0;
+                }
+                .v-gridlayout-margin-right {
+                    padding: 0;
+                }
+            }
+        }
+
+        .v-filterselect {
+            white-space: nowrap;
+
+            .v-filterselect-input {
+                white-space: nowrap;
+            }
+
+            .v-filterselect-button {
+            }
+        }
+    }
+}

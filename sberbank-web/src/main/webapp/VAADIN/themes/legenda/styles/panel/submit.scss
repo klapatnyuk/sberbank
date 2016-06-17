@@ -1,0 +1,17 @@
+@charset "UTF-8";
+
+@mixin panel-submit {
+
+    .panel-submit {
+        padding: $padding-v $padding-h;
+        font-size: 13px;
+
+        .v-button {
+            margin-left: $padding-h-small;
+        }
+
+        .chatarea {
+            padding: $padding-v-small $padding-h-small;
+        }
+    }
+}

@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+@mixin font-monospace {
+
+    .font-monospace {
+        font-family: Consolas, serif !important;
+        font-size: 12px;
+    }
+}

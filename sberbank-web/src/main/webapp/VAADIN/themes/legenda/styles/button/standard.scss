@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+@mixin button-standard {
+
+    .button-standard {
+        @extend %gradient-light-important;
+        border-color: $color-second !important;
+        font-size: $font-size-small !important;
+    }
+}

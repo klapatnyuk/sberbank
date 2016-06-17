@@ -1,0 +1,13 @@
+@charset "UTF-8";
+
+@mixin section-wrapper {
+
+    .section-wrapper {
+        min-width: $app-min-width;
+
+        .wrapper {
+            max-width: $app-max-width - 2 * $padding-h;
+            min-width: $app-min-width - 2 * $padding-h;
+        }
+    }
+}

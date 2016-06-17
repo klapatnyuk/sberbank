@@ -1,0 +1,83 @@
+@charset "UTF-8";
+
+@mixin section-main {
+
+    .section-main {
+        @extend .section-wrapper;
+        padding: 0 $padding-h $padding-v $padding-h;
+        background-color: $color-main-bg;
+
+        .v-menubar {
+            padding: 8px 0;
+            border: none;
+            background: transparent none;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+
+            .v-menubar-menuitem,
+            .v-menubar-menuitem-inactive {
+                font-size: $font-size-small;
+                color: $color-main;
+                min-width: 80px;
+                margin: 0 0 0 12px;
+                border-right-width: 0;
+                padding: 0 $padding-h;
+                text-align: center;
+                line-height: 34px;
+
+                .v-menubar-menuitem-caption {
+                }
+
+                .v-icon {
+                    margin: -1px 5px 2px -5px;
+                }
+            }
+
+            .v-menubar-menuitem:hover {
+            }
+            .v-menubar-menuitem-checked,
+            .v-menubar-menuitem-menuitem-active {
+                color: $color-main-font;
+            }
+        }
+
+        .v-menubar:focus:after {
+            border: none !important;
+            box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-sizing: border-box;
+        }
+
+        .header {
+            padding: 0 $padding-h;
+            background-color: $color-main;
+
+            .header-label {
+                color: white;
+            }
+
+            .layout-filter {
+                font-size: 13px;
+
+                .v-label {
+                    color: white;
+                    line-height: 24px;
+                    vertical-align: middle;
+                }
+
+                .v-button {
+                    @extend .button-standard;
+                    margin-left: 20px;
+                }
+
+                .v-filterselect {
+                    margin-left: 20px;
+                }
+
+                .v-filterselect-input {
+                    border-color: $color-second-dark;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+@mixin button-transparent {
+
+    .button-transparent {
+        border: none;
+        background: none;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+    }
+}

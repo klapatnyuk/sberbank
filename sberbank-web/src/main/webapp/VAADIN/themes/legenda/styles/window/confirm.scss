@@ -1,0 +1,24 @@
+@charset "UTF-8";
+
+@mixin window-confirm {
+
+    .window-confirm {
+        font-size: 13px;
+        padding: $padding-v $padding-h $padding-v * 2 $padding-h;
+        background-color: $color-window-bg;
+
+        .layout-row {
+            padding: $padding-v $padding-h;
+            background-color: white;
+            margin-top: 10px;
+
+            .v-label {
+                text-align: justify;
+            }
+
+            .v-button {
+                margin: 0;
+            }
+        }
+    }
+}

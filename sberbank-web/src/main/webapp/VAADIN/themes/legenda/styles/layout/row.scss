@@ -1,0 +1,26 @@
+@charset "UTF-8";
+
+@mixin layout-row {
+
+    .layout-row {
+        font-size: 13px;
+
+        .v-button {
+            margin-right: 25px;
+        }
+
+        .body-text-area {
+            padding: $padding-v-small $padding-h-small;
+        }
+
+        .v-filterselect {
+            font-size: 13px;
+        }
+
+        .recipient-label {
+            text-align: center;
+            margin-right: 25px;
+            line-height: 28px;
+        }
+    }
+}

@@ -1,0 +1,47 @@
+@charset "UTF-8";
+
+@mixin notification {
+
+    .notification {
+        max-width: 400px;
+        cursor: pointer;
+
+        .v-Notification-caption {
+            display: block;
+            text-align: left;
+            font-size: 14px;
+            white-space: normal;
+        }
+
+        .v-Notification-description {
+            margin-left: 0;
+            font-size: 12px;
+            padding-top: 10px;
+        }
+
+        .popupContent {
+
+            .gwt-HTML {
+                text-align: left;
+
+                h1 {
+                }
+
+                p {
+                }
+            }
+        }
+    }
+
+    .v-Notification-warning {
+        @extend .notification;
+        top: 47px !important;
+        right: 25px !important;
+    }
+
+    .v-Notification-tray {
+        @extend .notification;
+        bottom: 47px !important;
+        right: 25px !important;
+    }
+}

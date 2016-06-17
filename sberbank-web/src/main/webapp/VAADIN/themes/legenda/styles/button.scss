@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+@import "button/standard.scss";
+@import "button/transparent.scss";
+
+@mixin button {
+    @include button-standard;
+    @include button-transparent;
+}

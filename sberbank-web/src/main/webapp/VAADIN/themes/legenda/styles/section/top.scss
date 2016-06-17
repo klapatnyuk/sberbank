@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+@mixin section-top {
+
+    .section-top {
+        @extend .section-wrapper;
+        padding: 0 $padding-h;
+        background-color: $color-second;
+        font-size: $font-size-small;
+
+        .bar-profile {
+            padding-right: $padding-h;
+
+            .v-label {
+                color: white;
+            }
+
+            .bar-profile-user-name {
+                font-style: italic;
+            }
+        }
+    }
+}
