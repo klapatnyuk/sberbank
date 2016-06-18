@@ -39,7 +39,8 @@ public class FieldsLayout extends VerticalLayout {
     }
 
     public void clear() {
-        // TODO implement
+        removeAllComponents();
+        addComponent(newRow(null));
     }
 
     public List<Field> getFields() {
@@ -157,18 +158,12 @@ public class FieldsLayout extends VerticalLayout {
         title.setWidth("100%");
         title.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
         title.setMaxLength(ValidatePattern.TAGLIKE_STRINGS_LENGTH);
-        if (field != null && field.getTitle() != null) {
-            title.setValue(field.getTitle());
-        }
 
         TextField label = new TextField();
         label.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.Form.STRINGS_LABEL_PROMPT));
         label.setWidth("100%");
         label.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
         label.setMaxLength(ValidatePattern.TAGLIKE_STRINGS_LENGTH);
-        if (field != null && field.getLabel() != null) {
-            label.setValue(field.getLabel());
-        }
 
         ComboBox type = new ComboBox();
         type.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.Form.STRINGS_TYPE_PROMPT));
@@ -221,6 +216,19 @@ public class FieldsLayout extends VerticalLayout {
         row.setExpandRatio(label, 6);
         row.setExpandRatio(type, 3);
         row.setExpandRatio(buttonsLayout, 4);
+
+        // update values
+        if (field != null) {
+            if (field.getTitle() != null) {
+                title.setValue(field.getTitle());
+            }
+            if (field.getLabel() != null) {
+                label.setValue(field.getLabel());
+            }
+            if (field.getType() != null) {
+                type.setValue(field.getType());
+            }
+        }
 
         // add listeners
 

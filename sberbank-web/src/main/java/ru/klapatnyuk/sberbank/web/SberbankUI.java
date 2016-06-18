@@ -4,6 +4,7 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.data.util.sqlcontainer.connection.JDBCConnectionPool;
 import com.vaadin.data.util.sqlcontainer.connection.SimpleJDBCConnectionPool;
+import com.vaadin.event.UIEvents;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
@@ -29,12 +30,14 @@ public class SberbankUI extends UI {
     public static final ResourceBundle CONFIG =
             PropertyResourceBundle.getBundle(SberbankUI.class.getPackage().getName() + "." + SberbankUI.CONFIG_NAME);
 
-    private static final String CONFIG_NAME = "config";
+    public static JDBCConnectionPool connectionPool;
 
-    private static JDBCConnectionPool connectionPool;
+    private static final String CONFIG_NAME = "config";
+    private static final int POLL_INTERVAL = Integer.parseInt(CONFIG.getString(ConfigKey.TIME_POLL_INTERVAL.getKey()));
 
     private WarningWindow warningWindow;
     private LoginWindow loginWindow;
+    protected UIEvents.PollListener guestPollListener;
 
     static {
         try {
@@ -73,14 +76,19 @@ public class SberbankUI extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
+        setPollInterval(POLL_INTERVAL);
         Page.getCurrent().setTitle(I18N.getString(SberbankKey.Header.APP));
 
         initLoginWindow();
         initWarningWindow();
 
+        guestPollListener = event -> SberbankUI.getWarningWindow().poll();
+
         SberbankUITemplate template = new SberbankUITemplate();
         template.getProfileLayout().getNameLabel().setValue(BrownieSession.get().getLoggedInUser());
         setContent(template);
+
+        addPollListener(guestPollListener);
 
         /*try (Connection connection = connectionPool.reserveConnection()) {
 

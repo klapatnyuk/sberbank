@@ -1,5 +1,7 @@
 package ru.klapatnyuk.sberbank.model.handler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.klapatnyuk.sberbank.model.entity.Field;
 
 import java.sql.Connection;
@@ -14,14 +16,19 @@ import java.util.List;
  */
 public class FieldHandler extends AbstractHandler<Field> {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(FieldHandler.class);
+
     public FieldHandler(Connection connection) {
         super(connection);
     }
 
     public List<Field> findByTemplateId(int id) throws SQLException {
+        LOGGER.debug("Inside FieldHandler.findByTemplateId(" + id + ")");
+
         String sql = "SELECT id, title, label, type, \"order\" " +
                 "FROM template_field " +
-                "WHERE active = TRUE AND template_id = ?";
+                "WHERE active = TRUE AND template_id = ? " +
+                "ORDER BY \"order\"";
 
         List<Field> result = new ArrayList<>();
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {

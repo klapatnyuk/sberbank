@@ -79,6 +79,10 @@ public class TemplateTabView extends TabView {
         return titleField;
     }
 
+    public FieldsLayout getFieldsLayout() {
+        return fieldsLayout;
+    }
+
 //    public StringSelect getChoiceSelect() {
 //        return choiceSelect;
 //    }
