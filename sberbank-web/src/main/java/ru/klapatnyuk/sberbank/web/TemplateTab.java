@@ -1,5 +1,6 @@
 package ru.klapatnyuk.sberbank.web;
 
+import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import org.slf4j.Logger;
@@ -93,19 +94,39 @@ public class TemplateTab extends AbstractTab implements EditableTab {
         if (design.getTitleField().getValue().trim().isEmpty()) {
             messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_BODY_VALIDATE),
                     design.getTitleField(), getValidationSource()));
+        } else {
+            String title = design.getTitleField().getValue().trim();
+            boolean duplicate = false;
+            if (templateIndex < 0) {
+                if (templates.stream().map(Template::getTitle).filter(item -> item.equals(title)).findAny().isPresent()) {
+                    duplicate = true;
+                }
+            } else if (templates.stream().filter(item -> !item.equals(templates.get(templateIndex)))
+                    .map(Template::getTitle).filter(item -> item.equals(title)).findAny().isPresent()) {
+                duplicate = true;
+            }
+            if (duplicate) {
+                messages.add(new WarningMessage(
+                        SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_BODY_UNIQUE_VALIDATE),
+                        design.getTitleField(), getValidationSource()));
+            }
         }
 
-        /*if (design.getChoiceSelect().getStrings().size() < 2) {
+        if (design.getFieldsLayout().isEmpty()) {
             messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CHOICES_REQUIRED),
-                    design.getChoiceSelect().getLastField(),
-                    getValidationSource()));
-        } else if (design.getChoiceSelect().hasDuplicates()) {
+                    design.getFieldsLayout().getEmptyRowsField(), getValidationSource()));
+        } else if (design.getFieldsLayout().hasDuplicates()) {
             messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CHOICES_DUPLICATES),
-                    design.getChoiceSelect().getFirstDuplicateField(),
-                    getValidationSource()));
+                    design.getFieldsLayout().getFirstDuplicateField(), getValidationSource()));
         }
 
-        if (design.getAllowCustomField().getValue() && design.getCustomField().getValue().trim().isEmpty()) {
+        AbstractField emptyField = design.getFieldsLayout().getFirstEmptyField();
+        if (emptyField != null) {
+            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CUSTOM_REQUIRED),
+                    emptyField, getValidationSource()));
+        }
+
+        /*if (design.getAllowCustomField().getValue() && design.getCustomField().getValue().trim().isEmpty()) {
             messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CUSTOM_REQUIRED),
                     design.getCustomField(), getValidationSource()));
         }*/

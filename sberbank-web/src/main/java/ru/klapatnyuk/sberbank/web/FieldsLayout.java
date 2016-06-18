@@ -6,9 +6,7 @@ import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import ru.klapatnyuk.sberbank.model.entity.Field;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author klapatnyuk
@@ -43,9 +41,30 @@ public class FieldsLayout extends VerticalLayout {
         addComponent(newRow(null));
     }
 
+    public boolean isEmpty() {
+        for (Component item : this) {
+            if (!isEmptyRow((HorizontalLayout) item)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public List<Field> getFields() {
-        // TODO implement
-        return null;
+        List<Field> fields = new ArrayList<>();
+        Field field;
+        for (Component item : this) {
+            HorizontalLayout row = (HorizontalLayout) item;
+            if (isEmptyRow(row)) {
+                continue;
+            }
+            field = new Field();
+            field.setTitle(((TextField) row.getComponent(TITLE)).getValue().trim());
+            field.setLabel(((TextField) row.getComponent(LABEL)).getValue().trim());
+            field.setType((Field.Type) ((ComboBox) row.getComponent(TYPE)).getValue());
+            fields.add(field);
+        }
+        return fields;
     }
 
     public void setFields(List<Field> fields) {
@@ -54,6 +73,76 @@ public class FieldsLayout extends VerticalLayout {
             fields.stream().map(this::newRow).forEach(this::addComponent);
         }
         addComponent(newRow(null));
+    }
+
+    public AbstractField getEmptyRowsField() {
+        Iterator<Component> iterator = iterator();
+        HorizontalLayout row;
+        while (iterator.hasNext()) {
+            row = (HorizontalLayout) iterator.next();
+            if (isEmptyRow(row)) {
+                return (AbstractField) row.getComponent(TITLE);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Searches duplicates only among 'title' not empty field
+     */
+    public boolean hasDuplicates() {
+        List<String> all = new ArrayList<>();
+        forEach(item -> {
+            String value = ((TextField) ((HorizontalLayout) item).getComponent(TITLE)).getValue().trim();
+            if (!value.isEmpty()) {
+                all.add(value);
+            }
+        });
+        return new HashSet<>(all).size() < all.size();
+    }
+
+    /**
+     * Searches duplicates only among 'title' not empty field
+     */
+    public AbstractField getFirstDuplicateField() {
+        Set<String> unique = new HashSet<>();
+        TextField field;
+        String value;
+        for (Component item : this) {
+            field = (TextField) ((HorizontalLayout) item).getComponent(TITLE);
+            value = field.getValue().trim();
+            if (value.isEmpty()) {
+                continue;
+            }
+            if (unique.contains(value)) {
+                return field;
+            } else {
+                unique.add(value);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Searches empty among all 'not empty row' fields
+     */
+    public AbstractField getFirstEmptyField() {
+        for (Component rowItem : this) {
+            HorizontalLayout row = (HorizontalLayout) rowItem;
+            if (isEmptyRow(row)) {
+                continue;
+            }
+            if (((TextField) row.getComponent(TITLE)).getValue().trim().isEmpty()) {
+                return (AbstractField) row.getComponent(TITLE);
+            }
+            if (((TextField) row.getComponent(LABEL)).getValue().trim().isEmpty()) {
+                return (AbstractField) row.getComponent(LABEL);
+            }
+            if (((ComboBox) row.getComponent(TYPE)).isEmpty()) {
+                return (AbstractField) row.getComponent(TYPE);
+            }
+        }
+        return null;
     }
 
     @Override
@@ -228,6 +317,7 @@ public class FieldsLayout extends VerticalLayout {
             if (field.getType() != null) {
                 type.setValue(field.getType());
             }
+            remove.setEnabled(true);
         }
 
         // add listeners
