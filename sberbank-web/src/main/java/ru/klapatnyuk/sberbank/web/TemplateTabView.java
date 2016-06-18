@@ -39,7 +39,7 @@ public class TemplateTabView extends TabView {
     @SuppressWarnings("unused")
     private Label fieldsLabel;
     @SuppressWarnings("unused")
-    private FieldsLayout fieldsLayout;
+    private TemplateLayout templateLayout;
 
     @SuppressWarnings("unused")
     private Label submitSeparatorLabel;
@@ -79,33 +79,9 @@ public class TemplateTabView extends TabView {
         return titleField;
     }
 
-    public FieldsLayout getFieldsLayout() {
-        return fieldsLayout;
+    public TemplateLayout getTemplateLayout() {
+        return templateLayout;
     }
-
-//    public StringSelect getChoiceSelect() {
-//        return choiceSelect;
-//    }
-//
-//    public AbstractField<Boolean> getAllowCustomField() {
-//        return allowCustomField;
-//    }
-//
-//    public AbstractOrderedLayout getCustomLayout() {
-//        return customLayout;
-//    }
-//
-//    public AbstractTextField getCustomField() {
-//        return customField;
-//    }
-//
-//    public AbstractField<Boolean> getAllowMultiplyField() {
-//        return allowMultiplyField;
-//    }
-//
-//    public StringSelect getTagSelect() {
-//        return tagSelect;
-//    }
 
     public Button getSubmitButton() {
         return submitButton;
@@ -139,7 +115,7 @@ public class TemplateTabView extends TabView {
 
         fieldsLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_FIELDS_LABEL));
         fieldsLabel.setWidth(StyleDimensions.WIDTH_S);
-        fieldsLayout.setWidth("100%");
+        templateLayout.setWidth("100%");
 
         submitSeparatorLabel.setWidth("100%");
         submitSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);

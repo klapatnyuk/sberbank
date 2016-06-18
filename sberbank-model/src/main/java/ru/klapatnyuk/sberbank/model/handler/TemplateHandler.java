@@ -79,4 +79,33 @@ public class TemplateHandler extends AbstractHandler<Template> {
 
         return templateId;
     }
+
+    public void updateTemplate(Template template) throws SQLException {
+        LOGGER.debug("Inside TemplateHandler.updateTemplate");
+
+        String templateSql = "UPDATE template " +
+                "SET title = ? " +
+                "WHERE active = TRUE AND id = ?";
+
+        try (PreparedStatement statement = getConnection().prepareStatement(templateSql)) {
+            statement.setString(1, template.getTitle());
+            statement.setInt(2, template.getId());
+            if (statement.executeUpdate() == 0) {
+                throw new SQLException("Editing record failed, no affected records");
+            }
+        }
+
+        /*for (Field field : template.getFields()) {
+            if (field.getId() > 0) {
+                // edit existed fields
+
+            } else {
+                // add new fields
+
+            }
+        }
+
+        // remove fields*/
+
+    }
 }

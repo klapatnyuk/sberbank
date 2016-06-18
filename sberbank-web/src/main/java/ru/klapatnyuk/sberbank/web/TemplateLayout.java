@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * @author klapatnyuk
  */
-public class FieldsLayout extends VerticalLayout {
+public class TemplateLayout extends VerticalLayout {
 
     private static final int TITLE = 0;
     private static final int LABEL = 1;
@@ -22,12 +22,12 @@ public class FieldsLayout extends VerticalLayout {
     private static final int DOWN = 1;
     private static final int REMOVE = 2;
 
-    private final List<HorizontalLayout> layouts = new ArrayList<>();
+    private final List<FieldLayout> layouts = new ArrayList<>();
     private final BlurListener blurListener = new BlurListener();
     private final UpListener upListener = new UpListener();
     private final DownListener downListener = new DownListener();
 
-    public FieldsLayout() {
+    public TemplateLayout() {
         addComponent(newRow(null));
 
 //        // second empty line added for usability
@@ -54,11 +54,12 @@ public class FieldsLayout extends VerticalLayout {
         List<Field> fields = new ArrayList<>();
         Field field;
         for (Component item : this) {
-            HorizontalLayout row = (HorizontalLayout) item;
+            FieldLayout row = (FieldLayout) item;
             if (isEmptyRow(row)) {
                 continue;
             }
             field = new Field();
+            field.setId(row.getFieldId());
             field.setTitle(((TextField) row.getComponent(TITLE)).getValue().trim());
             field.setLabel(((TextField) row.getComponent(LABEL)).getValue().trim());
             field.setType((Field.Type) ((ComboBox) row.getComponent(TYPE)).getValue());
@@ -147,7 +148,7 @@ public class FieldsLayout extends VerticalLayout {
 
     @Override
     public void addComponent(Component component) {
-        HorizontalLayout row = (HorizontalLayout) component;
+        FieldLayout row = (FieldLayout) component;
 
         // add row
         layouts.add(row);
@@ -164,7 +165,7 @@ public class FieldsLayout extends VerticalLayout {
 
     @Override
     public void addComponent(Component component, int index) {
-        HorizontalLayout row = (HorizontalLayout) component;
+        FieldLayout row = (FieldLayout) component;
 
         // add row
         layouts.add(index, row);
@@ -189,7 +190,7 @@ public class FieldsLayout extends VerticalLayout {
 
     @Override
     public void removeComponent(Component component) {
-        HorizontalLayout row = (HorizontalLayout) component;
+        FieldLayout row = (FieldLayout) component;
 
         // update only neighbors navigate buttons
         if (layouts.size() > 2) {
@@ -240,7 +241,7 @@ public class FieldsLayout extends VerticalLayout {
         return parent.getComponentIndex(row) == parent.getComponentCount() - 1;
     }
 
-    private HorizontalLayout newRow(Field field) {
+    private FieldLayout newRow(Field field) {
 
         TextField title = new TextField();
         title.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.Form.STRINGS_PROMPT));
@@ -294,7 +295,7 @@ public class FieldsLayout extends VerticalLayout {
         buttonsLayout.setExpandRatio(down, 1);
         buttonsLayout.setExpandRatio(remove, 1);
 
-        HorizontalLayout row = new HorizontalLayout();
+        FieldLayout row = new FieldLayout(field == null ? null : field.getId());
         row.setWidth("100%");
         row.addComponent(title);
         row.addComponent(label);
@@ -345,7 +346,7 @@ public class FieldsLayout extends VerticalLayout {
 
         @Override
         public void buttonClick(Button.ClickEvent event) {
-            HorizontalLayout row = (HorizontalLayout) ((Component) event.getSource()).getParent().getParent();
+            FieldLayout row = (FieldLayout) ((Component) event.getSource()).getParent().getParent();
             int index = layouts.indexOf(row);
             if (index < 1) {
                 return;
@@ -362,7 +363,7 @@ public class FieldsLayout extends VerticalLayout {
 
         @Override
         public void buttonClick(Button.ClickEvent event) {
-            HorizontalLayout row = (HorizontalLayout) ((Component) event.getSource()).getParent().getParent();
+            FieldLayout row = (FieldLayout) ((Component) event.getSource()).getParent().getParent();
             int index = layouts.indexOf(row);
             if (index > layouts.size() - 3) {
                 return;

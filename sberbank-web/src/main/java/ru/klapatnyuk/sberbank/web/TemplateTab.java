@@ -112,15 +112,15 @@ public class TemplateTab extends AbstractTab implements EditableTab {
             }
         }
 
-        if (design.getFieldsLayout().isEmpty()) {
+        if (design.getTemplateLayout().isEmpty()) {
             messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CHOICES_REQUIRED),
-                    design.getFieldsLayout().getEmptyRowsField(), getValidationSource()));
-        } else if (design.getFieldsLayout().hasDuplicates()) {
+                    design.getTemplateLayout().getEmptyRowsField(), getValidationSource()));
+        } else if (design.getTemplateLayout().hasDuplicates()) {
             messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CHOICES_DUPLICATES),
-                    design.getFieldsLayout().getFirstDuplicateField(), getValidationSource()));
+                    design.getTemplateLayout().getFirstDuplicateField(), getValidationSource()));
         }
 
-        AbstractField emptyField = design.getFieldsLayout().getFirstEmptyField();
+        AbstractField emptyField = design.getTemplateLayout().getFirstEmptyField();
         if (emptyField != null) {
             messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CUSTOM_REQUIRED),
                     emptyField, getValidationSource()));
@@ -138,7 +138,7 @@ public class TemplateTab extends AbstractTab implements EditableTab {
     @Override
     public void clear() {
         design.getTitleField().clear();
-        design.getFieldsLayout().clear();
+        design.getTemplateLayout().clear();
     }
 
     @Override
@@ -188,7 +188,7 @@ public class TemplateTab extends AbstractTab implements EditableTab {
         if (fields == null) {
             return;
         }
-        design.getFieldsLayout().setFields(fields);
+        design.getTemplateLayout().setFields(fields);
     }
 
     private void clickTemplateButton(Button.ClickEvent event) {
@@ -227,7 +227,7 @@ public class TemplateTab extends AbstractTab implements EditableTab {
         if (fields == null) {
             return;
         }
-        design.getFieldsLayout().setFields(fields);
+        design.getTemplateLayout().setFields(fields);
     }
 
     private void clickCreateButton() {
@@ -286,47 +286,32 @@ public class TemplateTab extends AbstractTab implements EditableTab {
             templateIndex = (index < 0) ? 0 : index;
             Tray.show(I18N.getString(PTRN_POLL_UPDATED));
             update();*/
-        } else {
-            /*// create new pattern
-            PollPatternRequest model = new PollPatternRequest();
-            model.setBody(design.getBodyField().getValue().trim());
-            model.setChoiceType(design.getAllowMultiplyField().getValue() ? PollQuestionType.MULTIPLE_ANSWERS.toString()
-                    : PollQuestionType.SINGLE_ANSWER.toString());
-            model.setAnswers(design.getChoiceSelect().getStrings());
-            model.setCustom(design.getAllowCustomField().getValue());
-            if (design.getAllowCustomField().getValue()) {
-                model.setCustomAnswer(design.getCustomField().getValue().trim());
-            }
-            model.setTags(design.getTagSelect().getUniqueStrings());
-            model.setDeleted(false);*/
 
-            /*PollPatternsRequest request = new PollPatternsRequest(Arrays.asList(model));
-            PollPatternsResponse response = null;
-            try {
-                response = service.setPolls(request);
-            } catch (RemoteServiceException e) {
-                BrownieErrorHandler.handle(e, I18N.getString(PTRN_POLL_CREATE_ERROR));
-            }
-            if (response != null) {
-                PollPattern pattern = PollPattern.valueOf(response.getData().get(0));
-                List<PollPattern> patterns = BrownieSession.getMasterdata().getPolls();
-                patterns.add(pattern);
-                Collections.sort(patterns);
-                Tray.show(I18N.getString(PTRN_POLL_CREATED));
-                clear();
-                update();
-            }*/
-
-            Template template = new Template();
-            template.setTitle(design.getTitleField().getValue().trim());
-            template.setFields(design.getFieldsLayout().getFields());
+            Template updatedTemplate = new Template();
+            updatedTemplate.setId(template.getId());
+            updatedTemplate.setTitle(design.getTitleField().getValue().trim());
+            updatedTemplate.setFields(design.getTemplateLayout().getFields());
 
             try {
                 Connection connection = SberbankUI.connectionPool.reserveConnection();
                 connection.setAutoCommit(false);
+                new TemplateHandler(connection).updateTemplate(updatedTemplate);
+                connection.commit();
+                SberbankUI.connectionPool.releaseConnection(connection);
+            } catch (SQLException e) {
+                LOGGER.error("Template creation error", e);
+                // TODO display WarningMessage
+            }
 
-                new TemplateHandler(connection).createTemplate(template);
+        } else {
+            Template newTemplate = new Template();
+            newTemplate.setTitle(design.getTitleField().getValue().trim());
+            newTemplate.setFields(design.getTemplateLayout().getFields());
 
+            try {
+                Connection connection = SberbankUI.connectionPool.reserveConnection();
+                connection.setAutoCommit(false);
+                new TemplateHandler(connection).createTemplate(newTemplate);
                 connection.commit();
                 SberbankUI.connectionPool.releaseConnection(connection);
             } catch (SQLException e) {
