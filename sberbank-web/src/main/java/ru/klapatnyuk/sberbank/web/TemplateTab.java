@@ -126,11 +126,6 @@ public class TemplateTab extends AbstractTab implements EditableTab {
                     emptyField, getValidationSource()));
         }
 
-        /*if (design.getAllowCustomField().getValue() && design.getCustomField().getValue().trim().isEmpty()) {
-            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CUSTOM_REQUIRED),
-                    design.getCustomField(), getValidationSource()));
-        }*/
-
         SberbankUI.getWarningWindow().addAll(messages);
         return messages.isEmpty();
     }
@@ -259,8 +254,8 @@ public class TemplateTab extends AbstractTab implements EditableTab {
             return;
         }
 
-        /*if (templateIndex >= 0) {
-            // edit existed pattern
+        if (templateIndex >= 0) {
+            /*// edit existed pattern
             PollPatternRequest model = new PollPatternRequest();
             model.setSid(pattern.getSid());
             model.setDeleted(Pattern.DELETED);
@@ -290,9 +285,9 @@ public class TemplateTab extends AbstractTab implements EditableTab {
             int index = patterns.stream().map(Pattern::getSid).collect(Collectors.toList()).indexOf(pattern.getSid());
             templateIndex = (index < 0) ? 0 : index;
             Tray.show(I18N.getString(PTRN_POLL_UPDATED));
-            update();
+            update();*/
         } else {
-            // create new pattern
+            /*// create new pattern
             PollPatternRequest model = new PollPatternRequest();
             model.setBody(design.getBodyField().getValue().trim());
             model.setChoiceType(design.getAllowMultiplyField().getValue() ? PollQuestionType.MULTIPLE_ANSWERS.toString()
@@ -303,9 +298,9 @@ public class TemplateTab extends AbstractTab implements EditableTab {
                 model.setCustomAnswer(design.getCustomField().getValue().trim());
             }
             model.setTags(design.getTagSelect().getUniqueStrings());
-            model.setDeleted(false);
+            model.setDeleted(false);*/
 
-            PollPatternsRequest request = new PollPatternsRequest(Arrays.asList(model));
+            /*PollPatternsRequest request = new PollPatternsRequest(Arrays.asList(model));
             PollPatternsResponse response = null;
             try {
                 response = service.setPolls(request);
@@ -320,7 +315,27 @@ public class TemplateTab extends AbstractTab implements EditableTab {
                 Tray.show(I18N.getString(PTRN_POLL_CREATED));
                 clear();
                 update();
+            }*/
+
+            Template template = new Template();
+            template.setTitle(design.getTitleField().getValue().trim());
+            template.setFields(design.getFieldsLayout().getFields());
+
+            try {
+                Connection connection = SberbankUI.connectionPool.reserveConnection();
+                connection.setAutoCommit(false);
+
+                new TemplateHandler(connection).createTemplate(template);
+
+                connection.commit();
+                SberbankUI.connectionPool.releaseConnection(connection);
+            } catch (SQLException e) {
+                LOGGER.error("Template creation error", e);
+                // TODO display WarningMessage
             }
-        }*/
+
+            clear();
+            update();
+        }
     }
 }
