@@ -13,9 +13,10 @@ CREATE TABLE IF NOT EXISTS "user" (
 ALTER SEQUENCE user_ids OWNED BY "user".id;
 
 CREATE TABLE IF NOT EXISTS template (
-    id     INTEGER NOT NULL DEFAULT NEXTVAL('template_ids'),
-    title  VARCHAR NOT NULL,
-    active BOOLEAN NOT NULL DEFAULT TRUE,
+    id     INTEGER   NOT NULL DEFAULT NEXTVAL('template_ids'),
+    title  VARCHAR   NOT NULL,
+    edited TIMESTAMP NOT NULL DEFAULT LOCALTIMESTAMP,
+    active BOOLEAN   NOT NULL DEFAULT TRUE,
     CONSTRAINT template_pk PRIMARY KEY (id),
     CONSTRAINT template_title_uk UNIQUE (title)
 );
@@ -32,17 +33,17 @@ CREATE TABLE IF NOT EXISTS template_field (
     CONSTRAINT template_field_pk PRIMARY KEY (id),
     CONSTRAINT template_field_template_fk FOREIGN KEY (template_id) REFERENCES template (id),
     CONSTRAINT template_field_title_uk UNIQUE (template_id, title),
-    CONSTRAINT template_field_type_in CHECK (type IN ('LINE', 'AREA', 'CHECKBOX')),
-    CONSTRAINT template_field_order_uk UNIQUE (template_id, "order")
+    CONSTRAINT template_field_type_in CHECK (type IN ('LINE', 'AREA', 'CHECKBOX'))
 );
 ALTER SEQUENCE template_field_ids OWNED BY template_field.id;
 
 CREATE TABLE IF NOT EXISTS document (
-    id          INTEGER NOT NULL DEFAULT NEXTVAL('document_ids'),
-    template_id INTEGER NOT NULL,
-    title       VARCHAR NOT NULL,
-    owner_id    INTEGER NOT NULL,
-    active      BOOLEAN NOT NULL DEFAULT TRUE,
+    id          INTEGER   NOT NULL DEFAULT NEXTVAL('document_ids'),
+    template_id INTEGER   NOT NULL,
+    title       VARCHAR   NOT NULL,
+    owner_id    INTEGER   NOT NULL,
+    edited      TIMESTAMP NOT NULL DEFAULT LOCALTIMESTAMP,
+    active      BOOLEAN   NOT NULL DEFAULT TRUE,
     CONSTRAINT document_pk PRIMARY KEY (id),
     CONSTRAINT document_template_fk FOREIGN KEY (template_id) REFERENCES template (id),
     CONSTRAINT document_title_uk UNIQUE (template_id, title, owner_id)

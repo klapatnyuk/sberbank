@@ -295,7 +295,7 @@ public class TemplateLayout extends VerticalLayout {
         buttonsLayout.setExpandRatio(down, 1);
         buttonsLayout.setExpandRatio(remove, 1);
 
-        FieldLayout row = new FieldLayout(field == null ? null : field.getId());
+        FieldLayout row = new FieldLayout(field == null ? 0 : field.getId());
         row.setWidth("100%");
         row.addComponent(title);
         row.addComponent(label);

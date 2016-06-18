@@ -7,13 +7,13 @@ import com.vaadin.ui.HorizontalLayout;
  */
 public class FieldLayout extends HorizontalLayout {
 
-    private final Integer id;
+    private final int id;
 
-    public FieldLayout(Integer id) {
+    public FieldLayout(int id) {
         this.id = id;
     }
 
-    public Integer getFieldId() {
+    public int getFieldId() {
         return id;
     }
 }

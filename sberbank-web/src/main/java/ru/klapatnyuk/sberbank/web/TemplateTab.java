@@ -253,45 +253,12 @@ public class TemplateTab extends AbstractTab implements EditableTab {
         if (!validate()) {
             return;
         }
-
         if (templateIndex >= 0) {
-            /*// edit existed pattern
-            PollPatternRequest model = new PollPatternRequest();
-            model.setSid(pattern.getSid());
-            model.setDeleted(Pattern.DELETED);
-            model.setBody(design.getBodyField().getValue().trim());
-            model.setChoiceType(design.getAllowMultiplyField().getValue() ? PollQuestionType.MULTIPLE_ANSWERS.toString()
-                    : PollQuestionType.SINGLE_ANSWER.toString());
-            model.setAnswers(design.getChoiceSelect().getStrings());
-
-            model.setCustom(design.getAllowCustomField().getValue());
-            if (design.getAllowCustomField().getValue()) {
-                model.setCustomAnswer(design.getCustomField().getValue().trim());
-            }
-            model.setTags(design.getTagSelect().getUniqueStrings());
-
-            PollPatternsRequest request = new PollPatternsRequest(Arrays.asList(model));
-            PollPatternsResponse response;
-            try {
-                response = service.setPolls(request);
-            } catch (RemoteServiceException e) {
-                BrownieErrorHandler.handle(e, I18N.getString(PTRN_POLL_EDIT_ERROR));
-                return;
-            }
-            PollPattern pattern = PollPattern.valueOf(response.getData().get(0));
-            List<PollPattern> patterns = BrownieSession.getMasterdata().getPolls();
-            patterns.set(templateIndex, pattern);
-            Collections.sort(patterns);
-            int index = patterns.stream().map(Pattern::getSid).collect(Collectors.toList()).indexOf(pattern.getSid());
-            templateIndex = (index < 0) ? 0 : index;
-            Tray.show(I18N.getString(PTRN_POLL_UPDATED));
-            update();*/
-
             Template updatedTemplate = new Template();
             updatedTemplate.setId(template.getId());
+            updatedTemplate.setEdited(template.getEdited());
             updatedTemplate.setTitle(design.getTitleField().getValue().trim());
             updatedTemplate.setFields(design.getTemplateLayout().getFields());
-
             try {
                 Connection connection = SberbankUI.connectionPool.reserveConnection();
                 connection.setAutoCommit(false);
@@ -299,28 +266,30 @@ public class TemplateTab extends AbstractTab implements EditableTab {
                 connection.commit();
                 SberbankUI.connectionPool.releaseConnection(connection);
             } catch (SQLException e) {
-                LOGGER.error("Template creation error", e);
+                LOGGER.error("Template edition error", e);
                 // TODO display WarningMessage
+                return;
             }
+            template = updatedTemplate;
 
         } else {
-            Template newTemplate = new Template();
-            newTemplate.setTitle(design.getTitleField().getValue().trim());
-            newTemplate.setFields(design.getTemplateLayout().getFields());
-
+            Template createdTemplate = new Template();
+            createdTemplate.setTitle(design.getTitleField().getValue().trim());
+            createdTemplate.setFields(design.getTemplateLayout().getFields());
             try {
                 Connection connection = SberbankUI.connectionPool.reserveConnection();
                 connection.setAutoCommit(false);
-                new TemplateHandler(connection).createTemplate(newTemplate);
+                new TemplateHandler(connection).createTemplate(createdTemplate);
                 connection.commit();
                 SberbankUI.connectionPool.releaseConnection(connection);
             } catch (SQLException e) {
                 LOGGER.error("Template creation error", e);
                 // TODO display WarningMessage
+                return;
             }
-
             clear();
-            update();
         }
+
+        update();
     }
 }

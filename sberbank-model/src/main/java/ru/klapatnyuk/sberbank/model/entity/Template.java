@@ -1,5 +1,6 @@
 package ru.klapatnyuk.sberbank.model.entity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -9,6 +10,7 @@ public class Template extends AbstractRemovableEntity {
 
     private String title;
     private List<Field> fields;
+    private LocalDateTime edited;
 
     public String getTitle() {
         return title;
@@ -24,5 +26,13 @@ public class Template extends AbstractRemovableEntity {
 
     public void setFields(List<Field> fields) {
         this.fields = fields;
+    }
+
+    public LocalDateTime getEdited() {
+        return edited;
+    }
+
+    public void setEdited(LocalDateTime edited) {
+        this.edited = edited;
     }
 }
