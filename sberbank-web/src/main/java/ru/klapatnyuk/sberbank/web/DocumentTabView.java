@@ -22,7 +22,7 @@ public class DocumentTabView extends AbstractTabView {
     @SuppressWarnings("unused")
     private Label editLabel;
     @SuppressWarnings("unused")
-    private Panel patternContainer;
+    private Panel documentContainer;
     @SuppressWarnings("unused")
     private VerticalLayout editDocumentLayout;
     @SuppressWarnings("unused")
@@ -76,7 +76,7 @@ public class DocumentTabView extends AbstractTabView {
 
     @Override
     public SingleComponentContainer getEntityContainer() {
-        return patternContainer;
+        return documentContainer;
     }
 
     @Override

@@ -27,8 +27,6 @@ public class TemplateTabView extends AbstractTabView {
     @SuppressWarnings("unused")
     private Label verticalSeparatorLabel;
     @SuppressWarnings("unused")
-    private HorizontalLayout titleLayout;
-    @SuppressWarnings("unused")
     private Label titleLabel;
     @SuppressWarnings("unused")
     private TextField titleField;
