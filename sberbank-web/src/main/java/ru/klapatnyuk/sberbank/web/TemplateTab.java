@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author klapatnyuk
@@ -186,5 +187,10 @@ public class TemplateTab extends AbstractTab<Template> {
         }
 
         update();
+    }
+
+    @Override
+    protected Predicate<Template> duplicatePredicate(int userId, String title) {
+        return item -> item.getTitle().equals(title);
     }
 }

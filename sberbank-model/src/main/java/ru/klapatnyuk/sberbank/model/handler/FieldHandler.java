@@ -55,7 +55,11 @@ public class FieldHandler extends AbstractHandler<Field> {
         LOGGER.debug("Inside FieldHandler.findByDocumentId(" + id + ")");
 
         String sql = "SELECT d.id, t.label, t.type, t.active, t.id, d.value " +
-                "FROM document_field d " +
+                "FROM (" +
+                "   SELECT * " +
+                "   FROM document_field " +
+                "   WHERE active = TRUE" +
+                ") d " +
                 "RIGHT OUTER JOIN (" +
                 "   SELECT tf.id as id, tf.label as label , tf.type as type, tf.active as active, tf.order as \"order\" " +
                 "   FROM template_field tf " +

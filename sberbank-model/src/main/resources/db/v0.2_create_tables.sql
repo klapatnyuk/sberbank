@@ -17,8 +17,7 @@ CREATE TABLE IF NOT EXISTS template (
     title  VARCHAR   NOT NULL,
     edited TIMESTAMP NOT NULL DEFAULT LOCALTIMESTAMP,
     active BOOLEAN   NOT NULL DEFAULT TRUE,
-    CONSTRAINT template_pk PRIMARY KEY (id),
-    CONSTRAINT template_title_uk UNIQUE (title)
+    CONSTRAINT template_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE template_ids OWNED BY template.id;
 
@@ -32,7 +31,6 @@ CREATE TABLE IF NOT EXISTS template_field (
     active      BOOLEAN NOT NULL DEFAULT TRUE,
     CONSTRAINT template_field_pk PRIMARY KEY (id),
     CONSTRAINT template_field_template_fk FOREIGN KEY (template_id) REFERENCES template (id),
-    CONSTRAINT template_field_title_uk UNIQUE (template_id, title),
     CONSTRAINT template_field_type_in CHECK (type IN ('LINE', 'AREA', 'CHECKBOX'))
 );
 ALTER SEQUENCE template_field_ids OWNED BY template_field.id;
@@ -45,8 +43,7 @@ CREATE TABLE IF NOT EXISTS document (
     edited      TIMESTAMP NOT NULL DEFAULT LOCALTIMESTAMP,
     active      BOOLEAN   NOT NULL DEFAULT TRUE,
     CONSTRAINT document_pk PRIMARY KEY (id),
-    CONSTRAINT document_template_fk FOREIGN KEY (template_id) REFERENCES template (id),
-    CONSTRAINT document_title_uk UNIQUE (template_id, title, owner_id)
+    CONSTRAINT document_template_fk FOREIGN KEY (template_id) REFERENCES template (id)
 );
 ALTER SEQUENCE document_ids OWNED BY document.id;
 
@@ -58,8 +55,7 @@ CREATE TABLE IF NOT EXISTS document_field (
     active            BOOLEAN NOT NULL DEFAULT TRUE,
     CONSTRAINT document_field_pk PRIMARY KEY (id),
     CONSTRAINT document_field_document_fk FOREIGN KEY (document_id) REFERENCES document (id),
-    CONSTRAINT document_field_template_field_fk FOREIGN KEY (template_field_id) REFERENCES template_field (id),
-    CONSTRAINT document_field_document_uk UNIQUE (document_id, template_field_id)
+    CONSTRAINT document_field_template_field_fk FOREIGN KEY (template_field_id) REFERENCES template_field (id)
 );
 ALTER SEQUENCE document_field_ids OWNED BY document_field.id;
 

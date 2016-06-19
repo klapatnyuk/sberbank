@@ -11,6 +11,7 @@ import ru.klapatnyuk.sberbank.model.entity.AbstractEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author klapatnyuk
@@ -140,12 +141,13 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
             String title = getDesign().getTitleField().getValue().trim();
             boolean duplicate = false;
             if (entityIndex < 0) {
-                if (entities.stream().map(AbstractEntity::getTitle).filter(item -> item.equals(title)).findAny()
-                        .isPresent()) {
+                // TODO replace by dynamic user id
+                if (entities.stream().filter(duplicatePredicate(1, title)).findAny().isPresent()) {
                     duplicate = true;
                 }
+                // TODO replace by dynamic user id
             } else if (entities.stream().filter(item -> !item.equals(entities.get(entityIndex)))
-                    .map(AbstractEntity::getTitle).filter(item -> item.equals(title)).findAny().isPresent()) {
+                    .filter(duplicatePredicate(1, title)).findAny().isPresent()) {
                 duplicate = true;
             }
             if (duplicate) {
@@ -156,6 +158,8 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         }
         return messages;
     }
+
+    protected abstract Predicate<T> duplicatePredicate(int userId, String title);
 
     protected abstract AbstractTabView getDesign();
 

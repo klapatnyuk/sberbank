@@ -19,12 +19,12 @@ INSERT INTO template_field (id, template_id, title, label, type, "order") VALUES
     (7, 2, 'comment', 'Comments', 'AREA', 2);
 
 INSERT INTO document (id, template_id, title, owner_id) VALUES
-    (1, 1, 'Contract', 1),
-    (2, 2, 'Request', 1),
+    (1, 1, 'Contract 1', 1),
+    (2, 2, 'Request 1', 1),
 
-    (3, 1, 'Contract', 2),
-    (4, 1, 'Contract (1)', 2),
-    (5, 2, 'Request', 2);
+    (3, 1, 'Contract 2', 2),
+    (4, 1, 'Contract 3', 2),
+    (5, 2, 'Request 2', 2);
 
 INSERT INTO document_field (id, document_id, template_field_id, value) VALUES
     (1, 1, 1, 'Klapatnyuk'),

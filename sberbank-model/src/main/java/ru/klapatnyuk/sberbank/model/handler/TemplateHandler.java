@@ -146,6 +146,7 @@ public class TemplateHandler extends AbstractHandler<Template> {
 
         String insertFieldSql = "INSERT INTO template_field (template_id, title, label, type, \"order\") " +
                 "VALUES (?, ?, ?, ?, ?)";
+        // TODO check if 'template_id' could change
         String updateFieldSql = "UPDATE template_field " +
                 "SET template_id = ?, title = ?, label = ?, type = ?, \"order\" = ? " +
                 "WHERE active = TRUE AND id = ?";

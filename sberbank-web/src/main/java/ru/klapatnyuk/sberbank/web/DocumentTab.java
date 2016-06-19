@@ -16,6 +16,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author klapatnyuk
@@ -184,6 +185,24 @@ public class DocumentTab extends AbstractTab<Document> {
         }
 
         if (entityIndex >= 0) {
+            Document updatedDocument = new Document();
+
+            updatedDocument.setId(entity.getId());
+            updatedDocument.setEdited(entity.getEdited());
+            updatedDocument.setTitle(design.getTitleField().getValue().trim());
+            updatedDocument.setFields(design.getTemplateLayout().getFields());
+            try {
+                Connection connection = SberbankUI.connectionPool.reserveConnection();
+                connection.setAutoCommit(false);
+                new DocumentHandler(connection).updateDocument(updatedDocument);
+                connection.commit();
+                SberbankUI.connectionPool.releaseConnection(connection);
+            } catch (SQLException e) {
+                LOGGER.error("Document edition error", e);
+                // TODO display WarningMessage
+                return;
+            }
+            entity = updatedDocument;
 
         } else {
             Document createdDocument = new Document();
@@ -209,6 +228,11 @@ public class DocumentTab extends AbstractTab<Document> {
         }
 
         update();
+    }
+
+    @Override
+    protected Predicate<Document> duplicatePredicate(int userId, String title) {
+        return item -> item.getOwner().getId() == userId && item.getTitle().equals(title);
     }
 
     private void updateTemplateSelect() {
