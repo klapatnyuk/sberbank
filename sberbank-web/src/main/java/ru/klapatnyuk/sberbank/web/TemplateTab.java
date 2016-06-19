@@ -106,7 +106,7 @@ public class TemplateTab extends AbstractTab<Template> {
         List<Field> fields = null;
         try {
             Connection connection = SberbankUI.connectionPool.reserveConnection();
-            fields = new FieldHandler(connection).findByTemplateId(entities.get(entityIndex).getId());
+            fields = new FieldHandler(connection).findByTemplateId(entity.getId());
             SberbankUI.connectionPool.releaseConnection(connection);
         } catch (SQLException e) {
             LOGGER.error("Templates finding error", e);
@@ -121,13 +121,16 @@ public class TemplateTab extends AbstractTab<Template> {
 
     @Override
     protected void clickEntityButton(Button.ClickEvent event) {
+        if (entityIndex >= 0) {
+            return;
+        }
         super.clickEntityButton(event);
 
         // update form
         List<Field> fields = null;
         try {
             Connection connection = SberbankUI.connectionPool.reserveConnection();
-            fields = new FieldHandler(connection).findByTemplateId(entities.get(entityIndex).getId());
+            fields = new FieldHandler(connection).findByTemplateId(entity.getId());
             SberbankUI.connectionPool.releaseConnection(connection);
         } catch (SQLException e) {
             LOGGER.error("Templates finding error", e);

@@ -180,9 +180,6 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
 
     protected void clickEntityButton(Button.ClickEvent event) {
         LOGGER.debug("Inside AbstractTab.clickEntityButton");
-        if (entityIndex >= 0) {
-            return;
-        }
 
         // update model
         Button button = event.getButton();

@@ -1,16 +1,20 @@
 package ru.klapatnyuk.sberbank.web;
 
+import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vaadin.addons.toggle.ButtonGroupSelectionEvent;
 import ru.klapatnyuk.sberbank.model.entity.Document;
 import ru.klapatnyuk.sberbank.model.entity.Field;
+import ru.klapatnyuk.sberbank.model.entity.Template;
 import ru.klapatnyuk.sberbank.model.handler.DocumentHandler;
 import ru.klapatnyuk.sberbank.model.handler.FieldHandler;
+import ru.klapatnyuk.sberbank.model.handler.TemplateHandler;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +24,8 @@ public class DocumentTab extends AbstractTab<Document> {
 
     private static final long serialVersionUID = 5490116135419202151L;
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentTab.class);
+
+    private final Property.ValueChangeListener templateListener = new TemplateChangeListener();
 
     private DocumentTabView design;
 
@@ -41,6 +47,7 @@ public class DocumentTab extends AbstractTab<Document> {
         }
 
         updateEntityLayout();
+        updateTemplateSelect();
     }
 
     @Override
@@ -51,8 +58,16 @@ public class DocumentTab extends AbstractTab<Document> {
 
     @Override
     public boolean validate() {
-        // validate title
-        List<WarningMessage> messages = validateTitle();
+        List<WarningMessage> messages = new ArrayList<>();
+
+        if (entityIndex < 0 && design.getTemplateSelect().getValue() == null) {
+            // validate template
+            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_TEMPLATE_VALIDATE),
+                    design.getTemplateSelect(), getValidationSource()));
+        } else {
+            // validate title
+            messages.addAll(validateTitle());
+        }
 
         SberbankUI.getWarningWindow().addAll(messages);
         return messages.isEmpty();
@@ -61,7 +76,10 @@ public class DocumentTab extends AbstractTab<Document> {
     @Override
     public void clear() {
         design.getTemplateSelect().setReadOnly(false);
-        design.getTemplateSelect().clear();
+        design.getTemplateSelect().removeValueChangeListener(templateListener);
+        design.getTemplateSelect().removeAllItems();
+        design.getTemplateSeparatorLabel().setVisible(false);
+        design.getTitleField().clear();
         design.getTemplateLayout().clear();
         design.getTemplateLayout().setVisible(false);
     }
@@ -80,6 +98,8 @@ public class DocumentTab extends AbstractTab<Document> {
 
         design.getTitleLayout().setVisible(false);
         design.getTemplateSeparatorLabel().setVisible(false);
+
+        updateTemplateSelect();
     }
 
     @Override
@@ -95,6 +115,7 @@ public class DocumentTab extends AbstractTab<Document> {
         super.selectEntity(event);
 
         design.getTemplateSelect().setReadOnly(false);
+        design.getTemplateSelect().removeValueChangeListener(templateListener);
         design.getTemplateSelect().removeAllItems();
         design.getTemplateSelect().addItem(entity.getTemplate().getTitle());
         design.getTemplateSelect().setValue(entity.getTemplate().getTitle());
@@ -102,10 +123,11 @@ public class DocumentTab extends AbstractTab<Document> {
 
         design.getTitleLayout().setVisible(true);
 
+        // update form
         List<Field> fields = null;
         try {
             Connection connection = SberbankUI.connectionPool.reserveConnection();
-            fields = new FieldHandler(connection).findByDocumentId(entities.get(entityIndex).getId());
+            fields = new FieldHandler(connection).findByDocumentId(entity.getId());
             SberbankUI.connectionPool.releaseConnection(connection);
         } catch (SQLException e) {
             LOGGER.error("Templates finding error", e);
@@ -122,12 +144,25 @@ public class DocumentTab extends AbstractTab<Document> {
 
     @Override
     protected void clickEntityButton(Button.ClickEvent event) {
+        if (entityIndex >= 0) {
+            return;
+        }
         super.clickEntityButton(event);
 
+        design.getTemplateSelect().setReadOnly(false);
+        design.getTemplateSelect().removeValueChangeListener(templateListener);
+        design.getTemplateSelect().removeAllItems();
+        design.getTemplateSelect().addItem(entity.getTemplate().getTitle());
+        design.getTemplateSelect().setValue(entity.getTemplate().getTitle());
+        design.getTemplateSelect().setReadOnly(true);
+
+        design.getTitleLayout().setVisible(true);
+
+        // update form
         List<Field> fields = null;
         try {
             Connection connection = SberbankUI.connectionPool.reserveConnection();
-            fields = new FieldHandler(connection).findByDocumentId(entities.get(entityIndex).getId());
+            fields = new FieldHandler(connection).findByDocumentId(entity.getId());
             SberbankUI.connectionPool.releaseConnection(connection);
         } catch (SQLException e) {
             LOGGER.error("Templates finding error", e);
@@ -144,10 +179,11 @@ public class DocumentTab extends AbstractTab<Document> {
 
     @Override
     protected void clickSubmitButton() {
-        /*if (!validate()) {
+        if (!validate()) {
             return;
         }
 
+        /*
         final PatternService service = new PatternService(BrownieSession.get(), BrownieConfiguration.get());
         if (patternIndex >= 0) {
             // edit existed pattern
@@ -214,5 +250,63 @@ public class DocumentTab extends AbstractTab<Document> {
                 update();
             }
         }*/
+    }
+
+    private void updateTemplateSelect() {
+        List<Template> templates = null;
+        try {
+            Connection connection = SberbankUI.connectionPool.reserveConnection();
+            templates = new TemplateHandler(connection).findAll();
+            SberbankUI.connectionPool.releaseConnection(connection);
+        } catch (SQLException e) {
+            LOGGER.error("Templates finding error", e);
+            // TODO display WarningMessage
+        }
+        if (templates == null) {
+            return;
+        }
+        templates.forEach(item -> {
+            design.getTemplateSelect().addItem(item.getId());
+            design.getTemplateSelect().setItemCaption(item.getId(), item.getTitle());
+        });
+
+        design.getTemplateSelect().addValueChangeListener(templateListener);
+    }
+
+    /**
+     * @author klapatnyuk
+     */
+    private class TemplateChangeListener implements Property.ValueChangeListener {
+
+        @Override
+        public void valueChange(Property.ValueChangeEvent event) {
+            Integer templateId = (Integer) event.getProperty().getValue();
+            design.getTitleLayout().setVisible(templateId != null);
+
+            if (templateId == null) {
+                clear();
+                updateTemplateSelect();
+                return;
+            }
+
+            design.getTitleField().clear();
+
+            List<Field> fields = null;
+            try {
+                Connection connection = SberbankUI.connectionPool.reserveConnection();
+                fields = new FieldHandler(connection).findByTemplateId(templateId);
+                SberbankUI.connectionPool.releaseConnection(connection);
+            } catch (SQLException e) {
+                LOGGER.error("Templates finding error", e);
+                // TODO display WarningMessage
+            }
+
+            if (fields == null || fields.isEmpty()) {
+                return;
+            }
+            design.getTemplateSeparatorLabel().setVisible(true);
+            design.getTemplateLayout().setVisible(true);
+            design.getTemplateLayout().setFields(fields);
+        }
     }
 }
