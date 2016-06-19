@@ -63,6 +63,10 @@ public class DocumentTabView extends AbstractTabView {
         return documentLayout;
     }
 
+    public Label getTemplateSeparatorLabel() {
+        return templateSeparatorLabel;
+    }
+
     @Override
     public Label getEditSeparatorLabel() {
         return editSeparatorLabel;

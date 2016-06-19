@@ -63,6 +63,7 @@ public class DocumentTab extends AbstractTab<Document> {
         design.getTemplateSelect().setReadOnly(false);
         design.getTemplateSelect().clear();
         design.getTemplateLayout().clear();
+        design.getTemplateLayout().setVisible(false);
     }
 
     @Override
@@ -71,6 +72,14 @@ public class DocumentTab extends AbstractTab<Document> {
 
         design.getCreateButton().addClickListener(event -> clickCreateButton());
         design.getSubmitButton().addClickListener(event -> clickSubmitButton());
+    }
+
+    @Override
+    protected void clickCreateButton() {
+        super.clickCreateButton();
+
+        design.getTitleLayout().setVisible(false);
+        design.getTemplateSeparatorLabel().setVisible(false);
     }
 
     @Override
@@ -91,7 +100,7 @@ public class DocumentTab extends AbstractTab<Document> {
         design.getTemplateSelect().setValue(entity.getTemplate().getTitle());
         design.getTemplateSelect().setReadOnly(true);
 
-        design.getTitleField().setValue(entity.getTitle());
+        design.getTitleLayout().setVisible(true);
 
         List<Field> fields = null;
         try {
@@ -103,37 +112,34 @@ public class DocumentTab extends AbstractTab<Document> {
             // TODO display WarningMessage
         }
 
-        if (fields == null) {
+        if (fields == null || fields.isEmpty()) {
             return;
         }
+        design.getTemplateSeparatorLabel().setVisible(true);
+        design.getTemplateLayout().setVisible(true);
         design.getTemplateLayout().setFields(fields);
     }
 
     @Override
     protected void clickEntityButton(Button.ClickEvent event) {
-        /*final Button button = event.getButton();
-        final int index = buttonGroup.indexOfButton(button);
-        if (!patternIndex.equals(index)) {
-            patternIndex = index;
-            design.getCreateButton().removeStyleName(StyleNames.BUTTON_ACTIVE);
-            button.addStyleName(StyleNames.BUTTON_ACTIVE);
-            design.getSubmitButton().setCaption(I18N.getString(PTRN_MESSAGE_SAVE));
-            pattern = BrownieSession.getMasterdata().getPolls().get(patternIndex);
-            design.getBodyField().setValue(pattern.getBody());
-            design.getChoiceSelect().setStrings(pattern.getAnswers().stream().filter(answer -> !answer.isCustom())
-                    .map(PollAnswer::getSequence).collect(Collectors.toList()));
-            final PollAnswer customAnswer = pattern.findCustomAnswer();
-            design.getAllowCustomField().setValue(customAnswer != null);
-            if (customAnswer == null) {
-                design.getCustomField().clear();
-            } else {
-                design.getCustomField().setValue(customAnswer.getSequence());
-            }
-            design.getAllowMultiplyField().setValue(pattern.isMultiple());
-            design.getTagSelect().setStrings(pattern.getTags());
-            folder = pattern.getFolder();
-            design.getCurrentFolderLabel().setValue(folder.getTitle());
-        }*/
+        super.clickEntityButton(event);
+
+        List<Field> fields = null;
+        try {
+            Connection connection = SberbankUI.connectionPool.reserveConnection();
+            fields = new FieldHandler(connection).findByDocumentId(entities.get(entityIndex).getId());
+            SberbankUI.connectionPool.releaseConnection(connection);
+        } catch (SQLException e) {
+            LOGGER.error("Templates finding error", e);
+            // TODO display WarningMessage
+        }
+
+        if (fields == null || fields.isEmpty()) {
+            return;
+        }
+        design.getTemplateSeparatorLabel().setVisible(true);
+        design.getTemplateLayout().setVisible(true);
+        design.getTemplateLayout().setFields(fields);
     }
 
     @Override

@@ -103,8 +103,6 @@ public class TemplateTab extends AbstractTab<Template> {
         super.selectEntity(event);
 
         // update form
-        design.getTitleField().setValue(entity.getTitle());
-
         List<Field> fields = null;
         try {
             Connection connection = SberbankUI.connectionPool.reserveConnection();
@@ -123,28 +121,9 @@ public class TemplateTab extends AbstractTab<Template> {
 
     @Override
     protected void clickEntityButton(Button.ClickEvent event) {
-        LOGGER.debug("Inside TemplateTab.clickEntityButton");
-        if (entityIndex >= 0) {
-            return;
-        }
-
-        // update model
-        Button button = event.getButton();
-        int index = buttonGroup.indexOfButton(button);
-        if (entityIndex == index) {
-            return;
-        }
-        entityIndex = index;
-        entity = entities.get(entityIndex);
-
-        // update styles
-        design.getCreateButton().removeStyleName(StyleNames.BUTTON_ACTIVE);
-        button.addStyleName(StyleNames.BUTTON_ACTIVE);
+        super.clickEntityButton(event);
 
         // update form
-        design.getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_MESSAGE_SAVE));
-        design.getTitleField().setValue(entity.getTitle());
-
         List<Field> fields = null;
         try {
             Connection connection = SberbankUI.connectionPool.reserveConnection();
