@@ -59,10 +59,6 @@ public class DocumentTabView extends TabView {
         init();
     }
 
-    public Button getCreateButton() {
-        return createButton;
-    }
-
     public Label getEditSeparatorLabel() {
         return editSeparatorLabel;
     }
@@ -91,30 +87,12 @@ public class DocumentTabView extends TabView {
         return titleField;
     }
 
-//    public StringSelect getChoiceSelect() {
-//        return choiceSelect;
-//    }
-//
-//    public AbstractField<Boolean> getAllowCustomField() {
-//        return allowCustomField;
-//    }
-//
-//    public AbstractOrderedLayout getCustomLayout() {
-//        return customLayout;
-//    }
-//
-//    public AbstractTextField getCustomField() {
-//        return customField;
-//    }
-//
-//    public AbstractField<Boolean> getAllowMultiplyField() {
-//        return allowMultiplyField;
-//    }
-//
-//    public StringSelect getTagSelect() {
-//        return tagSelect;
-//    }
+    @Override
+    public Button getCreateButton() {
+        return createButton;
+    }
 
+    @Override
     public Button getSubmitButton() {
         return submitButton;
     }

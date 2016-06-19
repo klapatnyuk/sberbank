@@ -11,6 +11,7 @@ import com.vaadin.ui.declarative.Design;
 public class TemplateTabView extends TabView {
 
     private static final long serialVersionUID = -6788254175139485486L;
+
     @SuppressWarnings("unused")
     private VerticalLayout patternLayout;
     @SuppressWarnings("unused")
@@ -51,10 +52,6 @@ public class TemplateTabView extends TabView {
         init();
     }
 
-    public Button getCreateButton() {
-        return createButton;
-    }
-
     public Label getEditSeparatorLabel() {
         return editSeparatorLabel;
     }
@@ -83,6 +80,12 @@ public class TemplateTabView extends TabView {
         return templateLayout;
     }
 
+    @Override
+    public Button getCreateButton() {
+        return createButton;
+    }
+
+    @Override
     public Button getSubmitButton() {
         return submitButton;
     }

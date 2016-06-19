@@ -2,7 +2,6 @@ package ru.klapatnyuk.sberbank.web;
 
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vaadin.addons.toggle.ButtonGroup;
@@ -20,19 +19,11 @@ import java.util.List;
 /**
  * @author klapatnyuk
  */
-public class TemplateTab extends AbstractTab implements EditableTab {
+public class TemplateTab extends AbstractTab<Template> {
 
     private static final long serialVersionUID = 621247325187983282L;
-    private static final int LENGTH =
-            Integer.parseInt(SberbankUI.CONFIG.getString(ConfigKey.PATTERN_SUBJECT_LENGTH.getKey()));
     private static final Logger LOGGER = LoggerFactory.getLogger(TemplateTab.class);
 
-    private List<Template> templates = new ArrayList<>();
-
-    private int templateIndex = -1;
-    private Template template;
-
-    private ButtonGroup buttonGroup = new ButtonGroup();
     private TemplateTabView design;
 
     public TemplateTab(MenuTab tab, MenuTab actionTab) {
@@ -40,44 +31,39 @@ public class TemplateTab extends AbstractTab implements EditableTab {
     }
 
     @Override
-    public boolean isUpdated() {
-        return false;
-    }
-
-    @Override
     public void update() {
-        templates.clear();
+        entities.clear();
         buttonGroup = new ButtonGroup();
         design.getEditPatternLayout().removeAllComponents();
 
         try {
             Connection connection = SberbankUI.connectionPool.reserveConnection();
-            templates = new TemplateHandler(connection).findAll();
+            entities = new TemplateHandler(connection).findAll();
             SberbankUI.connectionPool.releaseConnection(connection);
         } catch (SQLException e) {
             LOGGER.error("Templates finding error", e);
             // TODO display WarningMessage
         }
-        design.getEditSeparatorLabel().setVisible(templates != null);
-        design.getEditLabel().setVisible(templates != null);
-        design.getPatternContainer().setVisible(templates != null);
+        design.getEditSeparatorLabel().setVisible(entities != null);
+        design.getEditLabel().setVisible(entities != null);
+        design.getPatternContainer().setVisible(entities != null);
 
-        templates.forEach(item -> {
+        entities.forEach(item -> {
             Button button = new Button((item.getTitle().length() > LENGTH) ?
                     item.getTitle().substring(0, LENGTH) + ".." : item.getTitle());
             button.setDescription(item.getTitle());
             button.setWidth("100%");
             button.addStyleName("pattern-button");
-            button.addClickListener(this::clickTemplateButton);
+            button.addClickListener(this::clickEntityButton);
             buttonGroup.addButton(button);
             design.getEditPatternLayout().addComponent(button);
         });
 
-        buttonGroup.addSelectionListener(this::selectTemplate);
+        buttonGroup.addSelectionListener(this::selectEntity);
 
-        if (templateIndex >= 0) {
-            buttonGroup.setSelectedButtonIndex(templateIndex);
-            selectTemplate(new ButtonGroupSelectionEvent(buttonGroup, buttonGroup.getButtons()[templateIndex], null));
+        if (entityIndex >= 0) {
+            buttonGroup.setSelectedButtonIndex(entityIndex);
+            selectEntity(new ButtonGroupSelectionEvent(buttonGroup, buttonGroup.getButtons()[entityIndex], null));
         }
     }
 
@@ -97,11 +83,11 @@ public class TemplateTab extends AbstractTab implements EditableTab {
         } else {
             String title = design.getTitleField().getValue().trim();
             boolean duplicate = false;
-            if (templateIndex < 0) {
-                if (templates.stream().map(Template::getTitle).filter(item -> item.equals(title)).findAny().isPresent()) {
+            if (entityIndex < 0) {
+                if (entities.stream().map(Template::getTitle).filter(item -> item.equals(title)).findAny().isPresent()) {
                     duplicate = true;
                 }
-            } else if (templates.stream().filter(item -> !item.equals(templates.get(templateIndex)))
+            } else if (entities.stream().filter(item -> !item.equals(entities.get(entityIndex)))
                     .map(Template::getTitle).filter(item -> item.equals(title)).findAny().isPresent()) {
                 duplicate = true;
             }
@@ -131,11 +117,6 @@ public class TemplateTab extends AbstractTab implements EditableTab {
     }
 
     @Override
-    public Component getValidationSource() {
-        return design.getSubmitButton();
-    }
-
-    @Override
     public void clear() {
         design.getTitleField().clear();
         design.getTemplateLayout().clear();
@@ -157,12 +138,13 @@ public class TemplateTab extends AbstractTab implements EditableTab {
         return design;
     }
 
-    private void selectTemplate(ButtonGroupSelectionEvent event) {
-        LOGGER.debug("Inside TemplateTab.selectTemplate");
+    @Override
+    protected void selectEntity(ButtonGroupSelectionEvent event) {
+        LOGGER.debug("Inside TemplateTab.selectEntity");
 
         // update model
-        templateIndex = buttonGroup.indexOfButton(buttonGroup.getSelectedButton());
-        template = templates.get(templateIndex);
+        entityIndex = buttonGroup.indexOfButton(buttonGroup.getSelectedButton());
+        entity = entities.get(entityIndex);
 
         // update styles
         if (event.getPreviousButton() != null) {
@@ -173,12 +155,12 @@ public class TemplateTab extends AbstractTab implements EditableTab {
 
         // update form
         design.getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_SAVE));
-        design.getTitleField().setValue(template.getTitle());
+        design.getTitleField().setValue(entity.getTitle());
 
         List<Field> fields = null;
         try {
             Connection connection = SberbankUI.connectionPool.reserveConnection();
-            fields = new FieldHandler(connection).findByTemplateId(templates.get(templateIndex).getId());
+            fields = new FieldHandler(connection).findByTemplateId(entities.get(entityIndex).getId());
             SberbankUI.connectionPool.releaseConnection(connection);
         } catch (SQLException e) {
             LOGGER.error("Templates finding error", e);
@@ -191,20 +173,21 @@ public class TemplateTab extends AbstractTab implements EditableTab {
         design.getTemplateLayout().setFields(fields);
     }
 
-    private void clickTemplateButton(Button.ClickEvent event) {
-        LOGGER.debug("Inside TemplateTab.clickTemplateButton");
-        if (templateIndex >= 0) {
+    @Override
+    protected void clickEntityButton(Button.ClickEvent event) {
+        LOGGER.debug("Inside TemplateTab.clickEntityButton");
+        if (entityIndex >= 0) {
             return;
         }
 
         // update model
         Button button = event.getButton();
         int index = buttonGroup.indexOfButton(button);
-        if (templateIndex == index) {
+        if (entityIndex == index) {
             return;
         }
-        templateIndex = index;
-        template = templates.get(templateIndex);
+        entityIndex = index;
+        entity = entities.get(entityIndex);
 
         // update styles
         design.getCreateButton().removeStyleName(StyleNames.BUTTON_ACTIVE);
@@ -212,12 +195,12 @@ public class TemplateTab extends AbstractTab implements EditableTab {
 
         // update form
         design.getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_MESSAGE_SAVE));
-        design.getTitleField().setValue(template.getTitle());
+        design.getTitleField().setValue(entity.getTitle());
 
         List<Field> fields = null;
         try {
             Connection connection = SberbankUI.connectionPool.reserveConnection();
-            fields = new FieldHandler(connection).findByTemplateId(templates.get(templateIndex).getId());
+            fields = new FieldHandler(connection).findByTemplateId(entities.get(entityIndex).getId());
             SberbankUI.connectionPool.releaseConnection(connection);
         } catch (SQLException e) {
             LOGGER.error("Templates finding error", e);
@@ -230,33 +213,15 @@ public class TemplateTab extends AbstractTab implements EditableTab {
         design.getTemplateLayout().setFields(fields);
     }
 
-    private void clickCreateButton() {
-        if (templateIndex < 0) {
-            return;
-        }
-
-        // update model
-        templateIndex = -1;
-
-        // update styles
-        design.getCreateButton().addStyleName(StyleNames.BUTTON_ACTIVE);
-        if (buttonGroup.getSelectedButton() != null) {
-            buttonGroup.getSelectedButton().removeStyleName(StyleNames.BUTTON_ACTIVE);
-        }
-
-        // update form
-        clear();
-        design.getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_ADD));
-    }
-
-    private void clickSubmitButton() {
+    @Override
+    protected void clickSubmitButton() {
         if (!validate()) {
             return;
         }
-        if (templateIndex >= 0) {
+        if (entityIndex >= 0) {
             Template updatedTemplate = new Template();
-            updatedTemplate.setId(template.getId());
-            updatedTemplate.setEdited(template.getEdited());
+            updatedTemplate.setId(entity.getId());
+            updatedTemplate.setEdited(entity.getEdited());
             updatedTemplate.setTitle(design.getTitleField().getValue().trim());
             updatedTemplate.setFields(design.getTemplateLayout().getFields());
             try {
@@ -270,7 +235,7 @@ public class TemplateTab extends AbstractTab implements EditableTab {
                 // TODO display WarningMessage
                 return;
             }
-            template = updatedTemplate;
+            entity = updatedTemplate;
 
         } else {
             Template createdTemplate = new Template();

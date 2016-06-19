@@ -1,34 +1,23 @@
 package ru.klapatnyuk.sberbank.web;
 
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.vaadin.addons.toggle.ButtonGroup;
 import org.vaadin.addons.toggle.ButtonGroupSelectionEvent;
+import ru.klapatnyuk.sberbank.model.entity.Document;
 
 /**
  * @author klapatnyuk
  */
-public class DocumentTab extends AbstractTab implements EditableTab {
+public class DocumentTab extends AbstractTab<Document> {
 
     private static final long serialVersionUID = 5490116135419202151L;
-    private static final int LENGTH = Integer.parseInt(SberbankUI.CONFIG.getString(ConfigKey.PATTERN_SUBJECT_LENGTH.getKey()));
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentTab.class);
 
-    private Integer patternIndex = -1;
-//    private PollPattern pattern;
-
-    private ButtonGroup buttonGroup = new ButtonGroup();
     private DocumentTabView design;
 
     public DocumentTab(MenuTab tab, MenuTab actionTab) {
         super(tab, actionTab);
-    }
-
-    @Override
-    public boolean isUpdated() {
-        return false;
     }
 
     @Override
@@ -99,11 +88,6 @@ public class DocumentTab extends AbstractTab implements EditableTab {
     }
 
     @Override
-    public Component getValidationSource() {
-        return design.getSubmitButton();
-    }
-
-    @Override
     public void clear() {
         design.getTemplateSelect().clear();
 
@@ -119,8 +103,6 @@ public class DocumentTab extends AbstractTab implements EditableTab {
         super.init();
 
         design.getCreateButton().addClickListener(event -> clickCreateButton());
-//        design.getAllowCustomField()
-//                .addValueChangeListener(event -> design.getCustomLayout().setVisible((boolean) event.getProperty().getValue()));
         design.getSubmitButton().addClickListener(event -> clickSubmitButton());
     }
 
@@ -132,7 +114,8 @@ public class DocumentTab extends AbstractTab implements EditableTab {
         return design;
     }
 
-    private void selectPattern(ButtonGroupSelectionEvent event) {
+    @Override
+    protected void selectEntity(ButtonGroupSelectionEvent event) {
         /*if (event.getPreviousButton() != null) {
             event.getPreviousButton().removeStyleName(StyleNames.BUTTON_ACTIVE);
         }
@@ -157,7 +140,8 @@ public class DocumentTab extends AbstractTab implements EditableTab {
         design.getTagSelect().setStrings(pattern.getTags());*/
     }
 
-    private void clickPatternButton(Button.ClickEvent event) {
+    @Override
+    protected void clickEntityButton(Button.ClickEvent event) {
         /*final Button button = event.getButton();
         final int index = buttonGroup.indexOfButton(button);
         if (!patternIndex.equals(index)) {
@@ -183,19 +167,8 @@ public class DocumentTab extends AbstractTab implements EditableTab {
         }*/
     }
 
-    private void clickCreateButton() {
-        design.getCreateButton().addStyleName(StyleNames.BUTTON_ACTIVE);
-        if (buttonGroup.getSelectedButton() != null) {
-            buttonGroup.getSelectedButton().removeStyleName(StyleNames.BUTTON_ACTIVE);
-        }
-        design.getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_ADD));
-        if (patternIndex >= 0) {
-            patternIndex = -1;
-            clear();
-        }
-    }
-
-    private void clickSubmitButton() {
+    @Override
+    protected void clickSubmitButton() {
         /*if (!validate()) {
             return;
         }

@@ -1,5 +1,7 @@
 package ru.klapatnyuk.sberbank.web;
 
+import com.vaadin.ui.Component;
+
 /**
  * @author klapatnyuk
  */
@@ -16,4 +18,10 @@ public interface Tab {
     MenuTab getTab();
 
     MenuTab getActionTab();
+
+    void clear();
+
+    boolean validate();
+
+    Component getValidationSource();
 }
