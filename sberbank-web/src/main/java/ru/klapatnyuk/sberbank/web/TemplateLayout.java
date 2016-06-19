@@ -29,11 +29,6 @@ public class TemplateLayout extends VerticalLayout {
 
     public TemplateLayout() {
         addComponent(newRow(null));
-
-//        // second empty line added for usability
-//        row = newRow(null);
-//        layouts.add(row);
-//        addComponent(row);
     }
 
     public void clear() {
@@ -59,7 +54,7 @@ public class TemplateLayout extends VerticalLayout {
                 continue;
             }
             field = new Field();
-            field.setId(row.getFieldId());
+            field.setId(row.getTemplateFieldId());
             field.setTitle(((TextField) row.getComponent(TITLE)).getValue().trim());
             field.setLabel(((TextField) row.getComponent(LABEL)).getValue().trim());
             field.setType((Field.Type) ((ComboBox) row.getComponent(TYPE)).getValue());
@@ -295,7 +290,7 @@ public class TemplateLayout extends VerticalLayout {
         buttonsLayout.setExpandRatio(down, 1);
         buttonsLayout.setExpandRatio(remove, 1);
 
-        FieldLayout row = new FieldLayout(field == null ? 0 : field.getId());
+        FieldLayout row = new FieldLayout(field == null ? 0 : field.getId(), 0);
         row.setWidth("100%");
         row.addComponent(title);
         row.addComponent(label);

@@ -60,13 +60,9 @@ public class DocumentTab extends AbstractTab<Document> {
 
     @Override
     public void clear() {
+        design.getTemplateSelect().setReadOnly(false);
         design.getTemplateSelect().clear();
-
-//        design.getChoiceSelect().clear();
-//        design.getAllowCustomField().clear();
-//        design.getCustomField().clear();
-//        design.getAllowMultiplyField().clear();
-//        design.getTagSelect().clear();
+        design.getTemplateLayout().clear();
     }
 
     @Override
@@ -89,10 +85,11 @@ public class DocumentTab extends AbstractTab<Document> {
     protected void selectEntity(ButtonGroupSelectionEvent event) {
         super.selectEntity(event);
 
+        design.getTemplateSelect().setReadOnly(false);
         design.getTemplateSelect().removeAllItems();
         design.getTemplateSelect().addItem(entity.getTemplate().getTitle());
         design.getTemplateSelect().setValue(entity.getTemplate().getTitle());
-        design.getTemplateSelect().setEnabled(false);
+        design.getTemplateSelect().setReadOnly(true);
 
         design.getTitleField().setValue(entity.getTitle());
 
@@ -109,7 +106,7 @@ public class DocumentTab extends AbstractTab<Document> {
         if (fields == null) {
             return;
         }
-        //design.getTemplateLayout().setFields(fields);
+        design.getTemplateLayout().setFields(fields);
     }
 
     @Override

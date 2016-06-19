@@ -54,14 +54,22 @@ public class FieldHandler extends AbstractHandler<Field> {
     public List<Field> findByDocumentId(int id) throws SQLException {
         LOGGER.debug("Inside FieldHandler.findByDocumentId(" + id + ")");
 
-        String sql = "SELECT d.id, t.label, t.type, t.active, d.value " +
-                "FROM document_field d, template_field t " +
-                "WHERE d.active = TRUE AND d.template_field_id = t.id AND d.document_id = ? " +
-                "ORDER BY t.order";
+        String sql = "SELECT d.id, t.label, t.type, t.active, t.id, d.value " +
+                "FROM document_field d " +
+                "RIGHT OUTER JOIN (" +
+                "   SELECT tf.id as id, tf.label as label , tf.type as type, tf.active as active, tf.order as \"order\" " +
+                "   FROM template_field tf " +
+                "       JOIN template t ON tf.template_id = t.id " +
+                "       JOIN document d ON d.template_id = t.id " +
+                "   WHERE d.id = ?" +
+                ") t " +
+                "ON d.template_field_id = t.id AND d.document_id = ? " +
+                "ORDER BY t.active DESC, t.order";
 
         List<Field> result = new ArrayList<>();
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
             statement.setInt(1, id);
+            statement.setInt(2, id);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
@@ -71,10 +79,11 @@ public class FieldHandler extends AbstractHandler<Field> {
                         case AREA: {
                             Field<String> entity = new Field<>();
                             entity.setId(resultSet.getInt(1));
-                            entity.setTitle(resultSet.getString(2));
+                            entity.setLabel(resultSet.getString(2));
                             entity.setType(type);
                             entity.setActive(resultSet.getBoolean(4));
-                            entity.setValue(resultSet.getString(5));
+                            entity.setReferenceId(resultSet.getInt(5));
+                            entity.setValue(resultSet.getString(6));
 
                             result.add(entity);
                             break;
@@ -82,10 +91,11 @@ public class FieldHandler extends AbstractHandler<Field> {
                         case CHECKBOX: {
                             Field<java.lang.Boolean> entity = new Field<>();
                             entity.setId(resultSet.getInt(1));
-                            entity.setTitle(resultSet.getString(2));
+                            entity.setLabel(resultSet.getString(2));
                             entity.setType(type);
                             entity.setActive(resultSet.getBoolean(4));
-                            entity.setValue(Boolean.find(resultSet.getString(5)));
+                            entity.setReferenceId(resultSet.getInt(5));
+                            entity.setValue(Boolean.find(resultSet.getString(6)));
 
                             result.add(entity);
                             break;

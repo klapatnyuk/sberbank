@@ -32,20 +32,15 @@ public class DocumentTabView extends AbstractTabView {
     @SuppressWarnings("unused")
     private ComboBox templateSelect;
     @SuppressWarnings("unused")
-    private Label templateSeparatorLabel;
-    @SuppressWarnings("unused")
     private HorizontalLayout titleLayout;
     @SuppressWarnings("unused")
     private Label titleLabel;
     @SuppressWarnings("unused")
     private TextField titleField;
-
-    private Label lineLabel;
-    private TextField lineField;
-    private Label areaLabel;
-    private TextArea areaField;
-    private CheckBox checkboxField;
-
+    @SuppressWarnings("unused")
+    private Label templateSeparatorLabel;
+    @SuppressWarnings("unused")
+    private DocumentLayout documentLayout;
     @SuppressWarnings("unused")
     private Label submitSeparatorLabel;
     @SuppressWarnings("unused")
@@ -62,6 +57,10 @@ public class DocumentTabView extends AbstractTabView {
 
     public AbstractOrderedLayout getTitleLayout() {
         return titleLayout;
+    }
+
+    public DocumentLayout getTemplateLayout() {
+        return documentLayout;
     }
 
     @Override
@@ -130,18 +129,6 @@ public class DocumentTabView extends AbstractTabView {
         titleLabel.setWidth(StyleDimensions.WIDTH_S);
         titleField.setWidth("100%");
         titleField.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CHOICE_CUSTOM_PROMPT));
-
-        lineLabel.setValue("Line label:");
-        lineLabel.setWidth(StyleDimensions.WIDTH_S);
-        lineField.setWidth("50%");
-        lineField.setInputPrompt("Line prompt..");
-        areaLabel.setValue("Area label:");
-        areaLabel.setWidth(StyleDimensions.WIDTH_S);
-        areaField.setHeight("100px");
-        areaField.setValidationVisible(false);
-        areaField.setInputPrompt("Area prompt..");
-        checkboxField.setCaption("Checkbox caption");
-        checkboxField.setHeight(StyleDimensions.HEIGHT_S);
 
         submitSeparatorLabel.setWidth("100%");
         submitSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
