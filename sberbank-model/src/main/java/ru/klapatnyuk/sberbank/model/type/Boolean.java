@@ -27,7 +27,20 @@ public enum Boolean implements EnumType {
         return getDefault();
     }
 
+    public static String find(boolean value) {
+        for (Boolean constant : values()) {
+            if (constant.value == value) {
+                return constant.toString();
+            }
+        }
+        return getDefaultString();
+    }
+
     public static boolean getDefault() {
         return false;
+    }
+
+    public static String getDefaultString() {
+        return N.toString();
     }
 }

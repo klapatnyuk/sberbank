@@ -78,8 +78,9 @@ public class TemplateHandler extends AbstractHandler<Template> {
                 statement.setString(3, field.getLabel());
                 statement.setString(4, field.getType().toString());
                 statement.setInt(5, order++);
+
+                statement.executeUpdate();
             }
-            statement.executeUpdate();
         }
 
         return templateId;

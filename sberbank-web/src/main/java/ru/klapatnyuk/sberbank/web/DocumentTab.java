@@ -183,73 +183,32 @@ public class DocumentTab extends AbstractTab<Document> {
             return;
         }
 
-        /*
-        final PatternService service = new PatternService(BrownieSession.get(), BrownieConfiguration.get());
-        if (patternIndex >= 0) {
-            // edit existed pattern
-            PollPatternRequest model = new PollPatternRequest();
-            model.setSid(pattern.getSid());
-            model.setDeleted(Pattern.DELETED);
-            model.setBody(design.getBodyField().getValue().trim());
-            model.setChoiceType(design.getAllowMultiplyField().getValue() ? PollQuestionType.MULTIPLE_ANSWERS.toString()
-                    : PollQuestionType.SINGLE_ANSWER.toString());
-            model.setAnswers(design.getChoiceSelect().getStrings());
+        if (entityIndex >= 0) {
 
-            model.setCustom(design.getAllowCustomField().getValue());
-            if (design.getAllowCustomField().getValue()) {
-                model.setCustomAnswer(design.getCustomField().getValue().trim());
-            }
-            model.setFolderId(folder.getId());
-            model.setTags(design.getTagSelect().getUniqueStrings());
+        } else {
+            Document createdDocument = new Document();
 
-            PollPatternsRequest request = new PollPatternsRequest(Arrays.asList(model));
-            PollPatternsResponse response;
+            Template template = new Template();
+            template.setId((int) design.getTemplateSelect().getValue());
+            createdDocument.setTemplate(template);
+            createdDocument.setTitle(design.getTitleField().getValue().trim());
+            createdDocument.setFields(design.getTemplateLayout().getFields());
             try {
-                response = service.setPolls(request);
-            } catch (RemoteServiceException e) {
-                BrownieErrorHandler.handle(e, I18N.getString(PTRN_POLL_EDIT_ERROR));
+                Connection connection = SberbankUI.connectionPool.reserveConnection();
+                connection.setAutoCommit(false);
+                new DocumentHandler(connection).createDocument(createdDocument);
+                connection.commit();
+                SberbankUI.connectionPool.releaseConnection(connection);
+            } catch (SQLException e) {
+                LOGGER.error("Document creation error", e);
+                // TODO display WarningMessage
                 return;
             }
-            PollPattern pattern = PollPattern.valueOf(response.getData().get(0));
-            List<PollPattern> patterns = BrownieSession.getMasterdata().getPolls();
-            patterns.set(patternIndex, pattern);
-            Collections.sort(patterns);
-            int index = patterns.stream().map(Pattern::getSid).collect(Collectors.toList()).indexOf(pattern.getSid());
-            patternIndex = (index < 0) ? 0 : index;
-            Tray.show(I18N.getString(PTRN_POLL_UPDATED));
-            update();
-        } else {
-            // create new pattern
-            PollPatternRequest model = new PollPatternRequest();
-            model.setBody(design.getBodyField().getValue().trim());
-            model.setChoiceType(design.getAllowMultiplyField().getValue() ? PollQuestionType.MULTIPLE_ANSWERS.toString()
-                    : PollQuestionType.SINGLE_ANSWER.toString());
-            model.setAnswers(design.getChoiceSelect().getStrings());
-            model.setCustom(design.getAllowCustomField().getValue());
-            if (design.getAllowCustomField().getValue()) {
-                model.setCustomAnswer(design.getCustomField().getValue().trim());
-            }
-            model.setFolderId(folder.getId());
-            model.setTags(design.getTagSelect().getUniqueStrings());
-            model.setDeleted(false);
+            clear();
+            design.getTitleLayout().setVisible(false);
+        }
 
-            PollPatternsRequest request = new PollPatternsRequest(Arrays.asList(model));
-            PollPatternsResponse response = null;
-            try {
-                response = service.setPolls(request);
-            } catch (RemoteServiceException e) {
-                BrownieErrorHandler.handle(e, I18N.getString(PTRN_POLL_CREATE_ERROR));
-            }
-            if (response != null) {
-                PollPattern pattern = PollPattern.valueOf(response.getData().get(0));
-                List<PollPattern> patterns = BrownieSession.getMasterdata().getPolls();
-                patterns.add(pattern);
-                Collections.sort(patterns);
-                Tray.show(I18N.getString(PTRN_POLL_CREATED));
-                clear();
-                update();
-            }
-        }*/
+        update();
     }
 
     private void updateTemplateSelect() {
@@ -304,6 +263,12 @@ public class DocumentTab extends AbstractTab<Document> {
             if (fields == null || fields.isEmpty()) {
                 return;
             }
+            // move ids to referenceIds
+            fields.forEach(item -> {
+                item.setReferenceId(item.getId());
+                item.setId(0);
+            });
+
             design.getTemplateSeparatorLabel().setVisible(true);
             design.getTemplateLayout().setVisible(true);
             design.getTemplateLayout().setFields(fields);

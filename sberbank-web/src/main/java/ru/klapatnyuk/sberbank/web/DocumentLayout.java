@@ -3,6 +3,8 @@ package ru.klapatnyuk.sberbank.web;
 import com.vaadin.ui.*;
 import ru.klapatnyuk.sberbank.model.entity.Field;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,16 +17,51 @@ public class DocumentLayout extends VerticalLayout {
     }
 
     public List<Field> getFields() {
-        // TODO implement
-        return null;
+        List<Field> fields = new ArrayList<>();
+        Field<Serializable> field;
+        for (Component item : this) {
+            FieldLayout row = (FieldLayout) item;
+            if (isEmptyRow(row)) {
+                continue;
+            }
+            field = new Field<>();
+            field.setId(row.getFieldId());
+            field.setReferenceId(row.getTemplateFieldId());
+            field.setValue(getRowValue(row));
+            fields.add(field);
+        }
+        return fields;
     }
 
     public void setFields(List<Field> fields) {
         removeAllComponents();
         if (fields != null) {
-            fields.stream().filter(item -> item.isActive() || item.getValue() != null).map(this::newRow)
+            // display active fields, inactive not empty fields or inactive checkboxes with 'true' value
+            fields.stream().filter(item -> item.isActive() ||
+                    item.getValue() != null && item.getType() == Field.Type.CHECKBOX && item.getValue().equals(true)
+            ).map(this::newRow)
                     .forEach(this::addComponent);
         }
+    }
+
+    private static boolean isEmptyRow(HorizontalLayout row) {
+        AbstractField field = (AbstractField) row.getComponent(row.getComponentCount() - 1);
+        if (field instanceof AbstractTextField && ((AbstractTextField) field).getValue().trim().isEmpty()) {
+            return true;
+        } else if (field instanceof CheckBox && !((CheckBox) field).getValue()) {
+            return true;
+        }
+        return false;
+    }
+
+    private static Serializable getRowValue(HorizontalLayout row) {
+        AbstractField field = (AbstractField) row.getComponent(row.getComponentCount() - 1);
+        if (field instanceof AbstractTextField) {
+            return ((AbstractTextField) field).getValue().trim();
+        } else if (field instanceof CheckBox) {
+            return ((CheckBox) field).getValue();
+        }
+        return null;
     }
 
     private FieldLayout newRow(Field field) {
