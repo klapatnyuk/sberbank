@@ -23,6 +23,7 @@ public class TemplateHandler extends AbstractHandler<Template> {
         super(connection);
     }
 
+    @Override
     public List<Template> findAll() throws SQLException {
         LOGGER.debug("Inside TemplateHandler.findAll");
 
@@ -34,13 +35,13 @@ public class TemplateHandler extends AbstractHandler<Template> {
         List<Template> result = new ArrayList<>();
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
             try (ResultSet resultSet = statement.executeQuery()) {
-                Template template;
+                Template entity;
                 while (resultSet.next()) {
-                    template = new Template();
-                    template.setId(resultSet.getInt(1));
-                    template.setTitle(resultSet.getString(2));
-                    template.setEdited(resultSet.getTimestamp(3).toLocalDateTime());
-                    result.add(template);
+                    entity = new Template();
+                    entity.setId(resultSet.getInt(1));
+                    entity.setTitle(resultSet.getString(2));
+                    entity.setEdited(resultSet.getTimestamp(3).toLocalDateTime());
+                    result.add(entity);
                 }
             }
         }

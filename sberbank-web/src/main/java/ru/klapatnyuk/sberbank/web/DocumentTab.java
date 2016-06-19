@@ -5,6 +5,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vaadin.addons.toggle.ButtonGroupSelectionEvent;
 import ru.klapatnyuk.sberbank.model.entity.Document;
+import ru.klapatnyuk.sberbank.model.entity.Field;
+import ru.klapatnyuk.sberbank.model.handler.DocumentHandler;
+import ru.klapatnyuk.sberbank.model.handler.FieldHandler;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * @author klapatnyuk
@@ -22,34 +29,18 @@ public class DocumentTab extends AbstractTab<Document> {
 
     @Override
     public void update() {
-        /*buttonGroup = new org.vaadin.addons.toggle.ButtonGroup();
-        design.getEditPatternLayout().removeAllComponents();
-        if (BrownieSession.getMasterdata().getPolls() == null) {
-            return;
+        super.update();
+
+        try {
+            Connection connection = SberbankUI.connectionPool.reserveConnection();
+            entities = new DocumentHandler(connection).findAll();
+            SberbankUI.connectionPool.releaseConnection(connection);
+        } catch (SQLException e) {
+            LOGGER.error("Templates finding error", e);
+            // TODO display WarningMessage
         }
-        BrownieSession.getMasterdata().getPolls().stream().map(PollPattern::getBody).forEach(body -> {
-            Button button = new Button((body.length() > LENGTH) ? body.substring(0, LENGTH) + ".." : body);
-            button.setDescription(body);
-            button.setWidth("100%");
-            button.addStyleName("pattern-button");
-            button.addClickListener(event -> clickPatternButton(event));
-            buttonGroup.addButton(button);
-            design.getEditPatternLayout().addComponent(button);
-        });
-        final boolean nonEmpty = buttonGroup.getButtons().length > 0;
-        design.getEditSeparatorLabel().setVisible(nonEmpty);
-        design.getEditLabel().setVisible(nonEmpty);
-        design.getPatternContainer().setVisible(nonEmpty);
-        if (nonEmpty) {
-            buttonGroup.addSelectionListener(event -> selectPattern(event));
-            if (patternIndex >= 0) {
-                buttonGroup.setSelectedButtonIndex(patternIndex);
-                selectPattern(new ButtonGroupSelectionEvent(buttonGroup, buttonGroup.getButtons()[patternIndex], null));
-            } else if (folder != null) {
-                design.getCurrentFolderLabel().setValue(folder.getTitle());
-            }
-        }
-        updated = true;*/
+
+        updateEntityLayout();
     }
 
     @Override
@@ -60,31 +51,11 @@ public class DocumentTab extends AbstractTab<Document> {
 
     @Override
     public boolean validate() {
-        /*List<WarningMessage> messages = new ArrayList<>();
-
-        if (design.getBodyField().getValue().trim().isEmpty()) {
-            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_BODY_VALIDATE),
-                    design.getBodyField(), getValidationSource()));
-        }
-
-        if (design.getChoiceSelect().getStrings().size() < 2) {
-            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CHOICES_REQUIRED),
-                    design.getChoiceSelect().getLastField(),
-                    getValidationSource()));
-        } else if (design.getChoiceSelect().hasDuplicates()) {
-            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CHOICES_DUPLICATES),
-                    design.getChoiceSelect().getFirstDuplicateField(),
-                    getValidationSource()));
-        }
-
-        if (design.getAllowCustomField().getValue() && design.getCustomField().getValue().trim().isEmpty()) {
-            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CUSTOM_REQUIRED),
-                    design.getCustomField(), getValidationSource()));
-        }
+        // validate title
+        List<WarningMessage> messages = validateTitle();
 
         SberbankUI.getWarningWindow().addAll(messages);
-        return messages.isEmpty();*/
-        return false;
+        return messages.isEmpty();
     }
 
     @Override
@@ -107,7 +78,7 @@ public class DocumentTab extends AbstractTab<Document> {
     }
 
     @Override
-    protected TabView getDesign() {
+    protected AbstractTabView getDesign() {
         if (design == null) {
             design = new DocumentTabView();
         }
@@ -116,28 +87,29 @@ public class DocumentTab extends AbstractTab<Document> {
 
     @Override
     protected void selectEntity(ButtonGroupSelectionEvent event) {
-        /*if (event.getPreviousButton() != null) {
-            event.getPreviousButton().removeStyleName(StyleNames.BUTTON_ACTIVE);
+        super.selectEntity(event);
+
+        design.getTemplateSelect().removeAllItems();
+        design.getTemplateSelect().addItem(entity.getTemplate().getTitle());
+        design.getTemplateSelect().setValue(entity.getTemplate().getTitle());
+        design.getTemplateSelect().setEnabled(false);
+
+        design.getTitleField().setValue(entity.getTitle());
+
+        List<Field> fields = null;
+        try {
+            Connection connection = SberbankUI.connectionPool.reserveConnection();
+            fields = new FieldHandler(connection).findByDocumentId(entities.get(entityIndex).getId());
+            SberbankUI.connectionPool.releaseConnection(connection);
+        } catch (SQLException e) {
+            LOGGER.error("Templates finding error", e);
+            // TODO display WarningMessage
         }
-        design.getCreateButton().removeStyleName(StyleNames.BUTTON_ACTIVE);
-        event.getSelectedButton().addStyleName(StyleNames.BUTTON_ACTIVE);
-        design.getSubmitButton().setCaption(SberbankUI.I18N.getString(PTRN_POLL_SAVE));
-        patternIndex = buttonGroup.indexOfButton(buttonGroup.getSelectedButton());
-        pattern = BrownieSession.getMasterdata().getPolls().get(patternIndex);
-        design.getBodyField().setValue(pattern.getBody());
-        design.getChoiceSelect().setStrings(pattern.getAnswers().stream().filter(answer -> !answer.isCustom()).map(PollAnswer::getSequence)
-                .collect(Collectors.toList()));
-        final PollAnswer customAnswer = pattern.findCustomAnswer();
-        design.getAllowCustomField().setValue(customAnswer != null);
-        if (customAnswer == null) {
-            design.getCustomField().clear();
-        } else {
-            design.getCustomField().setValue(customAnswer.getSequence());
+
+        if (fields == null) {
+            return;
         }
-        design.getAllowMultiplyField().setValue(pattern.isMultiple());
-        folder = pattern.getFolder();
-        design.getCurrentFolderLabel().setValue(folder.getTitle());
-        design.getTagSelect().setStrings(pattern.getTags());*/
+        //design.getTemplateLayout().setFields(fields);
     }
 
     @Override

@@ -4,7 +4,6 @@ import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.vaadin.addons.toggle.ButtonGroup;
 import org.vaadin.addons.toggle.ButtonGroupSelectionEvent;
 import ru.klapatnyuk.sberbank.model.entity.Field;
 import ru.klapatnyuk.sberbank.model.entity.Template;
@@ -32,9 +31,7 @@ public class TemplateTab extends AbstractTab<Template> {
 
     @Override
     public void update() {
-        entities.clear();
-        buttonGroup = new ButtonGroup();
-        design.getEditPatternLayout().removeAllComponents();
+        super.update();
 
         try {
             Connection connection = SberbankUI.connectionPool.reserveConnection();
@@ -44,27 +41,8 @@ public class TemplateTab extends AbstractTab<Template> {
             LOGGER.error("Templates finding error", e);
             // TODO display WarningMessage
         }
-        design.getEditSeparatorLabel().setVisible(entities != null);
-        design.getEditLabel().setVisible(entities != null);
-        design.getPatternContainer().setVisible(entities != null);
 
-        entities.forEach(item -> {
-            Button button = new Button((item.getTitle().length() > LENGTH) ?
-                    item.getTitle().substring(0, LENGTH) + ".." : item.getTitle());
-            button.setDescription(item.getTitle());
-            button.setWidth("100%");
-            button.addStyleName("pattern-button");
-            button.addClickListener(this::clickEntityButton);
-            buttonGroup.addButton(button);
-            design.getEditPatternLayout().addComponent(button);
-        });
-
-        buttonGroup.addSelectionListener(this::selectEntity);
-
-        if (entityIndex >= 0) {
-            buttonGroup.setSelectedButtonIndex(entityIndex);
-            selectEntity(new ButtonGroupSelectionEvent(buttonGroup, buttonGroup.getButtons()[entityIndex], null));
-        }
+        updateEntityLayout();
     }
 
     @Override
@@ -77,27 +55,10 @@ public class TemplateTab extends AbstractTab<Template> {
     public boolean validate() {
         List<WarningMessage> messages = new ArrayList<>();
 
-        if (design.getTitleField().getValue().trim().isEmpty()) {
-            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_BODY_VALIDATE),
-                    design.getTitleField(), getValidationSource()));
-        } else {
-            String title = design.getTitleField().getValue().trim();
-            boolean duplicate = false;
-            if (entityIndex < 0) {
-                if (entities.stream().map(Template::getTitle).filter(item -> item.equals(title)).findAny().isPresent()) {
-                    duplicate = true;
-                }
-            } else if (entities.stream().filter(item -> !item.equals(entities.get(entityIndex)))
-                    .map(Template::getTitle).filter(item -> item.equals(title)).findAny().isPresent()) {
-                duplicate = true;
-            }
-            if (duplicate) {
-                messages.add(new WarningMessage(
-                        SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_BODY_UNIQUE_VALIDATE),
-                        design.getTitleField(), getValidationSource()));
-            }
-        }
+        // validate title
+        messages.addAll(validateTitle());
 
+        // validate template body
         if (design.getTemplateLayout().isEmpty()) {
             messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CHOICES_REQUIRED),
                     design.getTemplateLayout().getEmptyRowsField(), getValidationSource()));
@@ -105,7 +66,6 @@ public class TemplateTab extends AbstractTab<Template> {
             messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CHOICES_DUPLICATES),
                     design.getTemplateLayout().getFirstDuplicateField(), getValidationSource()));
         }
-
         AbstractField emptyField = design.getTemplateLayout().getFirstEmptyField();
         if (emptyField != null) {
             messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CUSTOM_REQUIRED),
@@ -131,7 +91,7 @@ public class TemplateTab extends AbstractTab<Template> {
     }
 
     @Override
-    protected TabView getDesign() {
+    protected AbstractTabView getDesign() {
         if (design == null) {
             design = new TemplateTabView();
         }
@@ -140,21 +100,9 @@ public class TemplateTab extends AbstractTab<Template> {
 
     @Override
     protected void selectEntity(ButtonGroupSelectionEvent event) {
-        LOGGER.debug("Inside TemplateTab.selectEntity");
-
-        // update model
-        entityIndex = buttonGroup.indexOfButton(buttonGroup.getSelectedButton());
-        entity = entities.get(entityIndex);
-
-        // update styles
-        if (event.getPreviousButton() != null) {
-            event.getPreviousButton().removeStyleName(StyleNames.BUTTON_ACTIVE);
-        }
-        design.getCreateButton().removeStyleName(StyleNames.BUTTON_ACTIVE);
-        event.getSelectedButton().addStyleName(StyleNames.BUTTON_ACTIVE);
+        super.selectEntity(event);
 
         // update form
-        design.getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_SAVE));
         design.getTitleField().setValue(entity.getTitle());
 
         List<Field> fields = null;

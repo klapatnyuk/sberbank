@@ -8,7 +8,7 @@ import com.vaadin.ui.declarative.Design;
  * @author klapatnyuk
  */
 @DesignRoot
-public class TemplateTabView extends TabView {
+public class TemplateTabView extends AbstractTabView {
 
     private static final long serialVersionUID = -6788254175139485486L;
 
@@ -21,27 +21,23 @@ public class TemplateTabView extends TabView {
     @SuppressWarnings("unused")
     private Label editLabel;
     @SuppressWarnings("unused")
-    private Panel patternContainer;
+    private Panel templateContainer;
     @SuppressWarnings("unused")
-    private VerticalLayout editPatternLayout;
+    private VerticalLayout editTemplateLayout;
     @SuppressWarnings("unused")
     private Label verticalSeparatorLabel;
-
     @SuppressWarnings("unused")
     private HorizontalLayout titleLayout;
     @SuppressWarnings("unused")
     private Label titleLabel;
     @SuppressWarnings("unused")
     private TextField titleField;
-
     @SuppressWarnings("unused")
     private Label titleSeparatorLabel;
-
     @SuppressWarnings("unused")
     private Label fieldsLabel;
     @SuppressWarnings("unused")
     private TemplateLayout templateLayout;
-
     @SuppressWarnings("unused")
     private Label submitSeparatorLabel;
     @SuppressWarnings("unused")
@@ -52,32 +48,33 @@ public class TemplateTabView extends TabView {
         init();
     }
 
+    public TemplateLayout getTemplateLayout() {
+        return templateLayout;
+    }
+
+    @Override
     public Label getEditSeparatorLabel() {
         return editSeparatorLabel;
     }
 
+    @Override
     public Label getEditLabel() {
         return editLabel;
     }
 
-    public SingleComponentContainer getPatternContainer() {
-        return patternContainer;
+    @Override
+    public SingleComponentContainer getEntityContainer() {
+        return templateContainer;
     }
 
-    public AbstractOrderedLayout getEditPatternLayout() {
-        return editPatternLayout;
+    @Override
+    public AbstractOrderedLayout getEditEntityLayout() {
+        return editTemplateLayout;
     }
 
-    public AbstractOrderedLayout getTitleLayout() {
-        return titleLayout;
-    }
-
+    @Override
     public AbstractTextField getTitleField() {
         return titleField;
-    }
-
-    public TemplateLayout getTemplateLayout() {
-        return templateLayout;
     }
 
     @Override

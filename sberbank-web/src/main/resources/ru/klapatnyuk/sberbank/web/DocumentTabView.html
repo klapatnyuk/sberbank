@@ -9,8 +9,8 @@
         <v-button _id="createButton" style-name="pattern-button"/>
         <v-label _id="editSeparatorLabel" style-name="separator"/>
         <v-label _id="editLabel" style-name="label-edit"/>
-        <v-panel _id="patternContainer" style-name="panel-patterns-edit" size-full :expand>
-            <v-vertical-layout _id="editPatternLayout"/>
+        <v-panel _id="documentContainer" style-name="panel-patterns-edit" size-full :expand>
+            <v-vertical-layout _id="editDocumentLayout"/>
         </v-panel>
     </v-vertical-layout>
     <v-label _id="verticalSeparatorLabel" style-name="separator-vertical" size-full/>
@@ -20,11 +20,11 @@
                 <v-label _id="templateLabel"/>
                 <v-combo-box _id="templateSelect" :expand/>
             </v-horizontal-layout>
-            <v-label _id="templateSeparatorLabel" style-name="separator spacer-empty"/>
             <v-horizontal-layout _id="titleLayout" style-name="layout-row spacer-top" size-full>
                 <v-label _id="titleLabel"/>
                 <v-text-field _id="titleField" size-full :expand/>
             </v-horizontal-layout>
+            <v-label _id="templateSeparatorLabel" style-name="separator spacer-empty"/>
 
             <!-- temporary -->
 

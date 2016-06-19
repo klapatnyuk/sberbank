@@ -51,6 +51,10 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
     @Override
     public void update() {
         LOGGER.debug("Tab's update started");
+
+        entities.clear();
+        buttonGroup = new ButtonGroup();
+        getDesign().getEditEntityLayout().removeAllComponents();
     }
 
     @Override
@@ -101,9 +105,77 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_ADD));
     }
 
-    protected abstract TabView getDesign();
+    protected void updateEntityLayout() {
+        getDesign().getEditSeparatorLabel().setVisible(entities != null);
+        getDesign().getEditLabel().setVisible(entities != null);
+        getDesign().getEntityContainer().setVisible(entities != null);
 
-    protected abstract void selectEntity(ButtonGroupSelectionEvent event);
+        entities.forEach(item -> {
+            Button button = new Button((item.getTitle().length() > LENGTH) ?
+                    item.getTitle().substring(0, LENGTH) + ".." : item.getTitle());
+            button.setDescription(item.getTitle());
+            button.setWidth("100%");
+            button.addStyleName("pattern-button");
+            button.addClickListener(this::clickEntityButton);
+            buttonGroup.addButton(button);
+            getDesign().getEditEntityLayout().addComponent(button);
+        });
+
+        buttonGroup.addSelectionListener(this::selectEntity);
+
+        if (entityIndex >= 0) {
+            buttonGroup.setSelectedButtonIndex(entityIndex);
+            selectEntity(new ButtonGroupSelectionEvent(buttonGroup, buttonGroup.getButtons()[entityIndex], null));
+        }
+    }
+
+    protected List<WarningMessage> validateTitle() {
+        List<WarningMessage> messages = new ArrayList<>();
+
+        if (getDesign().getTitleField().getValue().trim().isEmpty()) {
+            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_BODY_VALIDATE),
+                    getDesign().getTitleField(), getValidationSource()));
+
+        } else {
+            String title = getDesign().getTitleField().getValue().trim();
+            boolean duplicate = false;
+            if (entityIndex < 0) {
+                if (entities.stream().map(AbstractEntity::getTitle).filter(item -> item.equals(title)).findAny()
+                        .isPresent()) {
+                    duplicate = true;
+                }
+            } else if (entities.stream().filter(item -> !item.equals(entities.get(entityIndex)))
+                    .map(AbstractEntity::getTitle).filter(item -> item.equals(title)).findAny().isPresent()) {
+                duplicate = true;
+            }
+            if (duplicate) {
+                messages.add(new WarningMessage(
+                        SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_BODY_UNIQUE_VALIDATE),
+                        getDesign().getTitleField(), getValidationSource()));
+            }
+        }
+        return messages;
+    }
+
+    protected abstract AbstractTabView getDesign();
+
+    protected void selectEntity(ButtonGroupSelectionEvent event) {
+        LOGGER.debug("Inside AbstractTab.selectEntity");
+
+        // update model
+        entityIndex = buttonGroup.indexOfButton(buttonGroup.getSelectedButton());
+        entity = entities.get(entityIndex);
+
+        // update styles
+        if (event.getPreviousButton() != null) {
+            event.getPreviousButton().removeStyleName(StyleNames.BUTTON_ACTIVE);
+        }
+        getDesign().getCreateButton().removeStyleName(StyleNames.BUTTON_ACTIVE);
+        event.getSelectedButton().addStyleName(StyleNames.BUTTON_ACTIVE);
+
+        // update form
+        getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_SAVE));
+    }
 
     protected abstract void clickEntityButton(Button.ClickEvent event);
 

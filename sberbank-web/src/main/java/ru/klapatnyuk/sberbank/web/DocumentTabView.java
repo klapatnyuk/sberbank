@@ -9,7 +9,7 @@ import com.vaadin.ui.declarative.Design;
  * @author klapatnyuk
  */
 @DesignRoot
-public class DocumentTabView extends TabView {
+public class DocumentTabView extends AbstractTabView {
 
     private static final long serialVersionUID = -2698683814256829227L;
 
@@ -24,18 +24,15 @@ public class DocumentTabView extends TabView {
     @SuppressWarnings("unused")
     private Panel patternContainer;
     @SuppressWarnings("unused")
-    private VerticalLayout editPatternLayout;
+    private VerticalLayout editDocumentLayout;
     @SuppressWarnings("unused")
     private Label verticalSeparatorLabel;
-
     @SuppressWarnings("unused")
     private Label templateLabel;
     @SuppressWarnings("unused")
     private ComboBox templateSelect;
-
     @SuppressWarnings("unused")
     private Label templateSeparatorLabel;
-
     @SuppressWarnings("unused")
     private HorizontalLayout titleLayout;
     @SuppressWarnings("unused")
@@ -59,22 +56,6 @@ public class DocumentTabView extends TabView {
         init();
     }
 
-    public Label getEditSeparatorLabel() {
-        return editSeparatorLabel;
-    }
-
-    public Label getEditLabel() {
-        return editLabel;
-    }
-
-    public SingleComponentContainer getPatternContainer() {
-        return patternContainer;
-    }
-
-    public AbstractOrderedLayout getEditPatternLayout() {
-        return editPatternLayout;
-    }
-
     public AbstractSelect getTemplateSelect() {
         return templateSelect;
     }
@@ -83,6 +64,27 @@ public class DocumentTabView extends TabView {
         return titleLayout;
     }
 
+    @Override
+    public Label getEditSeparatorLabel() {
+        return editSeparatorLabel;
+    }
+
+    @Override
+    public Label getEditLabel() {
+        return editLabel;
+    }
+
+    @Override
+    public SingleComponentContainer getEntityContainer() {
+        return patternContainer;
+    }
+
+    @Override
+    public AbstractOrderedLayout getEditEntityLayout() {
+        return editDocumentLayout;
+    }
+
+    @Override
     public AbstractTextField getTitleField() {
         return titleField;
     }

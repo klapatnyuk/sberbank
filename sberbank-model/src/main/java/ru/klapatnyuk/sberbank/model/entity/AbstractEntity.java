@@ -8,6 +8,7 @@ import ru.klapatnyuk.sberbank.model.entity.api.Entity;
 public abstract class AbstractEntity implements Entity {
 
     private int id;
+    private String title;
 
     @Override
     public int getId() {
@@ -17,6 +18,16 @@ public abstract class AbstractEntity implements Entity {
     @Override
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override

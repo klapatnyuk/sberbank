@@ -1,4 +1,4 @@
-package ru.klapatnyuk.sberbank.model.entity.api;
+package ru.klapatnyuk.sberbank.model.type.api;
 
 import java.io.Serializable;
 

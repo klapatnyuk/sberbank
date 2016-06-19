@@ -1,6 +1,6 @@
 package ru.klapatnyuk.sberbank.model.entity;
 
-import ru.klapatnyuk.sberbank.model.entity.api.EnumType;
+import ru.klapatnyuk.sberbank.model.type.api.EnumType;
 
 import java.io.Serializable;
 
@@ -9,19 +9,10 @@ import java.io.Serializable;
  */
 public class Field<T extends Serializable> extends AbstractRemovableEntity {
 
-    private String title;
     private String label;
     private Type type;
     private int order;
     private T value;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public String getLabel() {
         return label;
