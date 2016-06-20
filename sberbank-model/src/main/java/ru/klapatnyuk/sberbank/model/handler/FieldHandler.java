@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import ru.klapatnyuk.sberbank.model.entity.Field;
 import ru.klapatnyuk.sberbank.model.type.Boolean;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -123,5 +124,103 @@ public class FieldHandler extends AbstractHandler<Field> {
             }
         }
         return result;
+    }
+
+    public void createDocumentFields(int documentId, List<Field> fields) throws SQLException {
+        LOGGER.debug("Inside FieldHandler.createDocumentFields");
+        if (fields.isEmpty()) {
+            return;
+        }
+
+        String sql = "INSERT INTO document_field (document_id, template_field_id, value) " +
+                "VALUES (?, ?, ?)";
+
+        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
+            Serializable value;
+            for (Field field : fields) {
+                statement.setInt(1, documentId);
+                statement.setInt(2, field.getReferenceId());
+                value = field.getValue();
+                if (value instanceof String) {
+                    statement.setString(3, (String) value);
+                } else if (value instanceof java.lang.Boolean) {
+                    statement.setString(3, Boolean.find((boolean) value));
+                }
+                statement.executeUpdate();
+            }
+        }
+    }
+
+    public void removeDocumentFieldsExcept(int documentId, List<Integer> ids) throws SQLException {
+        LOGGER.debug("Inside FieldHandler.removeDocumentFields(List<Integer>)");
+        if (ids.isEmpty()) {
+            return;
+        }
+
+        StringBuilder sql = new StringBuilder("UPDATE document_field " +
+                "SET active = FALSE " +
+                "WHERE active = TRUE AND document_id = ? AND id NOT IN (");
+        for (int a = 0; a < ids.size(); a++) {
+            if (a > 0) {
+                sql.append(", ");
+            }
+            sql.append("?");
+        }
+        sql.append(")");
+        try (PreparedStatement statement = getConnection().prepareStatement(sql.toString())) {
+            statement.setInt(1, documentId);
+            for (int a = 0; a < ids.size(); a++) {
+                statement.setInt(a + 2, ids.get(a));
+            }
+            statement.executeUpdate();
+        }
+    }
+
+    public void removeDocumentFields(int documentId) throws SQLException {
+        LOGGER.debug("Inside FieldHandler.removeDocumentFields(" + documentId + ")");
+
+        String sql = "UPDATE document_field " +
+                "SET active = FALSE " +
+                "WHERE active = TRUE AND document_id = ?";
+        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
+            statement.setInt(1, documentId);
+            statement.executeUpdate();
+        }
+    }
+
+    public void insertAndUpdateFields(int documentId, List<Field> fields) throws SQLException {
+        LOGGER.debug("Inside FieldHandler.removeDocumentFields(" + documentId + ", List<Field>)");
+
+        String insertSql = "INSERT INTO document_field (document_id, template_field_id, value) " +
+                "VALUES (?, ?, ?)";
+        String updateSql = "UPDATE document_field " +
+                "SET value = ? " +
+                "WHERE active = TRUE AND id = ?";
+        try (PreparedStatement insertStatement = getConnection().prepareStatement(insertSql);
+             PreparedStatement updateStatement = getConnection().prepareStatement(updateSql)) {
+            for (Field field : fields) {
+                if (field.getId() == 0) {
+                    // add new fields
+                    insertStatement.setInt(1, documentId);
+                    insertStatement.setInt(2, field.getReferenceId());
+                    if (field.getValue() instanceof String) {
+                        insertStatement.setString(3, field.getValue().toString());
+                    } else if (field.getValue() instanceof java.lang.Boolean) {
+                        insertStatement.setString(3, Boolean.find((boolean) field.getValue()));
+                    }
+                    insertStatement.executeUpdate();
+
+                } else {
+                    // edit existed fields
+                    if (field.getValue() instanceof String) {
+                        updateStatement.setString(1, field.getValue().toString());
+                    } else if (field.getValue() instanceof java.lang.Boolean) {
+                        updateStatement.setString(1, Boolean.find((boolean) field.getValue()));
+                    }
+                    updateStatement.setInt(2, field.getId());
+                    updateStatement.executeUpdate();
+                }
+            }
+        }
     }
 }

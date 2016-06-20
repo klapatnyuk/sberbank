@@ -5,10 +5,7 @@ import com.vaadin.ui.Button;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vaadin.addons.toggle.ButtonGroupSelectionEvent;
-import ru.klapatnyuk.sberbank.model.entity.Document;
-import ru.klapatnyuk.sberbank.model.entity.Field;
-import ru.klapatnyuk.sberbank.model.entity.Template;
-import ru.klapatnyuk.sberbank.model.entity.User;
+import ru.klapatnyuk.sberbank.model.entity.*;
 import ru.klapatnyuk.sberbank.model.handler.DocumentHandler;
 import ru.klapatnyuk.sberbank.model.handler.FieldHandler;
 import ru.klapatnyuk.sberbank.model.handler.TemplateHandler;
@@ -18,6 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * @author klapatnyuk
@@ -201,16 +199,37 @@ public class DocumentTab extends AbstractTab<Document> {
         }
 
         if (entityIndex >= 0) {
-            Document updatedDocument = new Document();
+            Document document = new Document();
 
-            updatedDocument.setId(entity.getId());
-            updatedDocument.setEdited(entity.getEdited());
-            updatedDocument.setTitle(design.getTitleField().getValue().trim());
-            updatedDocument.setFields(design.getTemplateLayout().getFields());
+            document.setId(entity.getId());
+            document.setEdited(entity.getEdited());
+            document.setTitle(design.getTitleField().getValue().trim());
+            document.setFields(design.getTemplateLayout().getFields());
             try {
                 Connection connection = SberbankUI.connectionPool.reserveConnection();
                 connection.setAutoCommit(false);
-                new DocumentHandler(connection).updateDocument(updatedDocument);
+
+                // compare edited
+                DocumentHandler documentHandler = new DocumentHandler(connection);
+                if (documentHandler.compareEdited(document.getId(), document.getEdited()) > 0) {
+                    throw new SQLException("Concurrency editing detected");
+                }
+
+                // update document
+                documentHandler.updateDocument(document);
+
+                // remove fields
+                FieldHandler fieldHandler = new FieldHandler(connection);
+                List<Integer> ids = document.getFields().stream().map(AbstractEntity::getId).collect(Collectors.toList());
+                if (ids.isEmpty()) {
+                    fieldHandler.removeDocumentFields(document.getId());
+                } else {
+                    fieldHandler.removeDocumentFieldsExcept(document.getId(), ids);
+                }
+
+                // update fields
+                fieldHandler.insertAndUpdateFields(document.getId(), document.getFields());
+
                 connection.commit();
                 SberbankUI.connectionPool.releaseConnection(connection);
             } catch (SQLException e) {
@@ -218,21 +237,22 @@ public class DocumentTab extends AbstractTab<Document> {
                 // TODO display WarningMessage
                 return;
             }
-            entity = updatedDocument;
+            entity = document;
 
         } else {
-            Document createdDocument = new Document();
+            Document document = new Document();
 
             Template template = new Template();
             template.setId((int) design.getTemplateSelect().getValue());
-            createdDocument.setTemplate(template);
-            createdDocument.setTitle(design.getTitleField().getValue().trim());
-            createdDocument.setFields(design.getTemplateLayout().getFields());
-            createdDocument.setOwner(SberbankSession.get().getUser());
+            document.setTemplate(template);
+            document.setTitle(design.getTitleField().getValue().trim());
+            document.setFields(design.getTemplateLayout().getFields());
+            document.setOwner(SberbankSession.get().getUser());
             try {
                 Connection connection = SberbankUI.connectionPool.reserveConnection();
                 connection.setAutoCommit(false);
-                new DocumentHandler(connection).createDocument(createdDocument);
+                int id = new DocumentHandler(connection).createDocument(document);
+                new FieldHandler(connection).createDocumentFields(id, document.getFields());
                 connection.commit();
                 SberbankUI.connectionPool.releaseConnection(connection);
             } catch (SQLException e) {
