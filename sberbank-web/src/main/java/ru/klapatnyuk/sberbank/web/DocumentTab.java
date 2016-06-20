@@ -228,7 +228,7 @@ public class DocumentTab extends AbstractTab<Document> {
                 }
 
                 // update fields
-                fieldHandler.insertAndUpdateFields(document.getId(), document.getFields());
+                fieldHandler.insertAndUpdateDocumentFields(document.getId(), document.getFields());
 
                 connection.commit();
                 SberbankUI.connectionPool.releaseConnection(connection);
@@ -251,8 +251,10 @@ public class DocumentTab extends AbstractTab<Document> {
             try {
                 Connection connection = SberbankUI.connectionPool.reserveConnection();
                 connection.setAutoCommit(false);
+
                 int id = new DocumentHandler(connection).createDocument(document);
                 new FieldHandler(connection).createDocumentFields(id, document.getFields());
+
                 connection.commit();
                 SberbankUI.connectionPool.releaseConnection(connection);
             } catch (SQLException e) {

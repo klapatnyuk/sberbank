@@ -5,6 +5,7 @@ import com.vaadin.ui.Button;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vaadin.addons.toggle.ButtonGroupSelectionEvent;
+import ru.klapatnyuk.sberbank.model.entity.AbstractEntity;
 import ru.klapatnyuk.sberbank.model.entity.Field;
 import ru.klapatnyuk.sberbank.model.entity.Template;
 import ru.klapatnyuk.sberbank.model.handler.FieldHandler;
@@ -15,6 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * @author klapatnyuk
@@ -142,15 +144,32 @@ public class TemplateTab extends AbstractTab<Template> {
             return;
         }
         if (entityIndex >= 0) {
-            Template updatedTemplate = new Template();
-            updatedTemplate.setId(entity.getId());
-            updatedTemplate.setEdited(entity.getEdited());
-            updatedTemplate.setTitle(design.getTitleField().getValue().trim());
-            updatedTemplate.setFields(design.getTemplateLayout().getFields());
+            Template template = new Template();
+            template.setId(entity.getId());
+            template.setEdited(entity.getEdited());
+            template.setTitle(design.getTitleField().getValue().trim());
+            template.setFields(design.getTemplateLayout().getFields());
             try {
                 Connection connection = SberbankUI.connectionPool.reserveConnection();
                 connection.setAutoCommit(false);
-                new TemplateHandler(connection).updateTemplate(updatedTemplate);
+
+                // compare edited
+                TemplateHandler templateHandler = new TemplateHandler(connection);
+                if (templateHandler.compareEdited(template.getId(), template.getEdited()) > 0) {
+                    throw new SQLException("Concurrency editing detected");
+                }
+
+                // update template
+                templateHandler.updateTemplate(template);
+
+                // remove fields
+                FieldHandler fieldHandler = new FieldHandler(connection);
+                List<Integer> ids = template.getFields().stream().map(AbstractEntity::getId).collect(Collectors.toList());
+                fieldHandler.removeTemplateFieldsExcept(template.getId(), ids);
+
+                // update fields
+                fieldHandler.insertAndUpdateTemplateFields(template.getId(), template.getFields());
+
                 connection.commit();
                 SberbankUI.connectionPool.releaseConnection(connection);
             } catch (SQLException e) {
@@ -158,16 +177,19 @@ public class TemplateTab extends AbstractTab<Template> {
                 // TODO display WarningMessage
                 return;
             }
-            entity = updatedTemplate;
+            entity = template;
 
         } else {
-            Template createdTemplate = new Template();
-            createdTemplate.setTitle(design.getTitleField().getValue().trim());
-            createdTemplate.setFields(design.getTemplateLayout().getFields());
+            Template template = new Template();
+            template.setTitle(design.getTitleField().getValue().trim());
+            template.setFields(design.getTemplateLayout().getFields());
             try {
                 Connection connection = SberbankUI.connectionPool.reserveConnection();
                 connection.setAutoCommit(false);
-                new TemplateHandler(connection).createTemplate(createdTemplate);
+
+                int id = new TemplateHandler(connection).createTemplate(template);
+                new FieldHandler(connection).createTemplateFields(id, template.getFields());
+
                 connection.commit();
                 SberbankUI.connectionPool.releaseConnection(connection);
             } catch (SQLException e) {
