@@ -60,6 +60,45 @@ public class DocumentHandler extends AbstractHandler<Document> {
         return result;
     }
 
+    public List<Document> findByOwnerId(int id) throws SQLException {
+        LOGGER.debug("Inside DocumentHandler.findByOwnerId");
+
+        String sql = "SELECT d.id, d.title, d.edited, d.template_id, t.title, t.active " +
+                "FROM document d, template t " +
+                "WHERE d.active = TRUE AND d.template_id = t.id AND d.owner_id = ? " +
+                "ORDER BY t.active DESC, d.id DESC";
+
+        List<Document> result = new ArrayList<>();
+        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
+            statement.setInt(1, id);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                Document entity;
+                Template template;
+                User user;
+                while (resultSet.next()) {
+                    entity = new Document();
+                    entity.setId(resultSet.getInt(1));
+                    entity.setTitle(resultSet.getString(2));
+                    entity.setEdited(resultSet.getTimestamp(3).toLocalDateTime());
+
+                    template = new Template();
+                    template.setId(resultSet.getInt(4));
+                    template.setTitle(resultSet.getString(5));
+                    template.setActive(resultSet.getBoolean(6));
+                    entity.setTemplate(template);
+
+                    user = new User();
+                    user.setId(id);
+                    entity.setOwner(user);
+
+                    result.add(entity);
+                }
+            }
+        }
+        return result;
+    }
+
     public int createDocument(Document document) throws SQLException {
         LOGGER.debug("Inside DocumentHandler.createDocument");
 
@@ -71,8 +110,7 @@ public class DocumentHandler extends AbstractHandler<Document> {
                 Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, document.getTemplate().getId());
             statement.setString(2, document.getTitle());
-            // TODO implement dynamic 'owner_id'
-            statement.setInt(3, 1);
+            statement.setInt(3, document.getOwner().getId());
             statement.executeUpdate();
             try (ResultSet resultSet = statement.getGeneratedKeys()) {
                 if (resultSet.next()) {

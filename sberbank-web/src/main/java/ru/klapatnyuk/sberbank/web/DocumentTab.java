@@ -8,6 +8,7 @@ import org.vaadin.addons.toggle.ButtonGroupSelectionEvent;
 import ru.klapatnyuk.sberbank.model.entity.Document;
 import ru.klapatnyuk.sberbank.model.entity.Field;
 import ru.klapatnyuk.sberbank.model.entity.Template;
+import ru.klapatnyuk.sberbank.model.entity.User;
 import ru.klapatnyuk.sberbank.model.handler.DocumentHandler;
 import ru.klapatnyuk.sberbank.model.handler.FieldHandler;
 import ru.klapatnyuk.sberbank.model.handler.TemplateHandler;
@@ -40,7 +41,15 @@ public class DocumentTab extends AbstractTab<Document> {
 
         try {
             Connection connection = SberbankUI.connectionPool.reserveConnection();
-            entities = new DocumentHandler(connection).findAll();
+
+            if (SberbankSession.get().getUser().getRole() == User.Role.ADMIN) {
+                // 'admin' role
+                entities = new DocumentHandler(connection).findAll();
+            } else {
+                // other roles
+                entities = new DocumentHandler(connection).findByOwnerId(SberbankSession.get().getUser().getId());
+            }
+
             SberbankUI.connectionPool.releaseConnection(connection);
         } catch (SQLException e) {
             LOGGER.error("Templates finding error", e);
@@ -219,6 +228,7 @@ public class DocumentTab extends AbstractTab<Document> {
             createdDocument.setTemplate(template);
             createdDocument.setTitle(design.getTitleField().getValue().trim());
             createdDocument.setFields(design.getTemplateLayout().getFields());
+            createdDocument.setOwner(SberbankSession.get().getUser());
             try {
                 Connection connection = SberbankUI.connectionPool.reserveConnection();
                 connection.setAutoCommit(false);

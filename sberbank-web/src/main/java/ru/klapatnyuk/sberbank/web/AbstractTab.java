@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.vaadin.addons.toggle.ButtonGroup;
 import org.vaadin.addons.toggle.ButtonGroupSelectionEvent;
 import ru.klapatnyuk.sberbank.model.entity.AbstractEntity;
+import ru.klapatnyuk.sberbank.model.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +90,11 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         getDesign().getCreateButton().addClickListener(event -> clickCreateButton());
         getDesign().getSubmitButton().addClickListener(event -> clickSubmitButton());
         getDesign().getCancelButton().addClickListener(event -> clickCancelButton());
-        getDesign().getRemoveButton().addClickListener(event -> clickRemoveButton());
+
+        // 'admin' role
+        if (SberbankSession.get().getUser().getRole() == User.Role.ADMIN) {
+            getDesign().getRemoveButton().addClickListener(event -> clickRemoveButton());
+        }
     }
 
     protected void clickCreateButton() {
@@ -152,13 +157,12 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
             String title = getDesign().getTitleField().getValue().trim();
             boolean duplicate = false;
             if (entityIndex < 0) {
-                // TODO replace by dynamic user id
-                if (entities.stream().filter(duplicatePredicate(1, title)).findAny().isPresent()) {
+                if (entities.stream().filter(duplicatePredicate(SberbankSession.get().getUser().getId(), title))
+                        .findAny().isPresent()) {
                     duplicate = true;
                 }
-                // TODO replace by dynamic user id
             } else if (entities.stream().filter(item -> !item.equals(entities.get(entityIndex)))
-                    .filter(duplicatePredicate(1, title)).findAny().isPresent()) {
+                    .filter(duplicatePredicate(SberbankSession.get().getUser().getId(), title)).findAny().isPresent()) {
                 duplicate = true;
             }
             if (duplicate) {
@@ -191,7 +195,8 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         // update form
         getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_SAVE));
         getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_CANCEL));
-        getDesign().getRemoveButton().setVisible(true);
+        // 'admin' role
+        getDesign().getRemoveButton().setVisible(SberbankSession.get().getUser().getRole() == User.Role.ADMIN);
         getDesign().getTitleField().setReadOnly(false);
         getDesign().getTitleField().setValue(entity.getTitle());
     }
@@ -215,7 +220,8 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         // update form
         getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_SAVE));
         getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_CANCEL));
-        getDesign().getRemoveButton().setVisible(true);
+        // 'admin' role
+        getDesign().getRemoveButton().setVisible(SberbankSession.get().getUser().getRole() == User.Role.ADMIN);
         getDesign().getTitleField().setReadOnly(false);
         getDesign().getTitleField().setValue(entity.getTitle());
     }
