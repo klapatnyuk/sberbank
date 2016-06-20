@@ -75,7 +75,7 @@ public class FieldHandler extends AbstractHandler<Field> {
                 "   WHERE active = TRUE" +
                 ") d " +
                 "RIGHT OUTER JOIN (" +
-                "   SELECT tf.id as id, tf.label as label , tf.type as type, tf.active as active, tf.order as \"order\" " +
+                "   SELECT tf.id as id, tf.label as label, tf.type as type, tf.active as active, tf.\"order\" as \"order\" " +
                 "   FROM template_field tf " +
                 "       JOIN template t ON tf.template_id = t.id " +
                 "       JOIN document d ON d.template_id = t.id " +
