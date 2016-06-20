@@ -175,4 +175,14 @@ public class TemplateHandler extends AbstractHandler<Template> {
             }
         }
     }
+
+    public void removeTemplate(int id) throws SQLException {
+        String sql = "UPDATE template " +
+                "SET active = FALSE " +
+                "WHERE active = TRUE AND id = ?";
+        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        }
+    }
 }

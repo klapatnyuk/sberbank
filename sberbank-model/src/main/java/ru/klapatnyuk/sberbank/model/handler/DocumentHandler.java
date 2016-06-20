@@ -207,4 +207,14 @@ public class DocumentHandler extends AbstractHandler<Document> {
             }
         }
     }
+
+    public void removeDocument(int id) throws SQLException {
+        String sql = "UPDATE document " +
+                "SET active = FALSE " +
+                "WHERE active = TRUE AND id = ?";
+        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        }
+    }
 }

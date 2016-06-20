@@ -28,9 +28,10 @@
             <v-label _id="templateSeparatorLabel" style-name="separator spacer-empty" visible="false"/>
             <sb-document-layout _id="documentLayout" visible="false"/>
             <v-label _id="submitSeparatorLabel" style-name="separator spacer-empty"/>
-            <v-horizontal-layout style-name="layout-row spacer-top spacer-bottom" size-full>
+            <v-horizontal-layout style-name="layout-row spacer-top spacer-bottom">
                 <v-button _id="submitButton" style-name="button-standard spacer-empty"/>
-                <v-button _id="cancelButton" :expand/>
+                <v-button _id="cancelButton"/>
+                <v-button _id="removeButton" visible="false"/>
             </v-horizontal-layout>
         </v-vertical-layout>
     </v-panel>

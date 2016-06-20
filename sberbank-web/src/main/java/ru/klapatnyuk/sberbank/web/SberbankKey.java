@@ -146,6 +146,7 @@ public interface SberbankKey {
         PTRN_POLL_ADD,
         PTRN_POLL_CLEAR,
         PTRN_POLL_CANCEL,
+        PTRN_POLL_REMOVE,
         PTRN_POLL_SAVE,
         PTRN_POLL_PROMPT,
 

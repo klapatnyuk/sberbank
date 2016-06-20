@@ -85,13 +85,14 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         LOGGER.debug("Tab's init started");
         setSizeFull();
         addComponent(getDesign());
+
+        getDesign().getCreateButton().addClickListener(event -> clickCreateButton());
+        getDesign().getSubmitButton().addClickListener(event -> clickSubmitButton());
+        getDesign().getCancelButton().addClickListener(event -> clickCancelButton());
+        getDesign().getRemoveButton().addClickListener(event -> clickRemoveButton());
     }
 
     protected void clickCreateButton() {
-        if (entityIndex < 0) {
-            return;
-        }
-
         // update model
         entityIndex = -1;
 
@@ -105,12 +106,13 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         clear();
         getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_ADD));
         getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_CLEAR));
+        getDesign().getRemoveButton().setVisible(false);
     }
 
     protected void updateEntityLayout() {
-        getDesign().getEditSeparatorLabel().setVisible(entities != null);
-        getDesign().getEditLabel().setVisible(entities != null);
-        getDesign().getEntityContainer().setVisible(entities != null);
+        getDesign().getEditSeparatorLabel().setVisible(entities != null && !entities.isEmpty());
+        getDesign().getEditLabel().setVisible(entities != null && !entities.isEmpty());
+        getDesign().getEntityContainer().setVisible(entities != null && !entities.isEmpty());
 
         entities.forEach(item -> {
             Button button = new Button((item.getTitle().length() > LENGTH) ?
@@ -125,9 +127,14 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
 
         buttonGroup.addSelectionListener(this::selectEntity);
 
+        if (entityIndex >= buttonGroup.countButtons()) {
+            entityIndex = buttonGroup.countButtons() - 1;
+        }
         if (entityIndex >= 0) {
             buttonGroup.setSelectedButtonIndex(entityIndex);
             selectEntity(new ButtonGroupSelectionEvent(buttonGroup, buttonGroup.getButtons()[entityIndex], null));
+        } else {
+            clickCreateButton();
         }
     }
 
@@ -181,6 +188,7 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         // update form
         getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_SAVE));
         getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_CANCEL));
+        getDesign().getRemoveButton().setVisible(true);
         getDesign().getTitleField().setValue(entity.getTitle());
     }
 
@@ -203,10 +211,20 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         // update form
         getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_SAVE));
         getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_CANCEL));
+        getDesign().getRemoveButton().setVisible(true);
         getDesign().getTitleField().setValue(entity.getTitle());
     }
 
-    protected abstract void clickSubmitButton();
+    protected void clickCancelButton() {
+        if (entityIndex >= 0) {
+            update();
+        } else {
+            clear();
+            update();
+        }
+    }
 
-    protected abstract void clickCancelButton();
+    protected abstract void clickRemoveButton();
+
+    protected abstract void clickSubmitButton();
 }

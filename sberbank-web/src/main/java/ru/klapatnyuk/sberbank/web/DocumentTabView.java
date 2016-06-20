@@ -47,6 +47,8 @@ public class DocumentTabView extends AbstractTabView {
     private Button submitButton;
     @SuppressWarnings("unused")
     private Button cancelButton;
+    @SuppressWarnings("unused")
+    private Button removeButton;
 
     public DocumentTabView() {
         Design.read(this);
@@ -110,6 +112,11 @@ public class DocumentTabView extends AbstractTabView {
     }
 
     @Override
+    public Button getRemoveButton() {
+        return removeButton;
+    }
+
+    @Override
     protected void init() {
         super.init();
 
@@ -148,5 +155,7 @@ public class DocumentTabView extends AbstractTabView {
         submitButton.setWidth(StyleDimensions.WIDTH);
         cancelButton.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_CLEAR));
         cancelButton.setWidth(StyleDimensions.WIDTH_S);
+        removeButton.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_REMOVE));
+        removeButton.setWidth(StyleDimensions.WIDTH_S);
     }
 }

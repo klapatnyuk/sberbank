@@ -86,15 +86,6 @@ public class DocumentTab extends AbstractTab<Document> {
     }
 
     @Override
-    protected void init() {
-        super.init();
-
-        design.getCreateButton().addClickListener(event -> clickCreateButton());
-        design.getSubmitButton().addClickListener(event -> clickSubmitButton());
-        design.getCancelButton().addClickListener(event -> clickCancelButton());
-    }
-
-    @Override
     protected void clickCreateButton() {
         super.clickCreateButton();
 
@@ -233,13 +224,35 @@ public class DocumentTab extends AbstractTab<Document> {
 
     @Override
     protected void clickCancelButton() {
-        if (entityIndex >= 0) {
-            update();
-        } else {
-            clear();
+        super.clickCancelButton();
+
+        if (entityIndex < 0) {
             design.getTitleLayout().setVisible(false);
-            update();
         }
+    }
+
+    @Override
+    protected void clickRemoveButton() {
+        if (entityIndex < 0) {
+            return;
+        }
+
+        try {
+            Connection connection = SberbankUI.connectionPool.reserveConnection();
+            connection.setAutoCommit(false);
+            new DocumentHandler(connection).removeDocument(entity.getId());
+            connection.commit();
+            SberbankUI.connectionPool.releaseConnection(connection);
+        } catch (SQLException e) {
+            LOGGER.error("Document removing error", e);
+            // TODO display WarningMessage
+            return;
+        }
+
+        clear();
+
+        design.getTitleLayout().setVisible(true);
+        update();
     }
 
     @Override
