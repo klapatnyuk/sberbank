@@ -1,8 +1,8 @@
 -- Insert initial data
 
 INSERT INTO "user" (id, login, password, role) VALUES
-    (1, 'admin', 'admin', 'ADMIN'),
-    (2, 'client', 'client', 'CLIENT');
+    (1, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 'ADMIN'),
+    (2, 'client', 'd2a04d71301a8915217dd5faf81d12cffd6cd958', 'CLIENT');
 
 INSERT INTO template (id, title) VALUES
     (1, 'Contract'),

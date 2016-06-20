@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.klapatnyuk.sberbank.model.entity.User;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,7 +31,7 @@ public class UserHandler extends AbstractHandler<User> {
 
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
             statement.setString(1, login);
-            statement.setString(2, password);
+            statement.setString(2, getHash(password));
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -42,5 +44,23 @@ public class UserHandler extends AbstractHandler<User> {
             }
         }
         return null;
+    }
+
+    private static String getHash(String password) {
+        MessageDigest message;
+        try {
+            message = MessageDigest.getInstance("SHA");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            // TODO add NoSuchAlgorithmException to log
+            return null;
+        }
+        message.update(password.getBytes());
+
+        StringBuilder result = new StringBuilder();
+        for (byte item : message.digest()) {
+            result.append(Integer.toString((item & 0xff) + 0x100, 16).substring(1));
+        }
+        return result.toString();
     }
 }
