@@ -107,6 +107,9 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_ADD));
         getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_CLEAR));
         getDesign().getRemoveButton().setVisible(false);
+
+        getDesign().getSubmitButton().setEnabled(true);
+        getDesign().getCancelButton().setEnabled(true);
     }
 
     protected void updateEntityLayout() {
@@ -189,6 +192,7 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_SAVE));
         getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_CANCEL));
         getDesign().getRemoveButton().setVisible(true);
+        getDesign().getTitleField().setReadOnly(false);
         getDesign().getTitleField().setValue(entity.getTitle());
     }
 
@@ -212,6 +216,7 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_SAVE));
         getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_CANCEL));
         getDesign().getRemoveButton().setVisible(true);
+        getDesign().getTitleField().setReadOnly(false);
         getDesign().getTitleField().setValue(entity.getTitle());
     }
 

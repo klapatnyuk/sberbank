@@ -36,11 +36,23 @@ public class DocumentLayout extends VerticalLayout {
     public void setFields(List<Field> fields) {
         removeAllComponents();
         if (fields != null) {
-            // display active fields, inactive not empty fields or inactive checkboxes with 'true' value
-            fields.stream().filter(item -> item.isActive() ||
-                    item.getValue() != null && item.getType() == Field.Type.CHECKBOX && item.getValue().equals(true)
-            ).map(this::newRow)
-                    .forEach(this::addComponent);
+            // display 1) active fields 2) inactive not empty fields 3) inactive checkboxes with 'true' value
+            fields.stream().filter(item ->
+                    item.isActive() ||
+                            item.getValue() != null &&
+                                    !(item.getType() == Field.Type.CHECKBOX && item.getValue().equals(false)))
+                    .map(this::newRow).forEach(this::addComponent);
+        }
+    }
+
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        FieldLayout row;
+        Component field;
+        for (Component item : this) {
+            row = (FieldLayout) item;
+            field = row.getComponent(row.getComponentCount() - 1);
+            field.setReadOnly(field.isReadOnly() || readOnly);
         }
     }
 
@@ -74,12 +86,11 @@ public class DocumentLayout extends VerticalLayout {
         if (field.getType() == Field.Type.LINE) {
             Label label = new Label(field.getLabel());
             label.setWidth(StyleDimensions.WIDTH_S);
-            label.setEnabled(field.isActive());
             TextField textField = new TextField();
             textField.setWidth("50%");
             textField.setInputPrompt("Enter string..");
-            textField.setEnabled(field.isActive());
             textField.setValue(field.getValue() == null ? "" : field.getValue().toString());
+            textField.setReadOnly(!field.isActive());
 
             row.addComponent(label);
             row.addComponent(textField);
@@ -89,14 +100,13 @@ public class DocumentLayout extends VerticalLayout {
 
             Label label = new Label(field.getLabel());
             label.setWidth(StyleDimensions.WIDTH_S);
-            label.setEnabled(field.isActive());
             TextArea textArea = new TextArea();
             textArea.setWidth("100%");
             textArea.setHeight("100px");
             textArea.setInputPrompt("Enter text..");
-            textArea.setEnabled(field.isActive());
             textArea.setStyleName("body-text-area");
             textArea.setValue(field.getValue() == null ? "" : field.getValue().toString());
+            textArea.setReadOnly(!field.isActive());
 
             row.addComponent(label);
             row.addComponent(textArea);
@@ -104,10 +114,10 @@ public class DocumentLayout extends VerticalLayout {
 
         } else if (field.getType() == Field.Type.CHECKBOX) {
             CheckBox checkBox = new CheckBox(field.getLabel());
-            checkBox.setEnabled(field.isActive());
             checkBox.setStyleName("spacer-empty");
             checkBox.setHeight(StyleDimensions.HEIGHT_S);
             checkBox.setValue(field.getValue() == null ? false : (Boolean) field.getValue());
+            checkBox.setReadOnly(!field.isActive());
 
             row.addComponent(checkBox);
             row.setExpandRatio(checkBox, 1);

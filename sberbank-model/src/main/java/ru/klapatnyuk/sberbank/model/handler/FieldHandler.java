@@ -68,7 +68,7 @@ public class FieldHandler extends AbstractHandler<Field> {
                 "   WHERE d.id = ?" +
                 ") t " +
                 "ON d.template_field_id = t.id AND d.document_id = ? " +
-                "ORDER BY t.active DESC, t.order";
+                "ORDER BY t.active DESC, t.\"order\"";
 
         List<Field> result = new ArrayList<>();
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {

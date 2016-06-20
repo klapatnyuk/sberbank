@@ -80,6 +80,7 @@ public class DocumentTab extends AbstractTab<Document> {
         design.getTemplateSelect().removeValueChangeListener(templateListener);
         design.getTemplateSelect().removeAllItems();
         design.getTemplateSeparatorLabel().setVisible(false);
+        design.getTitleField().setReadOnly(false);
         design.getTitleField().clear();
         design.getTemplateLayout().clear();
         design.getTemplateLayout().setVisible(false);
@@ -107,6 +108,8 @@ public class DocumentTab extends AbstractTab<Document> {
     protected void selectEntity(ButtonGroupSelectionEvent event) {
         super.selectEntity(event);
 
+        boolean active = entity.getTemplate().isActive();
+
         design.getTemplateSelect().setReadOnly(false);
         design.getTemplateSelect().removeValueChangeListener(templateListener);
         design.getTemplateSelect().removeAllItems();
@@ -114,6 +117,7 @@ public class DocumentTab extends AbstractTab<Document> {
         design.getTemplateSelect().setValue(entity.getTemplate().getTitle());
         design.getTemplateSelect().setReadOnly(true);
 
+        getDesign().getTitleField().setReadOnly(!active);
         design.getTitleLayout().setVisible(true);
 
         // update form
@@ -133,6 +137,10 @@ public class DocumentTab extends AbstractTab<Document> {
         design.getTemplateSeparatorLabel().setVisible(true);
         design.getTemplateLayout().setVisible(true);
         design.getTemplateLayout().setFields(fields);
+        design.getTemplateLayout().setReadOnly(!active);
+
+        design.getSubmitButton().setEnabled(active);
+        design.getCancelButton().setEnabled(active);
     }
 
     @Override
@@ -142,6 +150,8 @@ public class DocumentTab extends AbstractTab<Document> {
         }
         super.clickEntityButton(event);
 
+        boolean active = entity.getTemplate().isActive();
+
         design.getTemplateSelect().setReadOnly(false);
         design.getTemplateSelect().removeValueChangeListener(templateListener);
         design.getTemplateSelect().removeAllItems();
@@ -149,6 +159,7 @@ public class DocumentTab extends AbstractTab<Document> {
         design.getTemplateSelect().setValue(entity.getTemplate().getTitle());
         design.getTemplateSelect().setReadOnly(true);
 
+        design.getTitleField().setReadOnly(!active);
         design.getTitleLayout().setVisible(true);
 
         // update form
@@ -168,6 +179,10 @@ public class DocumentTab extends AbstractTab<Document> {
         design.getTemplateSeparatorLabel().setVisible(true);
         design.getTemplateLayout().setVisible(true);
         design.getTemplateLayout().setFields(fields);
+        design.getTemplateLayout().setReadOnly(!active);
+
+        design.getSubmitButton().setEnabled(active);
+        design.getCancelButton().setEnabled(active);
     }
 
     @Override
@@ -297,6 +312,7 @@ public class DocumentTab extends AbstractTab<Document> {
                 return;
             }
 
+            design.getTitleField().setReadOnly(false);
             design.getTitleField().clear();
 
             List<Field> fields = null;

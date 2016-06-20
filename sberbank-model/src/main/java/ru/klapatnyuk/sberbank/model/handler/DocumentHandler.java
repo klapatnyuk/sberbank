@@ -27,10 +27,10 @@ public class DocumentHandler extends AbstractHandler<Document> {
     public List<Document> findAll() throws SQLException {
         LOGGER.debug("Inside DocumentHandler.findAll");
 
-        String sql = "SELECT d.id, d.title, d.edited, d.template_id, t.title, d.owner_id " +
+        String sql = "SELECT d.id, d.title, d.edited, d.template_id, t.title, t.active, d.owner_id " +
                 "FROM document d, template t " +
                 "WHERE d.active = TRUE AND d.template_id = t.id " +
-                "ORDER BY d.id DESC";
+                "ORDER BY t.active DESC, d.id DESC";
 
         List<Document> result = new ArrayList<>();
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
@@ -47,10 +47,11 @@ public class DocumentHandler extends AbstractHandler<Document> {
                     template = new Template();
                     template.setId(resultSet.getInt(4));
                     template.setTitle(resultSet.getString(5));
+                    template.setActive(resultSet.getBoolean(6));
                     entity.setTemplate(template);
 
                     user = new User();
-                    user.setId(resultSet.getInt(6));
+                    user.setId(resultSet.getInt(7));
                     entity.setOwner(user);
 
                     result.add(entity);
