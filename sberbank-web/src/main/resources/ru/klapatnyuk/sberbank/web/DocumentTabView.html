@@ -21,15 +21,16 @@
                 <v-label _id="templateLabel"/>
                 <v-combo-box _id="templateSelect" :expand/>
             </v-horizontal-layout>
-            <v-horizontal-layout _id="titleLayout" style-name="layout-row spacer-top" size-full visible = "false">
+            <v-horizontal-layout _id="titleLayout" style-name="layout-row spacer-top" size-full visible="false">
                 <v-label _id="titleLabel"/>
                 <v-text-field _id="titleField" size-full :expand/>
             </v-horizontal-layout>
-            <v-label _id="templateSeparatorLabel" style-name="separator spacer-empty" visible = "false"/>
-            <sb-document-layout _id="documentLayout" visible = "false"/>
+            <v-label _id="templateSeparatorLabel" style-name="separator spacer-empty" visible="false"/>
+            <sb-document-layout _id="documentLayout" visible="false"/>
             <v-label _id="submitSeparatorLabel" style-name="separator spacer-empty"/>
             <v-horizontal-layout style-name="layout-row spacer-top spacer-bottom" size-full>
                 <v-button _id="submitButton" style-name="button-standard spacer-empty"/>
+                <v-button _id="cancelButton" :expand/>
             </v-horizontal-layout>
         </v-vertical-layout>
     </v-panel>

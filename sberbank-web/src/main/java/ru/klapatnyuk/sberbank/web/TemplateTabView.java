@@ -40,6 +40,8 @@ public class TemplateTabView extends AbstractTabView {
     private Label submitSeparatorLabel;
     @SuppressWarnings("unused")
     private Button submitButton;
+    @SuppressWarnings("unused")
+    private Button cancelButton;
 
     public TemplateTabView() {
         Design.read(this);
@@ -86,6 +88,11 @@ public class TemplateTabView extends AbstractTabView {
     }
 
     @Override
+    public Button getCancelButton() {
+        return cancelButton;
+    }
+
+    @Override
     protected void init() {
         super.init();
 
@@ -120,5 +127,7 @@ public class TemplateTabView extends AbstractTabView {
 
         submitButton.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_ADD));
         submitButton.setWidth(StyleDimensions.WIDTH);
+        cancelButton.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_CLEAR));
+        cancelButton.setWidth(StyleDimensions.WIDTH_S);
     }
 }

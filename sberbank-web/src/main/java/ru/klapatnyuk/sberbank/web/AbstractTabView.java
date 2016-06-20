@@ -13,6 +13,8 @@ public abstract class AbstractTabView extends HorizontalLayout {
 
     public abstract Button getSubmitButton();
 
+    public abstract Button getCancelButton();
+
     public abstract AbstractOrderedLayout getEditEntityLayout();
 
     public abstract Label getEditSeparatorLabel();

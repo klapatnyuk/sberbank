@@ -89,6 +89,7 @@ public class TemplateTab extends AbstractTab<Template> {
 
         design.getCreateButton().addClickListener(event -> clickCreateButton());
         design.getSubmitButton().addClickListener(event -> clickSubmitButton());
+        design.getCancelButton().addClickListener(event -> clickCancelButton());
     }
 
     @Override
@@ -187,6 +188,16 @@ public class TemplateTab extends AbstractTab<Template> {
         }
 
         update();
+    }
+
+    @Override
+    protected void clickCancelButton() {
+        if (entityIndex >= 0) {
+            update();
+        } else {
+            clear();
+            update();
+        }
     }
 
     @Override

@@ -91,6 +91,7 @@ public class DocumentTab extends AbstractTab<Document> {
 
         design.getCreateButton().addClickListener(event -> clickCreateButton());
         design.getSubmitButton().addClickListener(event -> clickSubmitButton());
+        design.getCancelButton().addClickListener(event -> clickCancelButton());
     }
 
     @Override
@@ -228,6 +229,17 @@ public class DocumentTab extends AbstractTab<Document> {
         }
 
         update();
+    }
+
+    @Override
+    protected void clickCancelButton() {
+        if (entityIndex >= 0) {
+            update();
+        } else {
+            clear();
+            design.getTitleLayout().setVisible(false);
+            update();
+        }
     }
 
     @Override
