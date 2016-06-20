@@ -313,6 +313,7 @@ public class TemplateLayout extends VerticalLayout {
             if (field.getType() != null) {
                 type.setValue(field.getType());
             }
+            type.setReadOnly(field.getRelated() > 0);
             remove.setEnabled(true);
         }
 

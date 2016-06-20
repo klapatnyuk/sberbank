@@ -12,6 +12,7 @@ public class Field<T extends Serializable> extends AbstractRemovableEntity {
     private String label;
     private Type type;
     private int order;
+    private int related;
     private int referenceId;
     private T value;
 
@@ -37,6 +38,14 @@ public class Field<T extends Serializable> extends AbstractRemovableEntity {
 
     public void setOrder(int order) {
         this.order = order;
+    }
+
+    public int getRelated() {
+        return related;
+    }
+
+    public void setRelated(int related) {
+        this.related = related;
     }
 
     public int getReferenceId() {

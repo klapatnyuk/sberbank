@@ -26,14 +26,27 @@ public class FieldHandler extends AbstractHandler<Field> {
     public List<Field> findByTemplateId(int id) throws SQLException {
         LOGGER.debug("Inside FieldHandler.findByTemplateId(" + id + ")");
 
-        String sql = "SELECT id, title, label, type, \"order\" " +
-                "FROM template_field " +
-                "WHERE active = TRUE AND template_id = ? " +
-                "ORDER BY \"order\"";
+        String sql = "SELECT t.id, t.title, t.label, t.type, t.\"order\", c.count " +
+                "FROM ( " +
+                "  SELECT id, title, label, type, \"order\" " +
+                "  FROM template_field " +
+                "  WHERE active = TRUE AND template_id = ? " +
+                ") t " +
+                "LEFT OUTER JOIN ( " +
+                "  SELECT t_f.id, COUNT(*) AS count " +
+                "  FROM document_field d_f " +
+                "    JOIN document d ON d_f.document_id = d.id AND d.active = TRUE " +
+                "    JOIN template t ON d.template_id = t.id AND t.id = ? " +
+                "    JOIN template_field t_f ON d_f.template_field_id = t_f.id AND t_f.active = TRUE " +
+                "  WHERE d_f.active = TRUE " +
+                "  GROUP BY t_f.id " +
+                ") c ON c.id = t.id " +
+                "ORDER BY \"order\";";
 
         List<Field> result = new ArrayList<>();
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
             statement.setInt(1, id);
+            statement.setInt(2, id);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 Field entity;
@@ -44,6 +57,7 @@ public class FieldHandler extends AbstractHandler<Field> {
                     entity.setLabel(resultSet.getString(3));
                     entity.setType(Field.Type.find(resultSet.getString(4)));
                     entity.setOrder(resultSet.getInt(5));
+                    entity.setRelated(resultSet.getInt(6));
                     result.add(entity);
                 }
             }
