@@ -124,10 +124,4 @@ public class FieldHandler extends AbstractHandler<Field> {
         }
         return result;
     }
-
-    @Override
-    public List<Field> findAll() throws SQLException {
-        // TODO implement
-        return null;
-    }
 }

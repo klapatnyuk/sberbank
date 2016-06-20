@@ -23,7 +23,6 @@ public class TemplateHandler extends AbstractHandler<Template> {
         super(connection);
     }
 
-    @Override
     public List<Template> findAll() throws SQLException {
         LOGGER.debug("Inside TemplateHandler.findAll");
 

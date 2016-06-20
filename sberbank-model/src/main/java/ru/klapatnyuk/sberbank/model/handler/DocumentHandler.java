@@ -23,7 +23,6 @@ public class DocumentHandler extends AbstractHandler<Document> {
         super(connection);
     }
 
-    @Override
     public List<Document> findAll() throws SQLException {
         LOGGER.debug("Inside DocumentHandler.findAll");
 

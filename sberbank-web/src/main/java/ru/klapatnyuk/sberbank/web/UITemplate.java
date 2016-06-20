@@ -25,4 +25,6 @@ public interface UITemplate {
     AbstractTab getTab(MenuTab actionTab);
 
     AbstractTab getTab(MenuTab tab, MenuTab actionTab);
+
+    void poll();
 }

@@ -116,6 +116,15 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
         return null;
     }
 
+    /**
+     * TODO needs to be refactored (or removed)
+     */
+    @Override
+    public void poll() {
+        SberbankUI.getWarningWindow().poll();
+        getTab().poll();
+    }
+
     private void initProfileBar() {
         profileLayout.getLogoutButton().addClickListener(event -> SberbankUI.getCurrent().login());
 
