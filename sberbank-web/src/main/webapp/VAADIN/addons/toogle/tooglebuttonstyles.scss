@@ -1,0 +1,13 @@
+@charset "UTF-8";
+
+@mixin tooglebuttonstyles {
+
+    .v-button.v-toggled  {
+        @extend .v-button.v-pressed;
+    }
+
+    .v-toggled.v-button  {
+        @extend .v-pressed.v-button;
+    }
+
+}
