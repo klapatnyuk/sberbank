@@ -48,8 +48,10 @@ public class SberbankUI extends UI {
 
     static {
         try {
-            connectionPool = new SimpleJDBCConnectionPool("org.postgresql.Driver",
-                    "jdbc:postgresql://localhost:5432/sberbank", "sberbank", "sberbank", 2, 5);
+//            connectionPool = new SimpleJDBCConnectionPool("org.postgresql.Driver",
+//                    "jdbc:postgresql://localhost:5432/sberbank", "sberbank", "sberbank", 2, 5);
+            connectionPool = new SimpleJDBCConnectionPool("org.h2.Driver",
+                    "jdbc:h2:mem:sberbank;DB_CLOSE_DELAY=-1", "sberbank", "sberbank", 2, 5);
         } catch (SQLException e) {
             e.printStackTrace();
             // TODO add SQLException to log
@@ -182,8 +184,6 @@ public class SberbankUI extends UI {
 
         @Override
         protected void servletInitialized() throws ServletException {
-            super.servletInitialized();
-
             getService().setSystemMessagesProvider(systemMessagesInfo -> {
                 CustomizedSystemMessages messages = new CustomizedSystemMessages();
 
