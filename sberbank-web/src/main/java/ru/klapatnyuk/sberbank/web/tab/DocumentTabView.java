@@ -19,7 +19,7 @@ public class DocumentTabView extends AbstractTabView {
     private static final long serialVersionUID = -2698683814256829227L;
 
     @SuppressWarnings("unused")
-    private VerticalLayout patternLayout;
+    private VerticalLayout entityLayout;
     @SuppressWarnings("unused")
     private Button createButton;
     @SuppressWarnings("unused")
@@ -124,8 +124,8 @@ public class DocumentTabView extends AbstractTabView {
 
     @Override
     void init() {
-        patternLayout.setWidthUndefined();
-        patternLayout.setHeight("100%");
+        entityLayout.setWidthUndefined();
+        entityLayout.setHeight("100%");
 
         createButton.setWidth(StyleDimensions.WIDTH_L);
         createButton.setCaption(SberbankUI.I18N.getString(FormKey.DOCUMENT_CREATE_NEW_BUTTON));

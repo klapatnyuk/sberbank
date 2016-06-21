@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
-@import "container/pattern-poll.scss";
+@import "container/editor.scss";
 
 @mixin container {
-    @include container-pattern-poll;
+    @include container-editor;
 }

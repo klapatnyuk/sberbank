@@ -18,7 +18,7 @@ public class TemplateTabView extends AbstractTabView {
     private static final long serialVersionUID = -6788254175139485486L;
 
     @SuppressWarnings("unused")
-    private VerticalLayout patternLayout;
+    private VerticalLayout entityLayout;
     @SuppressWarnings("unused")
     private Button createButton;
     @SuppressWarnings("unused")
@@ -107,8 +107,8 @@ public class TemplateTabView extends AbstractTabView {
 
     @Override
     void init() {
-        patternLayout.setWidthUndefined();
-        patternLayout.setHeight("100%");
+        entityLayout.setWidthUndefined();
+        entityLayout.setHeight("100%");
 
         createButton.setWidth(StyleDimensions.WIDTH_L);
         createButton.setCaption(SberbankUI.I18N.getString(FormKey.TEMPLATE_CREATE_NEW_BUTTON));
