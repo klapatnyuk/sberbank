@@ -14,13 +14,9 @@ import java.util.List;
 /**
  * @author klapatnyuk
  */
-public class DocumentHandler extends AbstractHandler<Document> {
+public class DocumentHandler extends AbstractHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentHandler.class);
-
-    public DocumentHandler(Connection connection) {
-        super(connection);
-    }
 
     public List<Document> findAll() throws SQLException {
         LOGGER.debug("Inside DocumentHandler.findAll");

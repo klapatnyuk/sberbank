@@ -1,23 +1,26 @@
 package ru.klapatnyuk.sberbank.logic.api;
 
 import ru.klapatnyuk.sberbank.model.entity.Document;
+import ru.klapatnyuk.sberbank.model.entity.Field;
+import ru.klapatnyuk.sberbank.model.entity.User;
+import ru.klapatnyuk.sberbank.model.exception.BusinessException;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author klapatnyuk
  */
 public interface DocumentService extends BusinessService {
 
-    Set<Document> getDocuments();
+    List<Document> getAll() throws BusinessException;
 
-    Set<Document> getDocuments(boolean active);
+    List<Document> get(User owner) throws BusinessException;
 
-    Document getDocument(int id);
+    List<Field> getFields(int id) throws BusinessException;
 
-    int createDocument(Document document);
+    void create(Document document) throws BusinessException;
 
-    boolean updateDocument(int id, Document document);
+    void update(Document document) throws BusinessException;
 
-    boolean removeDocument(int id);
+    void remove(int id) throws BusinessException;
 }

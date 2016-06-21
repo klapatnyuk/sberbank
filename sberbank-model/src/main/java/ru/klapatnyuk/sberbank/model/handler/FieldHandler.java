@@ -6,7 +6,6 @@ import ru.klapatnyuk.sberbank.model.entity.Field;
 import ru.klapatnyuk.sberbank.model.type.Boolean;
 
 import java.io.Serializable;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,13 +15,9 @@ import java.util.List;
 /**
  * @author klapatnyuk
  */
-public class FieldHandler extends AbstractHandler<Field> {
+public class FieldHandler extends AbstractHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FieldHandler.class);
-
-    public FieldHandler(Connection connection) {
-        super(connection);
-    }
 
     public List<Field> findByTemplateId(int id) throws SQLException {
         LOGGER.debug("Inside FieldHandler.findByTemplateId(" + id + ")");

@@ -134,7 +134,11 @@ public class SberbankUI extends UI {
         User user = null;
         try {
             Connection connection = SberbankUI.connectionPool.reserveConnection();
-            user = new UserHandler(connection).login(login, password);
+
+            UserHandler handler = new UserHandler();
+            handler.setConnection(connection);
+            user = handler.login(login, password);
+
             SberbankUI.connectionPool.releaseConnection(connection);
         } catch (SQLException e) {
             LOGGER.error("Login error", e);
@@ -165,20 +169,6 @@ public class SberbankUI extends UI {
     @WebServlet(urlPatterns = "/*", name = "SberbankUIServlet", asyncSupported = true)
     @VaadinServletConfiguration(ui = SberbankUI.class, productionMode = false)
     public static class MyUIServlet extends VaadinServlet {
-
-        @Override
-        public void init() throws ServletException {
-            super.init();
-
-            // TODO initialize in-memory database here
-        }
-
-        @Override
-        public void destroy() {
-            super.destroy();
-
-            // TODO destroy in-memory database here
-        }
 
         @Override
         protected void servletInitialized() throws ServletException {

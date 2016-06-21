@@ -1,21 +1,28 @@
 package ru.klapatnyuk.sberbank.web;
 
 import com.vaadin.data.Property;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vaadin.addons.toggle.ButtonGroupSelectionEvent;
-import ru.klapatnyuk.sberbank.model.entity.*;
+import ru.klapatnyuk.sberbank.logic.DocumentServiceImpl;
+import ru.klapatnyuk.sberbank.logic.TemplateServiceImpl;
+import ru.klapatnyuk.sberbank.logic.TransactionalProxyService;
+import ru.klapatnyuk.sberbank.logic.api.DocumentService;
+import ru.klapatnyuk.sberbank.logic.api.TemplateService;
+import ru.klapatnyuk.sberbank.model.entity.Document;
+import ru.klapatnyuk.sberbank.model.entity.Field;
+import ru.klapatnyuk.sberbank.model.entity.Template;
+import ru.klapatnyuk.sberbank.model.entity.User;
+import ru.klapatnyuk.sberbank.model.exception.BusinessException;
 import ru.klapatnyuk.sberbank.model.handler.DocumentHandler;
 import ru.klapatnyuk.sberbank.model.handler.FieldHandler;
 import ru.klapatnyuk.sberbank.model.handler.TemplateHandler;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * @author klapatnyuk
@@ -24,6 +31,15 @@ public class DocumentTab extends AbstractTab<Document> {
 
     private static final long serialVersionUID = 5490116135419202151L;
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentTab.class);
+
+    private final DocumentService documentServiceImpl = new DocumentServiceImpl(new DocumentHandler(), new FieldHandler());
+    private final DocumentService documentService = TransactionalProxyService.newInstance(
+            documentServiceImpl, SberbankUI.connectionPool, DocumentService.class,
+            VaadinServlet.getCurrent().getServletContext().getClassLoader());
+    private final TemplateService templateServiceImpl = new TemplateServiceImpl(new TemplateHandler(), new FieldHandler());
+    private final TemplateService templateService = TransactionalProxyService.newInstance(
+            templateServiceImpl, SberbankUI.connectionPool, TemplateService.class,
+            VaadinServlet.getCurrent().getServletContext().getClassLoader());
 
     private final Property.ValueChangeListener templateListener = new TemplateChangeListener();
 
@@ -37,20 +53,15 @@ public class DocumentTab extends AbstractTab<Document> {
     public void update() {
         super.update();
 
+        // business logic
         try {
-            Connection connection = SberbankUI.connectionPool.reserveConnection();
-
             if (SberbankSession.get().getUser().getRole() == User.Role.ADMIN) {
-                // 'admin' role
-                entities = new DocumentHandler(connection).findAll();
+                entities = documentService.getAll();
             } else {
-                // other roles
-                entities = new DocumentHandler(connection).findByOwnerId(SberbankSession.get().getUser().getId());
+                entities = documentService.get(SberbankSession.get().getUser());
             }
-
-            SberbankUI.connectionPool.releaseConnection(connection);
-        } catch (SQLException e) {
-            LOGGER.error("Templates finding error", e);
+        } catch (BusinessException e) {
+            LOGGER.error("Tab updating error", e);
             // TODO display WarningMessage
         }
 
@@ -99,7 +110,6 @@ public class DocumentTab extends AbstractTab<Document> {
 
         design.getTitleLayout().setVisible(false);
         design.getTemplateSeparatorLabel().setVisible(false);
-
         updateTemplateSelect();
     }
 
@@ -115,8 +125,6 @@ public class DocumentTab extends AbstractTab<Document> {
     protected void selectEntity(ButtonGroupSelectionEvent event) {
         super.selectEntity(event);
 
-        boolean active = entity.getTemplate().isActive();
-
         design.getTemplateSelect().setReadOnly(false);
         design.getTemplateSelect().removeValueChangeListener(templateListener);
         design.getTemplateSelect().removeAllItems();
@@ -124,17 +132,17 @@ public class DocumentTab extends AbstractTab<Document> {
         design.getTemplateSelect().setValue(entity.getTemplate().getTitle());
         design.getTemplateSelect().setReadOnly(true);
 
+        boolean active = entity.getTemplate().isActive();
         getDesign().getTitleField().setReadOnly(!active);
         design.getTitleLayout().setVisible(true);
 
-        // update form
         List<Field> fields = null;
+
+        // business logic
         try {
-            Connection connection = SberbankUI.connectionPool.reserveConnection();
-            fields = new FieldHandler(connection).findByDocumentId(entity.getId());
-            SberbankUI.connectionPool.releaseConnection(connection);
-        } catch (SQLException e) {
-            LOGGER.error("Templates finding error", e);
+            fields = documentService.getFields(entity.getId());
+        } catch (BusinessException e) {
+            LOGGER.error("Fields finding error", e);
             // TODO display WarningMessage
         }
 
@@ -169,14 +177,13 @@ public class DocumentTab extends AbstractTab<Document> {
         design.getTitleField().setReadOnly(!active);
         design.getTitleLayout().setVisible(true);
 
-        // update form
         List<Field> fields = null;
+
+        // business logic
         try {
-            Connection connection = SberbankUI.connectionPool.reserveConnection();
-            fields = new FieldHandler(connection).findByDocumentId(entity.getId());
-            SberbankUI.connectionPool.releaseConnection(connection);
-        } catch (SQLException e) {
-            LOGGER.error("Templates finding error", e);
+            fields = documentService.getFields(entity.getId());
+        } catch (BusinessException e) {
+            LOGGER.error("Fields finding error", e);
             // TODO display WarningMessage
         }
 
@@ -200,72 +207,41 @@ public class DocumentTab extends AbstractTab<Document> {
 
         if (entityIndex >= 0) {
             Document document = new Document();
-
             document.setId(entity.getId());
             document.setEdited(entity.getEdited());
             document.setTitle(design.getTitleField().getValue().trim());
             document.setFields(design.getTemplateLayout().getFields());
+
+            // business logic
             try {
-                Connection connection = SberbankUI.connectionPool.reserveConnection();
-                connection.setAutoCommit(false);
-
-                // compare edited
-                DocumentHandler documentHandler = new DocumentHandler(connection);
-                if (documentHandler.compareEdited(document.getId(), document.getEdited()) > 0) {
-                    throw new SQLException("Concurrency editing detected");
-                }
-
-                // update document
-                documentHandler.updateDocument(document);
-
-                // remove fields
-                FieldHandler fieldHandler = new FieldHandler(connection);
-                List<Integer> ids = document.getFields().stream().map(AbstractEntity::getId).collect(Collectors.toList());
-                if (ids.isEmpty()) {
-                    fieldHandler.removeDocumentFields(document.getId());
-                } else {
-                    fieldHandler.removeDocumentFieldsExcept(document.getId(), ids);
-                }
-
-                // update fields
-                fieldHandler.insertAndUpdateDocumentFields(document.getId(), document.getFields());
-
-                connection.commit();
-                SberbankUI.connectionPool.releaseConnection(connection);
-            } catch (SQLException e) {
-                LOGGER.error("Document edition error", e);
+                documentService.update(document);
+            } catch (BusinessException e) {
+                LOGGER.error("Document updating error", e);
                 // TODO display WarningMessage
-                return;
             }
+
             entity = document;
 
         } else {
             Document document = new Document();
-
             Template template = new Template();
             template.setId((int) design.getTemplateSelect().getValue());
             document.setTemplate(template);
             document.setTitle(design.getTitleField().getValue().trim());
             document.setFields(design.getTemplateLayout().getFields());
             document.setOwner(SberbankSession.get().getUser());
+
+            // business logic
             try {
-                Connection connection = SberbankUI.connectionPool.reserveConnection();
-                connection.setAutoCommit(false);
-
-                int id = new DocumentHandler(connection).createDocument(document);
-                new FieldHandler(connection).createDocumentFields(id, document.getFields());
-
-                connection.commit();
-                SberbankUI.connectionPool.releaseConnection(connection);
-            } catch (SQLException e) {
+                documentService.create(document);
+            } catch (BusinessException e) {
                 LOGGER.error("Document creation error", e);
                 // TODO display WarningMessage
-                return;
             }
+
             clear();
             design.getTitleLayout().setVisible(false);
         }
-
         update();
     }
 
@@ -284,20 +260,15 @@ public class DocumentTab extends AbstractTab<Document> {
             return;
         }
 
+        // business logic
         try {
-            Connection connection = SberbankUI.connectionPool.reserveConnection();
-            connection.setAutoCommit(false);
-            new DocumentHandler(connection).removeDocument(entity.getId());
-            connection.commit();
-            SberbankUI.connectionPool.releaseConnection(connection);
-        } catch (SQLException e) {
+            documentService.remove(entity.getId());
+        } catch (BusinessException e) {
             LOGGER.error("Document removing error", e);
             // TODO display WarningMessage
-            return;
         }
 
         clear();
-
         design.getTitleLayout().setVisible(true);
         update();
     }
@@ -309,14 +280,15 @@ public class DocumentTab extends AbstractTab<Document> {
 
     private void updateTemplateSelect() {
         List<Template> templates = null;
+
+        // business logic
         try {
-            Connection connection = SberbankUI.connectionPool.reserveConnection();
-            templates = new TemplateHandler(connection).findAll();
-            SberbankUI.connectionPool.releaseConnection(connection);
-        } catch (SQLException e) {
-            LOGGER.error("Templates finding error", e);
+            templates = templateService.getAll();
+        } catch (BusinessException e) {
+            LOGGER.error("Templates reading error", e);
             // TODO display WarningMessage
         }
+
         if (templates == null) {
             return;
         }
@@ -348,12 +320,12 @@ public class DocumentTab extends AbstractTab<Document> {
             design.getTitleField().clear();
 
             List<Field> fields = null;
+
+            // business logic
             try {
-                Connection connection = SberbankUI.connectionPool.reserveConnection();
-                fields = new FieldHandler(connection).findByTemplateId(templateId);
-                SberbankUI.connectionPool.releaseConnection(connection);
-            } catch (SQLException e) {
-                LOGGER.error("Templates finding error", e);
+                fields = templateService.getFields(templateId);
+            } catch (BusinessException e) {
+                LOGGER.error("Template fields reading error", e);
                 // TODO display WarningMessage
             }
 

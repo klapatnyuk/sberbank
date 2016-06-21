@@ -6,7 +6,6 @@ import ru.klapatnyuk.sberbank.model.entity.User;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,13 +13,9 @@ import java.sql.SQLException;
 /**
  * @author klapatnyuk
  */
-public class UserHandler extends AbstractHandler<User> {
+public class UserHandler extends AbstractHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserHandler.class);
-
-    public UserHandler(Connection connection) {
-        super(connection);
-    }
 
     public User login(String login, String password) throws SQLException {
         LOGGER.debug("Inside UserHandler.login");

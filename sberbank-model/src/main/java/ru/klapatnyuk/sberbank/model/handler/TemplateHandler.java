@@ -12,13 +12,9 @@ import java.util.List;
 /**
  * @author klapatnyuk
  */
-public class TemplateHandler extends AbstractHandler<Template> {
+public class TemplateHandler extends AbstractHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TemplateHandler.class);
-
-    public TemplateHandler(Connection connection) {
-        super(connection);
-    }
 
     public List<Template> findAll() throws SQLException {
         LOGGER.debug("Inside TemplateHandler.findAll");

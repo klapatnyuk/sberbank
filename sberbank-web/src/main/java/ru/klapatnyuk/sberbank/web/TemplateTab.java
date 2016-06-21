@@ -38,7 +38,11 @@ public class TemplateTab extends AbstractTab<Template> {
 
         try {
             Connection connection = SberbankUI.connectionPool.reserveConnection();
-            entities = new TemplateHandler(connection).findAll();
+
+            TemplateHandler handler = new TemplateHandler();
+            handler.setConnection(connection);
+            entities = handler.findAll();
+
             SberbankUI.connectionPool.releaseConnection(connection);
         } catch (SQLException e) {
             LOGGER.error("Templates finding error", e);
@@ -101,7 +105,11 @@ public class TemplateTab extends AbstractTab<Template> {
         List<Field> fields = null;
         try {
             Connection connection = SberbankUI.connectionPool.reserveConnection();
-            fields = new FieldHandler(connection).findByTemplateId(entity.getId());
+
+            FieldHandler handler = new FieldHandler();
+            handler.setConnection(connection);
+            fields = handler.findByTemplateId(entity.getId());
+
             SberbankUI.connectionPool.releaseConnection(connection);
         } catch (SQLException e) {
             LOGGER.error("Templates finding error", e);
@@ -125,7 +133,11 @@ public class TemplateTab extends AbstractTab<Template> {
         List<Field> fields = null;
         try {
             Connection connection = SberbankUI.connectionPool.reserveConnection();
-            fields = new FieldHandler(connection).findByTemplateId(entity.getId());
+
+            FieldHandler handler = new FieldHandler();
+            handler.setConnection(connection);
+            fields = handler.findByTemplateId(entity.getId());
+
             SberbankUI.connectionPool.releaseConnection(connection);
         } catch (SQLException e) {
             LOGGER.error("Templates finding error", e);
@@ -154,7 +166,8 @@ public class TemplateTab extends AbstractTab<Template> {
                 connection.setAutoCommit(false);
 
                 // compare edited
-                TemplateHandler templateHandler = new TemplateHandler(connection);
+                TemplateHandler templateHandler = new TemplateHandler();
+                templateHandler.setConnection(connection);
                 if (templateHandler.compareEdited(template.getId(), template.getEdited()) > 0) {
                     throw new SQLException("Concurrency editing detected");
                 }
@@ -163,7 +176,8 @@ public class TemplateTab extends AbstractTab<Template> {
                 templateHandler.updateTemplate(template);
 
                 // remove fields
-                FieldHandler fieldHandler = new FieldHandler(connection);
+                FieldHandler fieldHandler = new FieldHandler();
+                fieldHandler.setConnection(connection);
                 List<Integer> ids = template.getFields().stream().map(AbstractEntity::getId).collect(Collectors.toList());
                 fieldHandler.removeTemplateFieldsExcept(template.getId(), ids);
 
@@ -187,8 +201,13 @@ public class TemplateTab extends AbstractTab<Template> {
                 Connection connection = SberbankUI.connectionPool.reserveConnection();
                 connection.setAutoCommit(false);
 
-                int id = new TemplateHandler(connection).createTemplate(template);
-                new FieldHandler(connection).createTemplateFields(id, template.getFields());
+                TemplateHandler templateHandler = new TemplateHandler();
+                templateHandler.setConnection(connection);
+                int id = templateHandler.createTemplate(template);
+
+                FieldHandler fieldHandler = new FieldHandler();
+                fieldHandler.setConnection(connection);
+                fieldHandler.createTemplateFields(id, template.getFields());
 
                 connection.commit();
                 SberbankUI.connectionPool.releaseConnection(connection);
@@ -212,7 +231,11 @@ public class TemplateTab extends AbstractTab<Template> {
         try {
             Connection connection = SberbankUI.connectionPool.reserveConnection();
             connection.setAutoCommit(false);
-            new TemplateHandler(connection).removeTemplate(entity.getId());
+
+            TemplateHandler handler = new TemplateHandler();
+            handler.setConnection(connection);
+            handler.removeTemplate(entity.getId());
+
             connection.commit();
             SberbankUI.connectionPool.releaseConnection(connection);
         } catch (SQLException e) {
