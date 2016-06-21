@@ -19,7 +19,9 @@ import ru.klapatnyuk.sberbank.model.exception.BusinessException;
 import ru.klapatnyuk.sberbank.model.handler.DocumentHandler;
 import ru.klapatnyuk.sberbank.model.handler.FieldHandler;
 import ru.klapatnyuk.sberbank.model.handler.TemplateHandler;
-import ru.klapatnyuk.sberbank.web.SberbankKey;
+import ru.klapatnyuk.sberbank.web.key.HeaderKey;
+import ru.klapatnyuk.sberbank.web.key.MenuKey;
+import ru.klapatnyuk.sberbank.web.key.NotificationKey;
 import ru.klapatnyuk.sberbank.web.SberbankSession;
 import ru.klapatnyuk.sberbank.web.SberbankUI;
 import ru.klapatnyuk.sberbank.web.notification.WarningMessage;
@@ -71,8 +73,8 @@ public class DocumentTab extends AbstractTab<Document> {
 
     @Override
     public String getHeader() {
-        return SberbankUI.I18N.getString(SberbankKey.HeaderKey.H2, SberbankUI.I18N.getString(SberbankKey.MenuKey.MSGR),
-                SberbankUI.I18N.getString(SberbankKey.HeaderKey.PTRN_POLL));
+        return SberbankUI.I18N.getString(HeaderKey.H2, SberbankUI.I18N.getString(MenuKey.MSGR),
+                SberbankUI.I18N.getString(HeaderKey.PTRN_POLL));
     }
 
     @Override
@@ -81,7 +83,7 @@ public class DocumentTab extends AbstractTab<Document> {
 
         if (entityIndex < 0 && design.getTemplateSelect().getValue() == null) {
             // validate template
-            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.NotificationKey.PTRN_POLL_TEMPLATE_VALIDATE),
+            messages.add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.PTRN_POLL_TEMPLATE_VALIDATE),
                     design.getTemplateSelect(), getValidationSource()));
         } else {
             // validate title

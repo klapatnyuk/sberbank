@@ -9,8 +9,9 @@ import org.vaadin.addons.toggle.ButtonGroup;
 import org.vaadin.addons.toggle.ButtonGroupSelectionEvent;
 import ru.klapatnyuk.sberbank.model.entity.AbstractEntity;
 import ru.klapatnyuk.sberbank.model.entity.User;
-import ru.klapatnyuk.sberbank.web.ConfigKey;
-import ru.klapatnyuk.sberbank.web.SberbankKey;
+import ru.klapatnyuk.sberbank.web.key.ConfigKey;
+import ru.klapatnyuk.sberbank.web.key.FormKey;
+import ru.klapatnyuk.sberbank.web.key.NotificationKey;
 import ru.klapatnyuk.sberbank.web.SberbankSession;
 import ru.klapatnyuk.sberbank.web.SberbankUI;
 import ru.klapatnyuk.sberbank.web.constant.StyleNames;
@@ -81,9 +82,9 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         // update form
         clear();
 
-        getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.FormKey.PTRN_POLL_ADD));
+        getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(FormKey.PTRN_POLL_ADD));
         getDesign().getSubmitButton().setEnabled(true);
-        getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(SberbankKey.FormKey.PTRN_POLL_CLEAR));
+        getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(FormKey.PTRN_POLL_CLEAR));
         getDesign().getCancelButton().setEnabled(true);
         getDesign().getRemoveButton().setVisible(false);
     }
@@ -121,7 +122,7 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         List<WarningMessage> messages = new ArrayList<>();
 
         if (getDesign().getTitleField().getValue().trim().isEmpty()) {
-            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.NotificationKey.PTRN_POLL_BODY_VALIDATE),
+            messages.add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.PTRN_POLL_BODY_VALIDATE),
                     getDesign().getTitleField(), getValidationSource()));
 
         } else {
@@ -138,7 +139,7 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
             }
             if (duplicate) {
                 messages.add(new WarningMessage(
-                        SberbankUI.I18N.getString(SberbankKey.NotificationKey.PTRN_POLL_BODY_UNIQUE_VALIDATE),
+                        SberbankUI.I18N.getString(NotificationKey.PTRN_POLL_BODY_UNIQUE_VALIDATE),
                         getDesign().getTitleField(), getValidationSource()));
             }
         }
@@ -160,8 +161,8 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         event.getSelectedButton().addStyleName(StyleNames.BUTTON_ACTIVE);
 
         // update form
-        getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.FormKey.PTRN_POLL_SAVE));
-        getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(SberbankKey.FormKey.PTRN_POLL_CANCEL));
+        getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(FormKey.PTRN_POLL_SAVE));
+        getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(FormKey.PTRN_POLL_CANCEL));
         // 'admin' role
         getDesign().getRemoveButton().setVisible(SberbankSession.get().getUser().getRole() == User.Role.ADMIN);
         getDesign().getTitleField().setReadOnly(false);
@@ -185,8 +186,8 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         button.addStyleName(StyleNames.BUTTON_ACTIVE);
 
         // update form
-        getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.FormKey.PTRN_POLL_SAVE));
-        getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(SberbankKey.FormKey.PTRN_POLL_CANCEL));
+        getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(FormKey.PTRN_POLL_SAVE));
+        getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(FormKey.PTRN_POLL_CANCEL));
         // 'admin' role
         getDesign().getRemoveButton().setVisible(SberbankSession.get().getUser().getRole() == User.Role.ADMIN);
         getDesign().getTitleField().setReadOnly(false);

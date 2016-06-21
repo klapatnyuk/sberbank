@@ -1,4 +1,4 @@
-package ru.klapatnyuk.sberbank.web;
+package ru.klapatnyuk.sberbank.web.key;
 
 import ru.klapatnyuk.sberbank.web.i18n.ResourceKey;
 

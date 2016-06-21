@@ -1,0 +1,41 @@
+package ru.klapatnyuk.sberbank.web.key;
+
+import ru.klapatnyuk.sberbank.web.i18n.ResourceKey;
+
+/**
+ * @author klapatnyuk
+ */
+public enum NotificationKey implements ResourceKey {
+
+    ERROR_DESCRIPTION_TIME,
+    ERROR_DESCRIPTION_BUSINESS,
+    ERROR_DESCRIPTION_BUSINESS_TIME,
+
+    SESSION_EXPIRED_CAPTION,
+    SESSION_EXPIRED,
+    COMMUNICATION_PROBLEM_CAPTION,
+    COMMUNICATION_PROBLEM,
+    AUTHENTICATION_PROBLEM_CAPTION,
+    AUTHENTICATION_PROBLEM,
+    INTERNAL_ERROR_CAPTION,
+    INTERNAL_ERROR,
+    COOKIES_DISABLED_CAPTION,
+    COOKIES_DISABLED,
+
+    LOGIN_ERROR,
+    LOGIN_LOGIN_INVALID,
+    LOGIN_PASSWORD_INVALID,
+    LOGIN_LOGIN_PASSWORD_INVALID,
+
+    PTRN_POLL_TEMPLATE_VALIDATE,
+    PTRN_POLL_BODY_VALIDATE,
+    PTRN_POLL_BODY_UNIQUE_VALIDATE,
+    PTRN_POLL_CHOICES_REQUIRED,
+    PTRN_POLL_CHOICES_DUPLICATES,
+    PTRN_POLL_CUSTOM_REQUIRED;
+
+    @Override
+    public String getKey() {
+        return "noti." + ResourceKey.convert(this);
+    }
+}

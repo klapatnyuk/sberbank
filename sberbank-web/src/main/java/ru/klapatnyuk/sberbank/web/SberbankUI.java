@@ -16,6 +16,9 @@ import ru.klapatnyuk.sberbank.model.entity.User;
 import ru.klapatnyuk.sberbank.model.handler.UserHandler;
 import ru.klapatnyuk.sberbank.web.i18n.ResourceFactory;
 import ru.klapatnyuk.sberbank.web.i18n.ResourceProvider;
+import ru.klapatnyuk.sberbank.web.key.ConfigKey;
+import ru.klapatnyuk.sberbank.web.key.HeaderKey;
+import ru.klapatnyuk.sberbank.web.key.NotificationKey;
 import ru.klapatnyuk.sberbank.web.window.LoginWindow;
 import ru.klapatnyuk.sberbank.web.window.WarningWindow;
 
@@ -94,7 +97,7 @@ public class SberbankUI extends UI {
         setPollInterval(POLL_INTERVAL);
         VaadinSession.getCurrent().getSession().setMaxInactiveInterval(INACTIVE_INTERVAL);
 
-        Page.getCurrent().setTitle(I18N.getString(SberbankKey.HeaderKey.APP));
+        Page.getCurrent().setTitle(I18N.getString(HeaderKey.APP));
 
         initLoginWindow();
         initWarningWindow();
@@ -117,7 +120,7 @@ public class SberbankUI extends UI {
     }
 
     private void initLoginWindow() {
-        loginWindow = new LoginWindow(SberbankUI.I18N.getString(SberbankKey.HeaderKey.WINDOW_LOGIN));
+        loginWindow = new LoginWindow(SberbankUI.I18N.getString(HeaderKey.WINDOW_LOGIN));
         loginWindow.getSubmitButton().addClickListener(event -> clickLoginButton());
     }
 
@@ -132,7 +135,7 @@ public class SberbankUI extends UI {
             loginWindow.getLoginTextField().validate();
             loginWindow.getPasswordField().validate();
         } catch (Validator.InvalidValueException e) {
-            SberbankUI.getWarningWindow().add(SberbankUI.I18N.getString(SberbankKey.NotificationKey.LOGIN_LOGIN_PASSWORD_INVALID));
+            SberbankUI.getWarningWindow().add(SberbankUI.I18N.getString(NotificationKey.LOGIN_LOGIN_PASSWORD_INVALID));
             return;
         }
         String login = loginWindow.getLoginTextField().getValue();
@@ -166,7 +169,7 @@ public class SberbankUI extends UI {
             addPollListener(pollListener);
 
         } else {
-            SberbankUI.getWarningWindow().add(SberbankUI.I18N.getString(SberbankKey.NotificationKey.LOGIN_ERROR));
+            SberbankUI.getWarningWindow().add(SberbankUI.I18N.getString(NotificationKey.LOGIN_ERROR));
         }
     }
 
@@ -182,16 +185,16 @@ public class SberbankUI extends UI {
             getService().setSystemMessagesProvider(systemMessagesInfo -> {
                 CustomizedSystemMessages messages = new CustomizedSystemMessages();
 
-                messages.setSessionExpiredCaption(I18N.getString(SberbankKey.NotificationKey.SESSION_EXPIRED_CAPTION));
-                messages.setSessionExpiredMessage(I18N.getString(SberbankKey.NotificationKey.SESSION_EXPIRED));
-                messages.setCommunicationErrorCaption(I18N.getString(SberbankKey.NotificationKey.COMMUNICATION_PROBLEM_CAPTION));
-                messages.setCommunicationErrorMessage(I18N.getString(SberbankKey.NotificationKey.COMMUNICATION_PROBLEM));
-                messages.setAuthenticationErrorCaption(I18N.getString(SberbankKey.NotificationKey.AUTHENTICATION_PROBLEM_CAPTION));
-                messages.setAuthenticationErrorMessage(I18N.getString(SberbankKey.NotificationKey.AUTHENTICATION_PROBLEM));
-                messages.setInternalErrorCaption(I18N.getString(SberbankKey.NotificationKey.INTERNAL_ERROR_CAPTION));
-                messages.setInternalErrorMessage(I18N.getString(SberbankKey.NotificationKey.INTERNAL_ERROR));
-                messages.setCookiesDisabledCaption(I18N.getString(SberbankKey.NotificationKey.COOKIES_DISABLED_CAPTION));
-                messages.setCookiesDisabledMessage(I18N.getString(SberbankKey.NotificationKey.COOKIES_DISABLED));
+                messages.setSessionExpiredCaption(I18N.getString(NotificationKey.SESSION_EXPIRED_CAPTION));
+                messages.setSessionExpiredMessage(I18N.getString(NotificationKey.SESSION_EXPIRED));
+                messages.setCommunicationErrorCaption(I18N.getString(NotificationKey.COMMUNICATION_PROBLEM_CAPTION));
+                messages.setCommunicationErrorMessage(I18N.getString(NotificationKey.COMMUNICATION_PROBLEM));
+                messages.setAuthenticationErrorCaption(I18N.getString(NotificationKey.AUTHENTICATION_PROBLEM_CAPTION));
+                messages.setAuthenticationErrorMessage(I18N.getString(NotificationKey.AUTHENTICATION_PROBLEM));
+                messages.setInternalErrorCaption(I18N.getString(NotificationKey.INTERNAL_ERROR_CAPTION));
+                messages.setInternalErrorMessage(I18N.getString(NotificationKey.INTERNAL_ERROR));
+                messages.setCookiesDisabledCaption(I18N.getString(NotificationKey.COOKIES_DISABLED_CAPTION));
+                messages.setCookiesDisabledMessage(I18N.getString(NotificationKey.COOKIES_DISABLED));
                 return messages;
             });
         }

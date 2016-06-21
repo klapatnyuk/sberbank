@@ -4,7 +4,8 @@ import com.vaadin.data.Validator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
-import ru.klapatnyuk.sberbank.web.SberbankKey;
+import ru.klapatnyuk.sberbank.web.key.FormKey;
+import ru.klapatnyuk.sberbank.web.key.NotificationKey;
 import ru.klapatnyuk.sberbank.web.SberbankUI;
 import ru.klapatnyuk.sberbank.web.constant.StyleDimensions;
 import ru.klapatnyuk.sberbank.web.constant.StyleNames;
@@ -73,8 +74,8 @@ public class LoginWindow extends AbstractCenteredWindow {
         loginTextField.setWidth("200px");
         loginTextField.setValidationVisible(false);
         final Validator validator =
-                new StringLengthValidator(SberbankUI.I18N.getString(SberbankKey.NotificationKey.LOGIN_LOGIN_INVALID,
-                        SberbankUI.I18N.getString(SberbankKey.FormKey.LOGIN_LOGIN_LABEL)), 1,
+                new StringLengthValidator(SberbankUI.I18N.getString(NotificationKey.LOGIN_LOGIN_INVALID,
+                        SberbankUI.I18N.getString(FormKey.LOGIN_LOGIN_LABEL)), 1,
                         ValidatePattern.LOGIN_LENGTH, false);
         loginTextField.addValidator(validator);
     }
@@ -84,25 +85,25 @@ public class LoginWindow extends AbstractCenteredWindow {
         passwordField.setWidth("200px");
         passwordField.setValidationVisible(false);
         final Validator validator =
-                new StringLengthValidator(SberbankUI.I18N.getString(SberbankKey.NotificationKey.LOGIN_PASSWORD_INVALID,
-                        SberbankUI.I18N.getString(SberbankKey.FormKey.LOGIN_PASSWORD_LABEL)), 1,
+                new StringLengthValidator(SberbankUI.I18N.getString(NotificationKey.LOGIN_PASSWORD_INVALID,
+                        SberbankUI.I18N.getString(FormKey.LOGIN_PASSWORD_LABEL)), 1,
                         ValidatePattern.PASSWORD_LENGTH, false);
         passwordField.addValidator(validator);
     }
 
     private void initSubmitButton() {
-        submitButton = new Button(SberbankUI.I18N.getString(SberbankKey.FormKey.LOGIN_BUTTON));
+        submitButton = new Button(SberbankUI.I18N.getString(FormKey.LOGIN_BUTTON));
         submitButton.setWidth(StyleDimensions.WIDTH);
         submitButton.addStyleName(StyleNames.BUTTON_STANDARD);
         submitButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
     }
 
     private HorizontalLayout newLoginRow() {
-        return newFormRow(SberbankUI.I18N.getString(SberbankKey.FormKey.LOGIN_LOGIN_LABEL), loginTextField);
+        return newFormRow(SberbankUI.I18N.getString(FormKey.LOGIN_LOGIN_LABEL), loginTextField);
     }
 
     private HorizontalLayout newPasswordRow() {
-        return newFormRow(SberbankUI.I18N.getString(SberbankKey.FormKey.LOGIN_PASSWORD_LABEL), passwordField);
+        return newFormRow(SberbankUI.I18N.getString(FormKey.LOGIN_PASSWORD_LABEL), passwordField);
     }
 
     private HorizontalLayout newSubmitRow() {

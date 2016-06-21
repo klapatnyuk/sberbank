@@ -4,7 +4,7 @@ import com.vaadin.annotations.DesignRoot;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.declarative.Design;
-import ru.klapatnyuk.sberbank.web.SberbankKey;
+import ru.klapatnyuk.sberbank.web.key.FormKey;
 import ru.klapatnyuk.sberbank.web.SberbankUI;
 import ru.klapatnyuk.sberbank.web.constant.StyleDimensions;
 import ru.klapatnyuk.sberbank.web.constant.StyleNames;
@@ -128,38 +128,38 @@ public class DocumentTabView extends AbstractTabView {
         patternLayout.setHeight("100%");
 
         createButton.setWidth(StyleDimensions.WIDTH_L);
-        createButton.setCaption(SberbankUI.I18N.getString(SberbankKey.FormKey.PTRN_POLL_CREATE));
+        createButton.setCaption(SberbankUI.I18N.getString(FormKey.PTRN_POLL_CREATE));
         createButton.addStyleName(StyleNames.BUTTON_ACTIVE);
 
         editSeparatorLabel.setWidth("100%");
         editSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
 
-        editLabel.setValue(SberbankUI.I18N.getString(SberbankKey.FormKey.PTRN_MESSAGE_EDIT));
+        editLabel.setValue(SberbankUI.I18N.getString(FormKey.PTRN_MESSAGE_EDIT));
 
         verticalSeparatorLabel.setWidth("1px");
 
-        templateLabel.setValue(SberbankUI.I18N.getString(SberbankKey.FormKey.MSGR_POLL_QUESTION));
+        templateLabel.setValue(SberbankUI.I18N.getString(FormKey.MSGR_POLL_QUESTION));
         templateLabel.setWidth(StyleDimensions.WIDTH_S);
         templateSelect.setWidth("50%");
         templateSelect.setFilteringMode(FilteringMode.CONTAINS);
-        templateSelect.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.FormKey.PTRN_POLL_PROMPT));
+        templateSelect.setInputPrompt(SberbankUI.I18N.getString(FormKey.PTRN_POLL_PROMPT));
 
         templateSeparatorLabel.setWidth("100%");
         templateSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
 
-        titleLabel.setValue(SberbankUI.I18N.getString(SberbankKey.FormKey.MSGR_POLL_CUSTOM_LABEL));
+        titleLabel.setValue(SberbankUI.I18N.getString(FormKey.MSGR_POLL_CUSTOM_LABEL));
         titleLabel.setWidth(StyleDimensions.WIDTH_S);
         titleField.setWidth("100%");
-        titleField.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.FormKey.MSGR_POLL_CHOICE_CUSTOM_PROMPT));
+        titleField.setInputPrompt(SberbankUI.I18N.getString(FormKey.MSGR_POLL_CHOICE_CUSTOM_PROMPT));
 
         submitSeparatorLabel.setWidth("100%");
         submitSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
 
-        submitButton.setCaption(SberbankUI.I18N.getString(SberbankKey.FormKey.PTRN_POLL_ADD));
+        submitButton.setCaption(SberbankUI.I18N.getString(FormKey.PTRN_POLL_ADD));
         submitButton.setWidth(StyleDimensions.WIDTH);
-        cancelButton.setCaption(SberbankUI.I18N.getString(SberbankKey.FormKey.PTRN_POLL_CLEAR));
+        cancelButton.setCaption(SberbankUI.I18N.getString(FormKey.PTRN_POLL_CLEAR));
         cancelButton.setWidth(StyleDimensions.WIDTH_S);
-        removeButton.setCaption(SberbankUI.I18N.getString(SberbankKey.FormKey.PTRN_POLL_REMOVE));
+        removeButton.setCaption(SberbankUI.I18N.getString(FormKey.PTRN_POLL_REMOVE));
         removeButton.setWidth(StyleDimensions.WIDTH_S);
     }
 }

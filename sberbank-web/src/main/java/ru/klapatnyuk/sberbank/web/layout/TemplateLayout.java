@@ -9,6 +9,7 @@ import ru.klapatnyuk.sberbank.web.*;
 import ru.klapatnyuk.sberbank.web.constant.StyleDimensions;
 import ru.klapatnyuk.sberbank.web.constant.StyleNames;
 import ru.klapatnyuk.sberbank.web.constant.ValidatePattern;
+import ru.klapatnyuk.sberbank.web.key.FormKey;
 
 import java.util.*;
 
@@ -243,47 +244,47 @@ public class TemplateLayout extends VerticalLayout {
     private FieldLayout newRow(Field field) {
 
         TextField title = new TextField();
-        title.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.FormKey.STRINGS_PROMPT));
+        title.setInputPrompt(SberbankUI.I18N.getString(FormKey.STRINGS_PROMPT));
         title.setWidth("100%");
         title.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
         title.setMaxLength(ValidatePattern.TAGLIKE_STRINGS_LENGTH);
 
         TextField label = new TextField();
-        label.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.FormKey.STRINGS_LABEL_PROMPT));
+        label.setInputPrompt(SberbankUI.I18N.getString(FormKey.STRINGS_LABEL_PROMPT));
         label.setWidth("100%");
         label.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
         label.setMaxLength(ValidatePattern.TAGLIKE_STRINGS_LENGTH);
 
         ComboBox type = new ComboBox();
-        type.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.FormKey.STRINGS_TYPE_PROMPT));
+        type.setInputPrompt(SberbankUI.I18N.getString(FormKey.STRINGS_TYPE_PROMPT));
         type.setWidth("100%");
         type.addItem(Field.Type.LINE);
-        type.setItemCaption(Field.Type.LINE, SberbankUI.I18N.getString(SberbankKey.FormKey.STRINGS_TYPE_LINE));
+        type.setItemCaption(Field.Type.LINE, SberbankUI.I18N.getString(FormKey.STRINGS_TYPE_LINE));
         type.addItem(Field.Type.AREA);
-        type.setItemCaption(Field.Type.AREA, SberbankUI.I18N.getString(SberbankKey.FormKey.STRINGS_TYPE_AREA));
+        type.setItemCaption(Field.Type.AREA, SberbankUI.I18N.getString(FormKey.STRINGS_TYPE_AREA));
         type.addItem(Field.Type.CHECKBOX);
-        type.setItemCaption(Field.Type.CHECKBOX, SberbankUI.I18N.getString(SberbankKey.FormKey.STRINGS_TYPE_CHECKBOX));
+        type.setItemCaption(Field.Type.CHECKBOX, SberbankUI.I18N.getString(FormKey.STRINGS_TYPE_CHECKBOX));
 
         Button up = new Button();
         up.setEnabled(false);
         up.setIcon(new ThemeResource("img/close-16x16.png"));
         up.setWidth(StyleDimensions.WIDTH_XXS_BUTTON);
         up.setStyleName(StyleNames.BUTTON_TRANSPARENT);
-        up.setDescription(SberbankUI.I18N.getString(SberbankKey.FormKey.STRINGS_UP));
+        up.setDescription(SberbankUI.I18N.getString(FormKey.STRINGS_UP));
 
         Button down = new Button();
         down.setEnabled(false);
         down.setIcon(new ThemeResource("img/close-16x16.png"));
         down.setWidth(StyleDimensions.WIDTH_XXS_BUTTON);
         down.setStyleName(StyleNames.BUTTON_TRANSPARENT);
-        down.setDescription(SberbankUI.I18N.getString(SberbankKey.FormKey.STRINGS_DOWN));
+        down.setDescription(SberbankUI.I18N.getString(FormKey.STRINGS_DOWN));
 
         Button remove = new Button();
         remove.setEnabled(false);
         remove.setIcon(new ThemeResource("img/close-16x16.png"));
         remove.setWidth(StyleDimensions.WIDTH_XXS_BUTTON);
         remove.setStyleName(StyleNames.BUTTON_TRANSPARENT);
-        remove.setDescription(SberbankUI.I18N.getString(SberbankKey.FormKey.STRINGS_CLOSE));
+        remove.setDescription(SberbankUI.I18N.getString(FormKey.STRINGS_CLOSE));
 
         HorizontalLayout buttonsLayout = new HorizontalLayout();
         buttonsLayout.setWidth("100%");

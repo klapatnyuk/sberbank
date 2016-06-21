@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 import ru.klapatnyuk.sberbank.model.entity.User;
 import ru.klapatnyuk.sberbank.web.constant.StyleDimensions;
 import ru.klapatnyuk.sberbank.web.constant.StyleNames;
+import ru.klapatnyuk.sberbank.web.key.FormKey;
+import ru.klapatnyuk.sberbank.web.key.HeaderKey;
+import ru.klapatnyuk.sberbank.web.key.MenuKey;
 import ru.klapatnyuk.sberbank.web.layout.ProfileLayout;
 import ru.klapatnyuk.sberbank.web.menu.EditorMenuTab;
 import ru.klapatnyuk.sberbank.web.menu.MenuTab;
@@ -130,8 +133,8 @@ public class SberbankUITemplate extends VerticalLayout {
     }
 
     private void initCopyright() {
-        copyrightLabel.setValue(SberbankUI.I18N.getString(SberbankKey.HeaderKey.FOOTER_PRODUCTION,
-                SberbankUI.I18N.getString(SberbankKey.HeaderKey.FOOTER_COPYRIGHT)));
+        copyrightLabel.setValue(SberbankUI.I18N.getString(HeaderKey.FOOTER_PRODUCTION,
+                SberbankUI.I18N.getString(HeaderKey.FOOTER_COPYRIGHT)));
     }
 
     private void initTabs() {
@@ -149,11 +152,11 @@ public class SberbankUITemplate extends VerticalLayout {
     }
 
     private void initMenuBar() {
-        menuBar.addItem(SberbankUI.I18N.getString(SberbankKey.MenuKey.MSGR), menuCommand);
+        menuBar.addItem(SberbankUI.I18N.getString(MenuKey.MSGR), menuCommand);
     }
 
     private void initFilterBar() {
-        Button button = new Button(SberbankUI.I18N.getString(SberbankKey.FormKey.FILTER_LIST));
+        Button button = new Button(SberbankUI.I18N.getString(FormKey.FILTER_LIST));
         button.setWidth(StyleDimensions.WIDTH_S);
         button.setHeight(StyleDimensions.HEIGHT_S);
         button.addClickListener(this::clickFilterButton);
@@ -164,11 +167,11 @@ public class SberbankUITemplate extends VerticalLayout {
         actionMenuBar.removeItems();
 
         // all roles
-        actionMenuBar.addItem(SberbankUI.I18N.getString(SberbankKey.MenuKey.MSGR_IN), actionCommand);
+        actionMenuBar.addItem(SberbankUI.I18N.getString(MenuKey.MSGR_IN), actionCommand);
 
         if (SberbankSession.get().getUser().getRole() == User.Role.ADMIN) {
             // 'admin' only
-            actionMenuBar.addItem(SberbankUI.I18N.getString(SberbankKey.MenuKey.MSGR_OUT), actionCommand);
+            actionMenuBar.addItem(SberbankUI.I18N.getString(MenuKey.MSGR_OUT), actionCommand);
         }
     }
 

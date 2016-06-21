@@ -4,7 +4,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import ru.klapatnyuk.sberbank.web.ButtonLogout;
-import ru.klapatnyuk.sberbank.web.SberbankKey;
+import ru.klapatnyuk.sberbank.web.key.FormKey;
 import ru.klapatnyuk.sberbank.web.SberbankUI;
 import ru.klapatnyuk.sberbank.web.constant.StyleNames;
 
@@ -16,12 +16,12 @@ public class ProfileLayout extends HorizontalLayout {
     private static final long serialVersionUID = 6933490056199145771L;
 
     private Label nameLabel = new Label("");
-    private ButtonLogout logoutButton = new ButtonLogout(SberbankUI.I18N.getString(SberbankKey.FormKey.PROFILE_LOGOUT));
+    private ButtonLogout logoutButton = new ButtonLogout(SberbankUI.I18N.getString(FormKey.PROFILE_LOGOUT));
 
     public ProfileLayout() {
         addStyleName(StyleNames.BAR_PROFILE);
 
-        Label status = new Label(SberbankUI.I18N.getString(SberbankKey.FormKey.PROFILE_STATUS));
+        Label status = new Label(SberbankUI.I18N.getString(FormKey.PROFILE_STATUS));
         addComponent(status);
         addComponent(nameLabel);
         addComponent(logoutButton);
