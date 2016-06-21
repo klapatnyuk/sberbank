@@ -111,8 +111,7 @@ public class SberbankUITemplate extends VerticalLayout {
     }
 
     private void initCopyright() {
-        copyrightLabel.setValue(SberbankUI.I18N.getString(HeaderKey.FOOTER_PRODUCTION,
-                SberbankUI.I18N.getString(HeaderKey.FOOTER_COPYRIGHT)));
+        copyrightLabel.setValue(SberbankUI.I18N.getString(HeaderKey.COPYRIGHT));
     }
 
     private void initTabs() {
@@ -130,18 +129,18 @@ public class SberbankUITemplate extends VerticalLayout {
     }
 
     private void initMenuBar() {
-        menuBar.addItem(SberbankUI.I18N.getString(MenuKey.MSGR), menuCommand);
+        menuBar.addItem(SberbankUI.I18N.getString(MenuKey.EDITOR), menuCommand);
     }
 
     private void reloadActionMenuBar() {
         actionMenuBar.removeItems();
 
         // all roles
-        actionMenuBar.addItem(SberbankUI.I18N.getString(MenuKey.MSGR_IN), actionCommand);
+        actionMenuBar.addItem(SberbankUI.I18N.getString(MenuKey.EDITOR_DOCUMENT), actionCommand);
 
         if (SberbankSession.get().getUser().getRole() == User.Role.ADMIN) {
             // 'admin' only
-            actionMenuBar.addItem(SberbankUI.I18N.getString(MenuKey.MSGR_OUT), actionCommand);
+            actionMenuBar.addItem(SberbankUI.I18N.getString(MenuKey.EDITOR_TEMPLATE), actionCommand);
         }
     }
 

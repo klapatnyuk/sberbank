@@ -7,14 +7,12 @@ import ru.klapatnyuk.sberbank.web.i18n.ResourceKey;
  */
 public enum HeaderKey implements ResourceKey {
 
-    APP,
+    APPLICATION,
     H2,
-    FOOTER_PRODUCTION,
-    FOOTER_COPYRIGHT,
+    COPYRIGHT,
     WINDOW_LOGIN,
-
-    PTRN_MESSAGE,
-    PTRN_POLL;
+    TEMPLATE,
+    DOCUMENT;
 
     @Override
     public String getKey() {

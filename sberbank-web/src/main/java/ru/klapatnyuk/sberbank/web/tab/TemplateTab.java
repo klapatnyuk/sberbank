@@ -56,8 +56,8 @@ public class TemplateTab extends AbstractTab<Template> {
 
     @Override
     public String getHeader() {
-        return SberbankUI.I18N.getString(HeaderKey.H2, SberbankUI.I18N.getString(MenuKey.MSGR),
-                SberbankUI.I18N.getString(HeaderKey.PTRN_MESSAGE));
+        return SberbankUI.I18N.getString(HeaderKey.H2, SberbankUI.I18N.getString(MenuKey.EDITOR),
+                SberbankUI.I18N.getString(HeaderKey.TEMPLATE));
     }
 
     @Override
@@ -69,15 +69,15 @@ public class TemplateTab extends AbstractTab<Template> {
 
         // validate template body
         if (design.getTemplateLayout().isEmpty()) {
-            messages.add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.PTRN_POLL_CHOICES_REQUIRED),
+            messages.add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.TEMPLATE_FIELDS_REQUIRED),
                     design.getTemplateLayout().getEmptyRowsField(), getValidationSource()));
         } else if (design.getTemplateLayout().hasDuplicates()) {
-            messages.add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.PTRN_POLL_CHOICES_DUPLICATES),
+            messages.add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.TEMPLATE_FIELD_TITLE_UNIQUE_VALIDATE),
                     design.getTemplateLayout().getFirstDuplicateField(), getValidationSource()));
         }
         AbstractField emptyField = design.getTemplateLayout().getFirstEmptyField();
         if (emptyField != null) {
-            messages.add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.PTRN_POLL_CUSTOM_REQUIRED),
+            messages.add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.TEMPLATE_FIELDS_ALL_REQUIRED),
                     emptyField, getValidationSource()));
         }
 

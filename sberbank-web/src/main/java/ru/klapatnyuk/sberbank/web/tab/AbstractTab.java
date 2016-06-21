@@ -122,7 +122,7 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         List<WarningMessage> messages = new ArrayList<>();
 
         if (getDesign().getTitleField().getValue().trim().isEmpty()) {
-            messages.add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.PTRN_POLL_BODY_VALIDATE),
+            messages.add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.ENTITY_TITLE_EMPTY_VALIDATE),
                     getDesign().getTitleField(), getValidationSource()));
 
         } else {
@@ -139,7 +139,7 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
             }
             if (duplicate) {
                 messages.add(new WarningMessage(
-                        SberbankUI.I18N.getString(NotificationKey.PTRN_POLL_BODY_UNIQUE_VALIDATE),
+                        SberbankUI.I18N.getString(NotificationKey.ENTITY_TITLE_UNIQUE_VALIDATE),
                         getDesign().getTitleField(), getValidationSource()));
             }
         }

@@ -97,7 +97,7 @@ public class SberbankUI extends UI {
         setPollInterval(POLL_INTERVAL);
         VaadinSession.getCurrent().getSession().setMaxInactiveInterval(INACTIVE_INTERVAL);
 
-        Page.getCurrent().setTitle(I18N.getString(HeaderKey.APP));
+        Page.getCurrent().setTitle(I18N.getString(HeaderKey.APPLICATION));
 
         initLoginWindow();
         initWarningWindow();
@@ -135,7 +135,7 @@ public class SberbankUI extends UI {
             loginWindow.getLoginTextField().validate();
             loginWindow.getPasswordField().validate();
         } catch (Validator.InvalidValueException e) {
-            SberbankUI.getWarningWindow().add(SberbankUI.I18N.getString(NotificationKey.LOGIN_LOGIN_PASSWORD_INVALID));
+            SberbankUI.getWarningWindow().add(SberbankUI.I18N.getString(NotificationKey.LOGIN_INVALID));
             return;
         }
         String login = loginWindow.getLoginTextField().getValue();

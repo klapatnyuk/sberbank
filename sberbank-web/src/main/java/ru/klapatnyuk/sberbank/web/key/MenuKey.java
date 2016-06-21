@@ -7,9 +7,9 @@ import ru.klapatnyuk.sberbank.web.i18n.ResourceKey;
  */
 public enum MenuKey implements ResourceKey {
 
-    MSGR,
-    MSGR_IN,
-    MSGR_OUT;
+    EDITOR,
+    EDITOR_DOCUMENT,
+    EDITOR_TEMPLATE;
 
     @Override
     public String getKey() {

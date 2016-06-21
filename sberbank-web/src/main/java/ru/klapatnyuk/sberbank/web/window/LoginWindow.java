@@ -4,12 +4,11 @@ import com.vaadin.data.Validator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
-import ru.klapatnyuk.sberbank.web.key.FormKey;
-import ru.klapatnyuk.sberbank.web.key.NotificationKey;
 import ru.klapatnyuk.sberbank.web.SberbankUI;
 import ru.klapatnyuk.sberbank.web.constant.StyleDimensions;
 import ru.klapatnyuk.sberbank.web.constant.StyleNames;
 import ru.klapatnyuk.sberbank.web.constant.ValidatePattern;
+import ru.klapatnyuk.sberbank.web.key.FormKey;
 
 /**
  * @author klapatnyuk
@@ -73,10 +72,7 @@ public class LoginWindow extends AbstractCenteredWindow {
         loginTextField = new TextField();
         loginTextField.setWidth("200px");
         loginTextField.setValidationVisible(false);
-        final Validator validator =
-                new StringLengthValidator(SberbankUI.I18N.getString(NotificationKey.LOGIN_LOGIN_INVALID,
-                        SberbankUI.I18N.getString(FormKey.LOGIN_LOGIN_LABEL)), 1,
-                        ValidatePattern.LOGIN_LENGTH, false);
+        Validator validator = new StringLengthValidator("Invalid login", 1, ValidatePattern.LOGIN_LENGTH, false);
         loginTextField.addValidator(validator);
     }
 
@@ -84,10 +80,7 @@ public class LoginWindow extends AbstractCenteredWindow {
         passwordField = new PasswordField();
         passwordField.setWidth("200px");
         passwordField.setValidationVisible(false);
-        final Validator validator =
-                new StringLengthValidator(SberbankUI.I18N.getString(NotificationKey.LOGIN_PASSWORD_INVALID,
-                        SberbankUI.I18N.getString(FormKey.LOGIN_PASSWORD_LABEL)), 1,
-                        ValidatePattern.PASSWORD_LENGTH, false);
+        Validator validator = new StringLengthValidator("Invalid password", 1, ValidatePattern.PASSWORD_LENGTH, false);
         passwordField.addValidator(validator);
     }
 
