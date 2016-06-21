@@ -286,7 +286,7 @@ public class DocumentTab extends AbstractTab<Document> {
             LOGGER.error("Document removing error", th);
             SberbankUI.getWarningWindow()
                     .add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.DOCUMENT_REMOVE_ERROR), th,
-                            design.getEntityContainer()));
+                            design.getRemoveButton()));
             return;
         }
 
@@ -310,7 +310,7 @@ public class DocumentTab extends AbstractTab<Document> {
             LOGGER.error("Templates reading error", th);
             SberbankUI.getWarningWindow()
                     .add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.TEMPLATE_GET_ERROR), th,
-                            design.getEntityContainer()));
+                            design.getTemplateSelect()));
         }
 
         if (templates == null) {
@@ -352,7 +352,7 @@ public class DocumentTab extends AbstractTab<Document> {
                 LOGGER.error("Template fields reading error", th);
                 SberbankUI.getWarningWindow()
                         .add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.TEMPLATE_FIELD_GET_ERROR), th,
-                                design.getEntityContainer()));
+                                design.getTemplateSelect()));
                 design.getSubmitButton().setEnabled(false);
                 design.getCancelButton().setEnabled(false);
             }

@@ -11,13 +11,12 @@ import ru.klapatnyuk.sberbank.logic.TransactionalProxyService;
 import ru.klapatnyuk.sberbank.logic.api.TemplateService;
 import ru.klapatnyuk.sberbank.model.entity.Field;
 import ru.klapatnyuk.sberbank.model.entity.Template;
-import ru.klapatnyuk.sberbank.model.exception.BusinessException;
 import ru.klapatnyuk.sberbank.model.handler.FieldHandler;
 import ru.klapatnyuk.sberbank.model.handler.TemplateHandler;
+import ru.klapatnyuk.sberbank.web.SberbankUI;
 import ru.klapatnyuk.sberbank.web.key.HeaderKey;
 import ru.klapatnyuk.sberbank.web.key.MenuKey;
 import ru.klapatnyuk.sberbank.web.key.NotificationKey;
-import ru.klapatnyuk.sberbank.web.SberbankUI;
 import ru.klapatnyuk.sberbank.web.notification.WarningMessage;
 
 import java.util.ArrayList;
@@ -46,9 +45,11 @@ public class TemplateTab extends AbstractTab<Template> {
         // business logic
         try {
             entities = templateService.getAll();
-        } catch (BusinessException e) {
-            LOGGER.error("Tab updating error", e);
-            // TODO display WarningMessage
+        } catch (Throwable th) {
+            LOGGER.error("Template tab updating error", th);
+            SberbankUI.getWarningWindow()
+                    .add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.TEMPLATE_GET_ERROR), th,
+                            design.getEntityContainer()));
         }
 
         updateEntityLayout();
@@ -108,9 +109,14 @@ public class TemplateTab extends AbstractTab<Template> {
         // business logic
         try {
             fields = templateService.getFields(entity.getId());
-        } catch (BusinessException e) {
-            LOGGER.error("Fields finding error", e);
-            // TODO display WarningMessage
+        } catch (Throwable th) {
+            LOGGER.error("Template fields finding error", th);
+            SberbankUI.getWarningWindow()
+                    .add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.TEMPLATE_FIELD_GET_ERROR), th,
+                            event.getSelectedButton()));
+            design.getSubmitButton().setEnabled(false);
+            design.getCancelButton().setEnabled(false);
+            design.getRemoveButton().setEnabled(false);
         }
 
         if (fields == null) {
@@ -131,9 +137,14 @@ public class TemplateTab extends AbstractTab<Template> {
         // business logic
         try {
             fields = templateService.getFields(entity.getId());
-        } catch (BusinessException e) {
-            LOGGER.error("Fields finding error", e);
-            // TODO display WarningMessage
+        } catch (Throwable th) {
+            LOGGER.error("Template fields finding error", th);
+            SberbankUI.getWarningWindow()
+                    .add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.TEMPLATE_FIELD_GET_ERROR), th,
+                            event.getButton()));
+            design.getSubmitButton().setEnabled(false);
+            design.getCancelButton().setEnabled(false);
+            design.getRemoveButton().setEnabled(false);
         }
 
         if (fields == null) {
@@ -157,9 +168,12 @@ public class TemplateTab extends AbstractTab<Template> {
             // business logic
             try {
                 templateService.update(template);
-            } catch (BusinessException e) {
-                LOGGER.error("Template updating error", e);
-                // TODO display WarningMessage
+            } catch (Throwable th) {
+                LOGGER.error("Template updating error", th);
+                SberbankUI.getWarningWindow()
+                        .add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.TEMPLATE_UPDATE_ERROR), th,
+                                design.getSubmitButton()));
+                return;
             }
 
             entity = template;
@@ -172,9 +186,12 @@ public class TemplateTab extends AbstractTab<Template> {
             // business logic
             try {
                 templateService.create(template);
-            } catch (BusinessException e) {
-                LOGGER.error("Template creation error", e);
-                // TODO display WarningMessage
+            } catch (Throwable th) {
+                LOGGER.error("Template creation error", th);
+                SberbankUI.getWarningWindow()
+                        .add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.TEMPLATE_CREATE_ERROR), th,
+                                design.getSubmitButton()));
+                return;
             }
 
             clear();
@@ -191,9 +208,12 @@ public class TemplateTab extends AbstractTab<Template> {
         // business logic
         try {
             templateService.remove(entity.getId());
-        } catch (BusinessException e) {
-            LOGGER.error("Template removing error", e);
-            // TODO display WarningMessage
+        } catch (Throwable th) {
+            LOGGER.error("Template removing error", th);
+            SberbankUI.getWarningWindow()
+                    .add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.TEMPLATE_REMOVE_ERROR), th,
+                            design.getRemoveButton()));
+            return;
         }
 
         clear();
