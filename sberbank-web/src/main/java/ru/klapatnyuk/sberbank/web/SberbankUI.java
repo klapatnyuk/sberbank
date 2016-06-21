@@ -12,7 +12,11 @@ import com.vaadin.ui.Window;
 import com.vaadin.util.CurrentInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.klapatnyuk.sberbank.logic.TransactionalProxyService;
+import ru.klapatnyuk.sberbank.logic.UserServiceImpl;
+import ru.klapatnyuk.sberbank.logic.api.UserService;
 import ru.klapatnyuk.sberbank.model.entity.User;
+import ru.klapatnyuk.sberbank.model.exception.BusinessException;
 import ru.klapatnyuk.sberbank.model.handler.UserHandler;
 import ru.klapatnyuk.sberbank.web.i18n.ResourceFactory;
 import ru.klapatnyuk.sberbank.web.i18n.ResourceProvider;
@@ -24,7 +28,6 @@ import ru.klapatnyuk.sberbank.web.window.WarningWindow;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
@@ -46,6 +49,11 @@ public class SberbankUI extends UI {
     private static final int POLL_INTERVAL = Integer.parseInt(CONFIG.getString(ConfigKey.TIME_POLL_INTERVAL.getKey()));
     private static final int INACTIVE_INTERVAL = Integer.parseInt(CONFIG.getString(ConfigKey.TIME_INACTIVE_INTERVAL.getKey()));
     private static final Logger LOGGER = LoggerFactory.getLogger(SberbankUI.class);
+
+    private final UserService userServiceImpl = new UserServiceImpl(new UserHandler());
+    private final UserService userService = TransactionalProxyService.newInstance(
+            userServiceImpl, SberbankUI.connectionPool, UserService.class,
+            VaadinServlet.getCurrent().getServletContext().getClassLoader());
 
     private WarningWindow warningWindow;
     private LoginWindow loginWindow;
@@ -142,15 +150,11 @@ public class SberbankUI extends UI {
         String password = loginWindow.getPasswordField().getValue();
 
         User user = null;
+
+        // business logic
         try {
-            Connection connection = SberbankUI.connectionPool.reserveConnection();
-
-            UserHandler handler = new UserHandler();
-            handler.setConnection(connection);
-            user = handler.login(login, password);
-
-            SberbankUI.connectionPool.releaseConnection(connection);
-        } catch (SQLException e) {
+            user = userService.login(login, password);
+        } catch (BusinessException e) {
             LOGGER.error("Login error", e);
             // TODO display WarningMessage
         }
