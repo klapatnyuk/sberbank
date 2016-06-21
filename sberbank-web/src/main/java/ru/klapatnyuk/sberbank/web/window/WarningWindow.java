@@ -161,12 +161,12 @@ public class WarningWindow extends Window {
         messageLayout.setSizeFull();
         if (message.getCaption() != null && !message.getCaption().isEmpty()) {
             Label captionLabel = new Label(message.getCaption());
-            captionLabel.setStyleName("label-caption");
+            captionLabel.setStyleName(StyleNames.LABEL_CAPTION);
             messageLayout.addComponent(captionLabel);
         }
         if (message.getDescription() != null && !message.getDescription().isEmpty()) {
             Label descriptionLabel = new Label(message.getDescription());
-            descriptionLabel.setStyleName("label-description");
+            descriptionLabel.setStyleName(StyleNames.LABEL_DESCRIPTION);
             descriptionLabel.setContentMode(ContentMode.HTML);
             messageLayout.addComponent(descriptionLabel);
         }

@@ -99,7 +99,7 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
                     item.getTitle().substring(0, LENGTH) + ".." : item.getTitle());
             button.setDescription(item.getTitle());
             button.setWidth("100%");
-            button.addStyleName("pattern-button");
+            button.addStyleName(StyleNames.PATTERN_BUTTON);
             button.addClickListener(this::clickEntityButton);
             buttonGroup.addButton(button);
             getDesign().getEditEntityLayout().addComponent(button);

@@ -19,9 +19,17 @@ public interface StyleNames {
 
     String SPACER_TOP = "spacer-top";
     String SPACER_RIGHT = "spacer-right";
+    String SPACER_EMPTY = "spacer-empty";
 
     String WINDOW_LOGIN = "window-login";
     String WINDOW_LOGIN_LAYOUT = "window-login-layout";
     String WINDOW_WARNING = "window-warning";
     String WINDOW_WARNING_LAYOUT = "window-warning-layout";
+
+    String PATTERN_BUTTON = "pattern-button";
+
+    String BODY_TEXT_AREA = "body-text-area";
+
+    String LABEL_CAPTION = "label-caption";
+    String LABEL_DESCRIPTION = "label-description";
 }

@@ -108,7 +108,7 @@ public class DocumentLayout extends VerticalLayout {
             textArea.setHeight("100px");
             // TODO replace by I18N string
             textArea.setInputPrompt("Enter text..");
-            textArea.setStyleName("body-text-area");
+            textArea.setStyleName(StyleNames.BODY_TEXT_AREA);
             textArea.setValue(field.getValue() == null ? "" : field.getValue().toString());
             textArea.setReadOnly(!field.isActive());
 
@@ -118,7 +118,7 @@ public class DocumentLayout extends VerticalLayout {
 
         } else if (field.getType() == Field.Type.CHECKBOX) {
             CheckBox checkBox = new CheckBox(field.getLabel());
-            checkBox.setStyleName("spacer-empty");
+            checkBox.setStyleName(StyleNames.SPACER_EMPTY);
             checkBox.setHeight(StyleDimensions.HEIGHT_S);
             checkBox.setValue(field.getValue() == null ? false : (Boolean) field.getValue());
             checkBox.setReadOnly(!field.isActive());

@@ -178,8 +178,7 @@ public class SberbankUITemplate extends VerticalLayout {
         menuBar.getItems().get(tab.getIndex()).setStyleName(StyleNames.MENU_ITEM_ACTIVE);
     }
 
-    // TODO needs to be refactored
-    private void updateTabsLayout(MenuTab old) {
+    private void updateTabsLayout() {
         tabs.forEach((tab, layouts) -> layouts.forEach((subTab, layout) -> layout.setVisible(false)));
         getTab().setVisible(true);
     }
@@ -235,8 +234,7 @@ public class SberbankUITemplate extends VerticalLayout {
             LOG.debug("Selected action menu item: " + item.getText());
 
             // save old sate
-            final int oldIndex = actionTab.getIndex();
-            final MenuTab oldActionTab = actionTab;
+            int oldIndex = actionTab.getIndex();
 
             // update model
             actionTab = actionTab.get(actionMenuBar.getItems().indexOf(item));
@@ -244,7 +242,7 @@ public class SberbankUITemplate extends VerticalLayout {
             Tab currentTab = getTab(tab, actionTab);
             headerLabel.setValue(currentTab == null ? "" : currentTab.getHeader());
             updateActionMenuBar(oldIndex);
-            updateTabsLayout(oldActionTab);
+            updateTabsLayout();
         }
     }
 }
