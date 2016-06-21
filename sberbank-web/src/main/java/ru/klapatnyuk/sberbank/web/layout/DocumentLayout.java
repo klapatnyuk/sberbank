@@ -90,6 +90,7 @@ public class DocumentLayout extends VerticalLayout {
             label.setWidth(StyleDimensions.WIDTH_S);
             TextField textField = new TextField();
             textField.setWidth("50%");
+            // TODO replace by I18N string
             textField.setInputPrompt("Enter string..");
             textField.setValue(field.getValue() == null ? "" : field.getValue().toString());
             textField.setReadOnly(!field.isActive());
@@ -105,6 +106,7 @@ public class DocumentLayout extends VerticalLayout {
             TextArea textArea = new TextArea();
             textArea.setWidth("100%");
             textArea.setHeight("100px");
+            // TODO replace by I18N string
             textArea.setInputPrompt("Enter text..");
             textArea.setStyleName("body-text-area");
             textArea.setValue(field.getValue() == null ? "" : field.getValue().toString());

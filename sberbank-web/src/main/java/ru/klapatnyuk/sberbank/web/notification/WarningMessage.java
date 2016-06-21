@@ -15,7 +15,7 @@ public class WarningMessage implements Comparable<WarningMessage> {
     private String description;
     private Component.Focusable field;
 
-    private boolean removable = false;
+    private boolean removable;
     private Long time = System.nanoTime();
 
     public WarningMessage(String caption, String description, Component.Focusable field, Component source) {
@@ -30,8 +30,8 @@ public class WarningMessage implements Comparable<WarningMessage> {
         this(caption, null, field, source);
     }
 
-    public WarningMessage(String caption, String description, LayoutEvents.LayoutClickListener listener,
-                          Component source) {
+    public WarningMessage(
+            String caption, String description, LayoutEvents.LayoutClickListener listener, Component source) {
         this.caption = caption;
         this.listener = listener;
         this.source = source;
@@ -84,6 +84,6 @@ public class WarningMessage implements Comparable<WarningMessage> {
 
     @Override
     public int compareTo(WarningMessage message) {
-        return -this.time.compareTo(message.getTime());
+        return -time.compareTo(message.getTime());
     }
 }

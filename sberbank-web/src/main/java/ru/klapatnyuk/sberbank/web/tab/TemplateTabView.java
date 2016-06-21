@@ -50,64 +50,63 @@ public class TemplateTabView extends AbstractTabView {
     @SuppressWarnings("unused")
     private Button removeButton;
 
-    public TemplateTabView() {
+    TemplateTabView() {
         Design.read(this);
         init();
     }
 
-    public TemplateLayout getTemplateLayout() {
+    @Override
+    TemplateLayout getTemplateLayout() {
         return templateLayout;
     }
 
     @Override
-    public Label getEditSeparatorLabel() {
+    Label getEditSeparatorLabel() {
         return editSeparatorLabel;
     }
 
     @Override
-    public Label getEditLabel() {
+    Label getEditLabel() {
         return editLabel;
     }
 
     @Override
-    public SingleComponentContainer getEntityContainer() {
+    SingleComponentContainer getEntityContainer() {
         return templateContainer;
     }
 
     @Override
-    public AbstractOrderedLayout getEditEntityLayout() {
+    AbstractOrderedLayout getEditEntityLayout() {
         return editTemplateLayout;
     }
 
     @Override
-    public AbstractTextField getTitleField() {
+    AbstractTextField getTitleField() {
         return titleField;
     }
 
     @Override
-    public Button getCreateButton() {
+    Button getCreateButton() {
         return createButton;
     }
 
     @Override
-    public Button getSubmitButton() {
+    Button getSubmitButton() {
         return submitButton;
     }
 
     @Override
-    public Button getCancelButton() {
+    Button getCancelButton() {
         return cancelButton;
     }
 
     @Override
-    public Button getRemoveButton() {
+    Button getRemoveButton() {
         return removeButton;
     }
 
     @Override
-    protected void init() {
-        super.init();
-
+    void init() {
         patternLayout.setWidthUndefined();
         patternLayout.setHeight("100%");
 

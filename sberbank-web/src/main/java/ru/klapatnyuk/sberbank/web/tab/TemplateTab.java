@@ -17,7 +17,6 @@ import ru.klapatnyuk.sberbank.model.handler.TemplateHandler;
 import ru.klapatnyuk.sberbank.web.SberbankKey;
 import ru.klapatnyuk.sberbank.web.SberbankUI;
 import ru.klapatnyuk.sberbank.web.notification.WarningMessage;
-import ru.klapatnyuk.sberbank.web.menu.MenuTab;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +36,6 @@ public class TemplateTab extends AbstractTab<Template> {
             VaadinServlet.getCurrent().getServletContext().getClassLoader());
 
     private TemplateTabView design;
-
-    public TemplateTab(MenuTab tab, MenuTab actionTab) {
-        super(tab, actionTab);
-    }
 
     @Override
     public void update() {

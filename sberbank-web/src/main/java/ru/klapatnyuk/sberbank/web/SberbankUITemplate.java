@@ -138,13 +138,11 @@ public class SberbankUITemplate extends VerticalLayout {
         Map<MenuTab, AbstractTab> editorTabs = new TreeMap<>();
 
         // all roles
-        AbstractTab document = new DocumentTab(SberbankMenuTab.EDITOR, EditorMenuTab.DOCUMENT);
-        editorTabs.put(EditorMenuTab.DOCUMENT, document);
+        editorTabs.put(EditorMenuTab.DOCUMENT, new DocumentTab());
 
         // 'admin' only
         if (SberbankSession.get().getUser().getRole() == User.Role.ADMIN) {
-            AbstractTab template = new TemplateTab(SberbankMenuTab.EDITOR, EditorMenuTab.TEMPLATE);
-            editorTabs.put(EditorMenuTab.TEMPLATE, template);
+            editorTabs.put(EditorMenuTab.TEMPLATE, new TemplateTab());
         }
 
         tabs.put(SberbankMenuTab.EDITOR, editorTabs);

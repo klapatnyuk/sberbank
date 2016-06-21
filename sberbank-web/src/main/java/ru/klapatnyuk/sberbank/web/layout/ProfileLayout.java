@@ -15,22 +15,22 @@ public class ProfileLayout extends HorizontalLayout {
 
     private static final long serialVersionUID = 6933490056199145771L;
 
-    private Label statusLabel = new Label(SberbankUI.I18N.getString(SberbankKey.Form.PROFILE_STATUS));
     private Label nameLabel = new Label("");
     private ButtonLogout logoutButton = new ButtonLogout(SberbankUI.I18N.getString(SberbankKey.Form.PROFILE_LOGOUT));
 
     public ProfileLayout() {
         addStyleName(StyleNames.BAR_PROFILE);
 
-        addComponent(statusLabel);
+        Label status = new Label(SberbankUI.I18N.getString(SberbankKey.Form.PROFILE_STATUS));
+        addComponent(status);
         addComponent(nameLabel);
         addComponent(logoutButton);
 
-        setComponentAlignment(statusLabel, Alignment.MIDDLE_CENTER);
+        setComponentAlignment(status, Alignment.MIDDLE_CENTER);
         setComponentAlignment(nameLabel, Alignment.MIDDLE_CENTER);
         setComponentAlignment(logoutButton, Alignment.MIDDLE_CENTER);
 
-        statusLabel.addStyleName(StyleNames.SPACER_RIGHT);
+        status.addStyleName(StyleNames.SPACER_RIGHT);
         nameLabel.addStyleName(StyleNames.SPACER_RIGHT);
         nameLabel.addStyleName(StyleNames.BAR_PROFILE_USER_NAME);
     }
@@ -41,9 +41,5 @@ public class ProfileLayout extends HorizontalLayout {
 
     public Label getNameLabel() {
         return nameLabel;
-    }
-
-    public void setNameLabel(Label label) {
-        this.nameLabel = label;
     }
 }

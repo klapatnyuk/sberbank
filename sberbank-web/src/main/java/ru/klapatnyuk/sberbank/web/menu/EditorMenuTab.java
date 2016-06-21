@@ -4,7 +4,6 @@ package ru.klapatnyuk.sberbank.web.menu;
  * @author klapatnyuk
  */
 public enum EditorMenuTab implements MenuTab {
-
     DOCUMENT(0),
     TEMPLATE(1);
 

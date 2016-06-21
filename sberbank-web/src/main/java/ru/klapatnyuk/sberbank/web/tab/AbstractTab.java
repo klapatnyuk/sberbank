@@ -9,9 +9,11 @@ import org.vaadin.addons.toggle.ButtonGroup;
 import org.vaadin.addons.toggle.ButtonGroupSelectionEvent;
 import ru.klapatnyuk.sberbank.model.entity.AbstractEntity;
 import ru.klapatnyuk.sberbank.model.entity.User;
-import ru.klapatnyuk.sberbank.web.*;
+import ru.klapatnyuk.sberbank.web.ConfigKey;
+import ru.klapatnyuk.sberbank.web.SberbankKey;
+import ru.klapatnyuk.sberbank.web.SberbankSession;
+import ru.klapatnyuk.sberbank.web.SberbankUI;
 import ru.klapatnyuk.sberbank.web.constant.StyleNames;
-import ru.klapatnyuk.sberbank.web.menu.MenuTab;
 import ru.klapatnyuk.sberbank.web.notification.WarningMessage;
 
 import java.util.ArrayList;
@@ -23,35 +25,20 @@ import java.util.function.Predicate;
  */
 public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLayout implements Tab {
 
-    protected static final int LENGTH =
-            Integer.parseInt(SberbankUI.CONFIG.getString(ConfigKey.PATTERN_SUBJECT_LENGTH.getKey()));
-
     protected List<T> entities = new ArrayList<>();
-    protected MenuTab tab;
-    protected MenuTab actionTab;
     protected int entityIndex = -1;
-    protected ButtonGroup buttonGroup = new ButtonGroup();
     protected T entity;
 
+    private static final int LENGTH =
+            Integer.parseInt(SberbankUI.CONFIG.getString(ConfigKey.PATTERN_SUBJECT_LENGTH.getKey()));
     private static final long serialVersionUID = -6229564821654218076L;
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractTab.class);
 
-    public AbstractTab(MenuTab tab, MenuTab actionTab) {
-        this.tab = tab;
-        this.actionTab = actionTab;
+    private ButtonGroup buttonGroup = new ButtonGroup();
 
+    public AbstractTab() {
         init();
         setVisible(false);
-    }
-
-    @Override
-    public MenuTab getTab() {
-        return tab;
-    }
-
-    @Override
-    public MenuTab getActionTab() {
-        return actionTab;
     }
 
     @Override
@@ -65,40 +52,20 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
 
     @Override
     public void poll() {
-        LOGGER.debug("Tab's poll started");
+        // nothing to do
     }
 
     @Override
     public void setVisible(boolean visible) {
-        if (visible && !isUpdated()) {
+        if (visible) {
             update();
         }
         super.setVisible(visible);
     }
 
     @Override
-    public boolean isUpdated() {
-        return false;
-    }
-
-    @Override
     public Component getValidationSource() {
         return getDesign().getSubmitButton();
-    }
-
-    protected void init() {
-        LOGGER.debug("Tab's init started");
-        setSizeFull();
-        addComponent(getDesign());
-
-        getDesign().getCreateButton().addClickListener(event -> clickCreateButton());
-        getDesign().getSubmitButton().addClickListener(event -> clickSubmitButton());
-        getDesign().getCancelButton().addClickListener(event -> clickCancelButton());
-
-        // 'admin' role
-        if (SberbankSession.get().getUser().getRole() == User.Role.ADMIN) {
-            getDesign().getRemoveButton().addClickListener(event -> clickRemoveButton());
-        }
     }
 
     protected void clickCreateButton() {
@@ -113,12 +80,12 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
 
         // update form
         clear();
-        getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_ADD));
-        getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_CLEAR));
-        getDesign().getRemoveButton().setVisible(false);
 
+        getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_ADD));
         getDesign().getSubmitButton().setEnabled(true);
+        getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_CLEAR));
         getDesign().getCancelButton().setEnabled(true);
+        getDesign().getRemoveButton().setVisible(false);
     }
 
     protected void updateEntityLayout() {
@@ -178,10 +145,6 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         return messages;
     }
 
-    protected abstract Predicate<T> duplicatePredicate(int userId, String title);
-
-    protected abstract AbstractTabView getDesign();
-
     protected void selectEntity(ButtonGroupSelectionEvent event) {
         LOGGER.debug("Inside AbstractTab.selectEntity");
 
@@ -239,7 +202,26 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         }
     }
 
+    protected abstract Predicate<T> duplicatePredicate(int userId, String title);
+
+    protected abstract AbstractTabView getDesign();
+
     protected abstract void clickRemoveButton();
 
     protected abstract void clickSubmitButton();
+
+    private void init() {
+        LOGGER.debug("Tab's init started");
+        setSizeFull();
+        addComponent(getDesign());
+
+        getDesign().getCreateButton().addClickListener(event -> clickCreateButton());
+        getDesign().getSubmitButton().addClickListener(event -> clickSubmitButton());
+        getDesign().getCancelButton().addClickListener(event -> clickCancelButton());
+
+        // 'admin' role
+        if (SberbankSession.get().getUser().getRole() == User.Role.ADMIN) {
+            getDesign().getRemoveButton().addClickListener(event -> clickRemoveButton());
+        }
+    }
 }

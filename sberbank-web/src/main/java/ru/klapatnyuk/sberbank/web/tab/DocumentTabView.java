@@ -55,76 +55,75 @@ public class DocumentTabView extends AbstractTabView {
     @SuppressWarnings("unused")
     private Button removeButton;
 
-    public DocumentTabView() {
+    DocumentTabView() {
         Design.read(this);
         init();
     }
 
-    public AbstractSelect getTemplateSelect() {
+    AbstractSelect getTemplateSelect() {
         return templateSelect;
     }
 
-    public AbstractOrderedLayout getTitleLayout() {
+    AbstractOrderedLayout getTitleLayout() {
         return titleLayout;
     }
 
-    public DocumentLayout getTemplateLayout() {
-        return documentLayout;
-    }
-
-    public Label getTemplateSeparatorLabel() {
+    Label getTemplateSeparatorLabel() {
         return templateSeparatorLabel;
     }
 
     @Override
-    public Label getEditSeparatorLabel() {
+    DocumentLayout getTemplateLayout() {
+        return documentLayout;
+    }
+
+    @Override
+    Label getEditSeparatorLabel() {
         return editSeparatorLabel;
     }
 
     @Override
-    public Label getEditLabel() {
+    Label getEditLabel() {
         return editLabel;
     }
 
     @Override
-    public SingleComponentContainer getEntityContainer() {
+    SingleComponentContainer getEntityContainer() {
         return documentContainer;
     }
 
     @Override
-    public AbstractOrderedLayout getEditEntityLayout() {
+    AbstractOrderedLayout getEditEntityLayout() {
         return editDocumentLayout;
     }
 
     @Override
-    public AbstractTextField getTitleField() {
+    AbstractTextField getTitleField() {
         return titleField;
     }
 
     @Override
-    public Button getCreateButton() {
+    Button getCreateButton() {
         return createButton;
     }
 
     @Override
-    public Button getSubmitButton() {
+    Button getSubmitButton() {
         return submitButton;
     }
 
     @Override
-    public Button getCancelButton() {
+    Button getCancelButton() {
         return cancelButton;
     }
 
     @Override
-    public Button getRemoveButton() {
+    Button getRemoveButton() {
         return removeButton;
     }
 
     @Override
-    protected void init() {
-        super.init();
-
+    void init() {
         patternLayout.setWidthUndefined();
         patternLayout.setHeight("100%");
 

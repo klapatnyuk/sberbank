@@ -9,24 +9,25 @@ public abstract class AbstractTabView extends HorizontalLayout {
 
     private static final long serialVersionUID = 2028146581661208756L;
 
-    public abstract Button getCreateButton();
+    abstract AbstractOrderedLayout getTemplateLayout();
 
-    public abstract Button getSubmitButton();
+    abstract Button getCreateButton();
 
-    public abstract Button getCancelButton();
+    abstract Button getSubmitButton();
 
-    public abstract Button getRemoveButton();
+    abstract Button getCancelButton();
 
-    public abstract AbstractOrderedLayout getEditEntityLayout();
+    abstract Button getRemoveButton();
 
-    public abstract Label getEditSeparatorLabel();
+    abstract AbstractOrderedLayout getEditEntityLayout();
 
-    public abstract Label getEditLabel();
+    abstract Label getEditSeparatorLabel();
 
-    public abstract SingleComponentContainer getEntityContainer();
+    abstract Label getEditLabel();
 
-    public abstract AbstractTextField getTitleField();
+    abstract SingleComponentContainer getEntityContainer();
 
-    protected void init() {
-    }
+    abstract AbstractTextField getTitleField();
+
+    abstract void init();
 }
