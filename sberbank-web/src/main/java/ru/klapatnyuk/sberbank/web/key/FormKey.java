@@ -9,9 +9,11 @@ public enum FormKey implements ResourceKey {
 
     PROFILE_STATUS,
     PROFILE_LOGOUT,
+
     LOGIN_BUTTON,
     LOGIN_LOGIN_LABEL,
     LOGIN_PASSWORD_LABEL,
+
     STRINGS_PROMPT,
     STRINGS_LABEL_PROMPT,
     STRINGS_TYPE_PROMPT,
