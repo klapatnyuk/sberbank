@@ -82,9 +82,9 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         // update form
         clear();
 
-        getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(FormKey.PTRN_POLL_ADD));
+        getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(FormKey.ENTITY_CREATE));
         getDesign().getSubmitButton().setEnabled(true);
-        getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(FormKey.PTRN_POLL_CLEAR));
+        getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(FormKey.ENTITY_CLEAR));
         getDesign().getCancelButton().setEnabled(true);
         getDesign().getRemoveButton().setVisible(false);
     }
@@ -161,8 +161,8 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         event.getSelectedButton().addStyleName(StyleNames.BUTTON_ACTIVE);
 
         // update form
-        getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(FormKey.PTRN_POLL_SAVE));
-        getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(FormKey.PTRN_POLL_CANCEL));
+        getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(FormKey.ENTITY_SAVE));
+        getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(FormKey.ENTITY_CANCEL));
         // 'admin' role
         getDesign().getRemoveButton().setVisible(SberbankSession.get().getUser().getRole() == User.Role.ADMIN);
         getDesign().getTitleField().setReadOnly(false);
@@ -186,8 +186,8 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         button.addStyleName(StyleNames.BUTTON_ACTIVE);
 
         // update form
-        getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(FormKey.PTRN_POLL_SAVE));
-        getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(FormKey.PTRN_POLL_CANCEL));
+        getDesign().getSubmitButton().setCaption(SberbankUI.I18N.getString(FormKey.ENTITY_SAVE));
+        getDesign().getCancelButton().setCaption(SberbankUI.I18N.getString(FormKey.ENTITY_CANCEL));
         // 'admin' role
         getDesign().getRemoveButton().setVisible(SberbankSession.get().getUser().getRole() == User.Role.ADMIN);
         getDesign().getTitleField().setReadOnly(false);
