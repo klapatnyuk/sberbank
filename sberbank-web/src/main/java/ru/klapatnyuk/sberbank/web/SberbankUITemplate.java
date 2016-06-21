@@ -7,9 +7,7 @@ import com.vaadin.ui.declarative.Design;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.klapatnyuk.sberbank.model.entity.User;
-import ru.klapatnyuk.sberbank.web.constant.StyleDimensions;
 import ru.klapatnyuk.sberbank.web.constant.StyleNames;
-import ru.klapatnyuk.sberbank.web.key.FormKey;
 import ru.klapatnyuk.sberbank.web.key.HeaderKey;
 import ru.klapatnyuk.sberbank.web.key.MenuKey;
 import ru.klapatnyuk.sberbank.web.layout.ProfileLayout;
@@ -18,6 +16,7 @@ import ru.klapatnyuk.sberbank.web.menu.MenuTab;
 import ru.klapatnyuk.sberbank.web.menu.SberbankMenuTab;
 import ru.klapatnyuk.sberbank.web.tab.AbstractTab;
 import ru.klapatnyuk.sberbank.web.tab.DocumentTab;
+import ru.klapatnyuk.sberbank.web.tab.Tab;
 import ru.klapatnyuk.sberbank.web.tab.TemplateTab;
 
 import java.util.Map;
@@ -47,8 +46,6 @@ public class SberbankUITemplate extends VerticalLayout {
     private HorizontalLayout tabsLayout;
     @SuppressWarnings("unused")
     private ProfileLayout profileLayout;
-    @SuppressWarnings("unused")
-    private HorizontalLayout filterLayout;
     @SuppressWarnings("unused")
     private Label copyrightLabel;
     @SuppressWarnings("unused")
@@ -80,52 +77,33 @@ public class SberbankUITemplate extends VerticalLayout {
         return profileLayout;
     }
 
-    public HorizontalLayout getFilterLayout() {
-        return filterLayout;
-    }
-
-    public MenuBar getActionMenuBar() {
-        return actionMenuBar;
-    }
-
-    public void setHeader(String header) {
-        headerLabel.setValue(header);
-    }
-
-    public void clickMenu(MenuTab tab) {
-        MenuBar.MenuItem item = menuBar.getItems().get(tab.getIndex());
-        item.getCommand().menuSelected(item);
-    }
-
-    public void clickActionMenu(MenuTab tab) {
-        MenuBar.MenuItem item = actionMenuBar.getItems().get(tab.getIndex());
-        item.getCommand().menuSelected(item);
-    }
-
-    public AbstractTab getTab() {
-        return tabs.get(tab).get(actionTab);
-    }
-
-    public AbstractTab getTab(MenuTab actionTab) {
-        if (tabs.get(tab).containsKey(actionTab)) {
-            return tabs.get(tab).get(actionTab);
-        }
-        return null;
-    }
-
-    public AbstractTab getTab(MenuTab tab, MenuTab actionTab) {
-        if (tabs.containsKey(tab) && tabs.get(tab).containsKey(actionTab)) {
-            return tabs.get(tab).get(actionTab);
-        }
-        return null;
-    }
-
     /**
      * TODO needs to be refactored (or removed)
      */
     public void poll() {
         SberbankUI.getWarningWindow().poll();
         getTab().poll();
+    }
+
+    private void clickMenu(MenuTab tab) {
+        MenuBar.MenuItem item = menuBar.getItems().get(tab.getIndex());
+        item.getCommand().menuSelected(item);
+    }
+
+    private void clickActionMenu(MenuTab tab) {
+        MenuBar.MenuItem item = actionMenuBar.getItems().get(tab.getIndex());
+        item.getCommand().menuSelected(item);
+    }
+
+    private AbstractTab getTab() {
+        return tabs.get(tab).get(actionTab);
+    }
+
+    private AbstractTab getTab(MenuTab tab, MenuTab actionTab) {
+        if (tabs.containsKey(tab) && tabs.get(tab).containsKey(actionTab)) {
+            return tabs.get(tab).get(actionTab);
+        }
+        return null;
     }
 
     private void initProfileBar() {
@@ -155,14 +133,6 @@ public class SberbankUITemplate extends VerticalLayout {
         menuBar.addItem(SberbankUI.I18N.getString(MenuKey.MSGR), menuCommand);
     }
 
-    private void initFilterBar() {
-        Button button = new Button(SberbankUI.I18N.getString(FormKey.FILTER_LIST));
-        button.setWidth(StyleDimensions.WIDTH_S);
-        button.setHeight(StyleDimensions.HEIGHT_S);
-        button.addClickListener(this::clickFilterButton);
-        filterLayout.addComponent(button);
-    }
-
     private void reloadActionMenuBar() {
         actionMenuBar.removeItems();
 
@@ -173,68 +143,6 @@ public class SberbankUITemplate extends VerticalLayout {
             // 'admin' only
             actionMenuBar.addItem(SberbankUI.I18N.getString(MenuKey.MSGR_OUT), actionCommand);
         }
-    }
-
-    private void clickFilterButton(Button.ClickEvent event) {
-
-        /*if (getTab() instanceof ReviewTab) {
-            ReviewTab layout = (ReviewTab) getTab();
-            boolean filter = layout.isFilter();
-            filter = !filter;
-
-            layout.setFilter(filter);
-            layout.getTreePanel().setVisible(filter);
-            layout.getSubmitPanel().setVisible(filter && !StringUtils.isEmpty(layout.getRecipient()));
-            layout.getVerticalSeparator().setVisible(filter);
-
-            if (filter) {
-                event.getButton().setCaption(AbstractUI.I18N.getString(FILTER_LIST));
-            } else {
-                event.getButton().setCaption(AbstractUI.I18N.getString(FILTER_GROUP));
-            }
-
-            headerLabel.setValue(layout.getHeader());
-
-            SimpleMonologComponent dialog = layout.getDialog();
-            dialog.clear();
-            if (filter) {
-                layout.clear();
-            } else {
-                layout.setRecipient(RequestConstant.FROM_ALL);
-                dialog.setRecipient(RequestConstant.FROM_ALL);
-                layout.getDialogContainer().setContent(dialog);
-                layout.update();
-            }
-            layout.setFilter(filter);
-
-        } else if (getTab() instanceof RequestsTab) {
-            RequestsTab layout = (RequestsTab) getTab();
-            boolean filter = layout.isFilter();
-            filter = !filter;
-
-            layout.setFilter(filter);
-            layout.getTreePanel().setVisible(filter);
-            layout.getVerticalSeparator().setVisible(filter);
-
-            if (filter) {
-                event.getButton().setCaption(AbstractUI.I18N.getString(FILTER_LIST));
-            } else {
-                event.getButton().setCaption(AbstractUI.I18N.getString(FILTER_GROUP));
-            }
-            headerLabel.setValue(layout.getHeader());
-
-            TaskListedComponent dialog = layout.getDialog();
-            dialog.clear();
-            if (filter) {
-                layout.clear();
-            } else {
-                layout.setRecipient(RequestConstant.FROM_ALL);
-                dialog.setRecipient(RequestConstant.FROM_ALL);
-                layout.getDialogContainer().setContent(dialog);
-                layout.update();
-            }
-            layout.setFilter(filter);
-        }*/
     }
 
     private void initTopSection() {
@@ -249,7 +157,6 @@ public class SberbankUITemplate extends VerticalLayout {
         initMenuBar();
         actionMenuBar.setHeight("50px");
         headerLayout.setHeight("36px");
-        initFilterBar();
     }
 
     private void initMainSection() {
@@ -323,9 +230,6 @@ public class SberbankUITemplate extends VerticalLayout {
 
         private static final long serialVersionUID = 5134839118306122334L;
 
-        public ActionMenuCommand() {
-        }
-
         @Override
         public void menuSelected(MenuBar.MenuItem item) {
             LOG.debug("Selected action menu item: " + item.getText());
@@ -337,7 +241,8 @@ public class SberbankUITemplate extends VerticalLayout {
             // update model
             actionTab = actionTab.get(actionMenuBar.getItems().indexOf(item));
 
-            headerLabel.setValue(getTab(tab, actionTab).getHeader());
+            Tab currentTab = getTab(tab, actionTab);
+            headerLabel.setValue(currentTab == null ? "" : currentTab.getHeader());
             updateActionMenuBar(oldIndex);
             updateTabsLayout(oldActionTab);
         }

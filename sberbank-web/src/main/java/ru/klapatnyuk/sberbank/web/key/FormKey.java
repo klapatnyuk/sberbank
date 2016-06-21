@@ -21,7 +21,6 @@ public enum FormKey implements ResourceKey {
     STRINGS_UP,
     STRINGS_DOWN,
     STRINGS_CLOSE,
-    FILTER_LIST,
 
     MSGR_POLL_CHOICE_CUSTOM_PROMPT,
     MSGR_POLL_CUSTOM_LABEL,
