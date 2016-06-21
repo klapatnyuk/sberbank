@@ -7,9 +7,14 @@ import ru.klapatnyuk.sberbank.web.i18n.ResourceKey;
  */
 public enum ConfigKey implements ResourceKey {
 
+    CONNECT_URI,
+    CONNECT_USERNAME,
+    CONNECT_PASSWORD,
+    CONNECT_INITIAL,
+    CONNECT_MAX,
+
     TIME_INACTIVE_INTERVAL,
     TIME_POLL_INTERVAL,
-    PATTERN_SUBJECT_LENGTH,
     WARNING_LIMIT;
 
     @Override

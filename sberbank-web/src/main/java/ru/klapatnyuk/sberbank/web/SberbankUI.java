@@ -67,10 +67,13 @@ public class SberbankUI extends UI {
 
         try {
             connectionPool = new SimpleJDBCConnectionPool("org.h2.Driver",
-                    "jdbc:h2:mem:sberbank;DB_CLOSE_DELAY=-1", "sberbank", "sberbank", 2, 5);
+                    CONFIG.getString(ConfigKey.CONNECT_URI.getKey()),
+                    CONFIG.getString(ConfigKey.CONNECT_USERNAME.getKey()),
+                    CONFIG.getString(ConfigKey.CONNECT_PASSWORD.getKey()),
+                    Integer.parseInt(CONFIG.getString(ConfigKey.CONNECT_INITIAL.getKey())),
+                    Integer.parseInt(CONFIG.getString(ConfigKey.CONNECT_MAX.getKey())));
         } catch (SQLException e) {
-            e.printStackTrace();
-            // TODO add SQLException to log
+            LOGGER.error("Connection pool instantiation error", e);
         }
     }
 

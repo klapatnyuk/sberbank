@@ -9,12 +9,11 @@ import org.vaadin.addons.toggle.ButtonGroup;
 import org.vaadin.addons.toggle.ButtonGroupSelectionEvent;
 import ru.klapatnyuk.sberbank.model.entity.AbstractEntity;
 import ru.klapatnyuk.sberbank.model.entity.User;
-import ru.klapatnyuk.sberbank.web.key.ConfigKey;
-import ru.klapatnyuk.sberbank.web.key.FormKey;
-import ru.klapatnyuk.sberbank.web.key.NotificationKey;
 import ru.klapatnyuk.sberbank.web.SberbankSession;
 import ru.klapatnyuk.sberbank.web.SberbankUI;
 import ru.klapatnyuk.sberbank.web.constant.StyleNames;
+import ru.klapatnyuk.sberbank.web.key.FormKey;
+import ru.klapatnyuk.sberbank.web.key.NotificationKey;
 import ru.klapatnyuk.sberbank.web.notification.WarningMessage;
 
 import java.util.ArrayList;
@@ -30,8 +29,7 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
     protected int entityIndex = -1;
     protected T entity;
 
-    private static final int LENGTH =
-            Integer.parseInt(SberbankUI.CONFIG.getString(ConfigKey.PATTERN_SUBJECT_LENGTH.getKey()));
+    private static final int LENGTH = 40;
     private static final long serialVersionUID = -6229564821654218076L;
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractTab.class);
 
