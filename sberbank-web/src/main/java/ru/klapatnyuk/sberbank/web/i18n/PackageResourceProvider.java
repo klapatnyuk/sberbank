@@ -14,22 +14,20 @@ public class PackageResourceProvider implements ResourceProvider {
     public static final String BUNDLE_NAME = "strings";
 
     private final String path;
-
     private final boolean hasBundle;
 
     private ResourceBundle bundle;
-
     private Locale locale;
 
     /**
      * Package-private ctor - factory use only.
+     *
      * @see ResourceFactory#getProvider(Class)
      */
     PackageResourceProvider(String path, boolean hasBundle) {
         this.path = path;
         this.hasBundle = hasBundle;
-        this.locale = ResourceFactory.getGlobalLocale() == null ?
-                Locale.getDefault() : ResourceFactory.getGlobalLocale();
+        this.locale = ResourceFactory.getGlobalLocale() == null ? Locale.getDefault() : ResourceFactory.getGlobalLocale();
     }
 
     /**
@@ -136,5 +134,4 @@ public class PackageResourceProvider implements ResourceProvider {
     private String buildGlobalKey(String key) {
         return "#" + path + BUNDLE_NAME + ":" + key + '#';
     }
-
 }

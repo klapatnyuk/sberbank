@@ -23,6 +23,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
@@ -49,6 +50,10 @@ public class SberbankUI extends UI {
     private UIEvents.PollListener pollListener = event -> SberbankUI.getTemplate().poll();
 
     static {
+        Locale globalLocale = ResourceFactory.getGlobalLocale();
+        LOGGER.info("ResourceFactory global locale: " + ((globalLocale != null) ? globalLocale : "null"));
+        LOGGER.info("ResourceProvider locale: " + I18N.getLocale());
+
         try {
             connectionPool = new SimpleJDBCConnectionPool("org.h2.Driver",
                     "jdbc:h2:mem:sberbank;DB_CLOSE_DELAY=-1", "sberbank", "sberbank", 2, 5);

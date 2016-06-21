@@ -19,6 +19,12 @@ public class ResourceFactory {
     private static Locale globalLocale = null;
 
     /**
+     * Prevents instantiation
+     */
+    private ResourceFactory() {
+    }
+
+    /**
      * Returns a new or cached instance of {@link PackageResourceProvider} for the package to
      * which {@code neighbourClass} belongs. This method returns a provider even if
      * specified package does not contain a resource bundle.
@@ -81,9 +87,4 @@ public class ResourceFactory {
     public static Locale getGlobalLocale() {
         return globalLocale;
     }
-
-    /* prevents instantiation */
-    private ResourceFactory() {
-    }
-
 }
