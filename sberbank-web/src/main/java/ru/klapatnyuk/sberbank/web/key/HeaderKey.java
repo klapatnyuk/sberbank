@@ -11,6 +11,7 @@ public enum HeaderKey implements ResourceKey {
     H2,
     COPYRIGHT,
     WINDOW_LOGIN,
+    WINDOW_CONFIRM_REMOVE,
     TEMPLATE,
     DOCUMENT;
 

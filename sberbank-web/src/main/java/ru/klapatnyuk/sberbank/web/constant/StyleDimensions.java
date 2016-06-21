@@ -17,4 +17,5 @@ public interface StyleDimensions {
     String SEPARATOR_HEIGHT = "1px";
 
     String WINDOW_WIDTH = "412px";
+    String WINDOW_WIDTH_XL  = "500px";
 }

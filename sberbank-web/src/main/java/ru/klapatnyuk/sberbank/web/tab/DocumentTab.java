@@ -3,6 +3,7 @@ package ru.klapatnyuk.sberbank.web.tab;
 import com.vaadin.data.Property;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.UI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vaadin.addons.toggle.ButtonGroupSelectionEvent;
@@ -20,11 +21,13 @@ import ru.klapatnyuk.sberbank.model.handler.FieldHandler;
 import ru.klapatnyuk.sberbank.model.handler.TemplateHandler;
 import ru.klapatnyuk.sberbank.web.SberbankSession;
 import ru.klapatnyuk.sberbank.web.SberbankUI;
+import ru.klapatnyuk.sberbank.web.key.FormKey;
 import ru.klapatnyuk.sberbank.web.key.HeaderKey;
 import ru.klapatnyuk.sberbank.web.key.MenuKey;
 import ru.klapatnyuk.sberbank.web.key.NotificationKey;
 import ru.klapatnyuk.sberbank.web.notification.Tray;
 import ru.klapatnyuk.sberbank.web.notification.WarningMessage;
+import ru.klapatnyuk.sberbank.web.window.ConfirmWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +52,7 @@ public class DocumentTab extends AbstractTab<Document> {
 
     private final Property.ValueChangeListener templateListener = new TemplateChangeListener();
 
+    private ConfirmWindow confirmWindow;
     private DocumentTabView design;
 
     @Override
@@ -281,22 +285,35 @@ public class DocumentTab extends AbstractTab<Document> {
         if (entityIndex < 0) {
             return;
         }
+        UI.getCurrent().addWindow(confirmWindow);
+    }
 
-        // business logic
-        try {
-            documentService.remove(entity.getId());
-        } catch (Throwable th) {
-            LOGGER.error("Document removing error", th);
-            SberbankUI.getWarningWindow()
-                    .add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.DOCUMENT_REMOVE_ERROR), th,
-                            design.getRemoveButton()));
-            return;
-        }
+    @Override
+    protected void init() {
+        super.init();
 
-        Tray.show(SberbankUI.I18N.getString(NotificationKey.DOCUMENT_REMOVED));
-        clear();
-        design.getTitleLayout().setVisible(true);
-        update();
+        confirmWindow = new ConfirmWindow(SberbankUI.I18N.getString(HeaderKey.WINDOW_CONFIRM_REMOVE),
+                SberbankUI.I18N.getString(FormKey.CONFIRM_DOCUMENT_REMOVE_LABEL));
+        confirmWindow.getCancelButton().addClickListener(cancelEvent -> confirmWindow.close());
+        confirmWindow.getOkButton().addClickListener(okEvent -> {
+
+            // business logic
+            try {
+                documentService.remove(entity.getId());
+            } catch (Throwable th) {
+                LOGGER.error("Document removing error", th);
+                SberbankUI.getWarningWindow()
+                        .add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.DOCUMENT_REMOVE_ERROR), th,
+                                design.getRemoveButton()));
+                return;
+            }
+
+            Tray.show(SberbankUI.I18N.getString(NotificationKey.DOCUMENT_REMOVED));
+            clear();
+            design.getTitleLayout().setVisible(true);
+            update();
+            confirmWindow.close();
+        });
     }
 
     @Override

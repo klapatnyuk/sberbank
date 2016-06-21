@@ -25,6 +25,7 @@ public interface StyleNames {
     String WINDOW_LOGIN_LAYOUT = "window-login-layout";
     String WINDOW_WARNING = "window-warning";
     String WINDOW_WARNING_LAYOUT = "window-warning-layout";
+    String WINDOW_CONFIRM = "window-confirm";
 
     String PATTERN_BUTTON = "pattern-button";
 

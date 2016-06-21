@@ -203,15 +203,7 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
         }
     }
 
-    protected abstract Predicate<T> duplicatePredicate(int userId, String title);
-
-    protected abstract AbstractTabView getDesign();
-
-    protected abstract void clickRemoveButton();
-
-    protected abstract void clickSubmitButton();
-
-    private void init() {
+    protected void init() {
         LOGGER.debug("Tab's init started");
         setSizeFull();
         addComponent(getDesign());
@@ -225,4 +217,12 @@ public abstract class AbstractTab<T extends AbstractEntity> extends HorizontalLa
             getDesign().getRemoveButton().addClickListener(event -> clickRemoveButton());
         }
     }
+
+    protected abstract Predicate<T> duplicatePredicate(int userId, String title);
+
+    protected abstract AbstractTabView getDesign();
+
+    protected abstract void clickRemoveButton();
+
+    protected abstract void clickSubmitButton();
 }
