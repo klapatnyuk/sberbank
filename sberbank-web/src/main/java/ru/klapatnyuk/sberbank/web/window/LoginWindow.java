@@ -1,9 +1,13 @@
-package ru.klapatnyuk.sberbank.web;
+package ru.klapatnyuk.sberbank.web.window;
 
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
+import ru.klapatnyuk.sberbank.web.*;
+import ru.klapatnyuk.sberbank.web.constant.StyleDimensions;
+import ru.klapatnyuk.sberbank.web.constant.StyleNames;
+import ru.klapatnyuk.sberbank.web.constant.ValidatePattern;
 
 import java.util.ResourceBundle;
 

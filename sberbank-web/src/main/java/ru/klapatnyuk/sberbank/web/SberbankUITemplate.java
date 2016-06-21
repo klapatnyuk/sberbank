@@ -7,6 +7,15 @@ import com.vaadin.ui.declarative.Design;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.klapatnyuk.sberbank.model.entity.User;
+import ru.klapatnyuk.sberbank.web.constant.StyleDimensions;
+import ru.klapatnyuk.sberbank.web.constant.StyleNames;
+import ru.klapatnyuk.sberbank.web.layout.ProfileLayout;
+import ru.klapatnyuk.sberbank.web.menu.EditorMenuTab;
+import ru.klapatnyuk.sberbank.web.menu.MenuTab;
+import ru.klapatnyuk.sberbank.web.menu.SberbankMenuTab;
+import ru.klapatnyuk.sberbank.web.tab.AbstractTab;
+import ru.klapatnyuk.sberbank.web.tab.DocumentTab;
+import ru.klapatnyuk.sberbank.web.tab.TemplateTab;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -15,7 +24,7 @@ import java.util.TreeMap;
  * @author klapatnyuk
  */
 @DesignRoot
-public class SberbankUITemplate extends VerticalLayout implements UITemplate {
+public class SberbankUITemplate extends VerticalLayout {
 
     private static final long serialVersionUID = 4433227540082907242L;
     private static final Logger LOG = LoggerFactory.getLogger(SberbankUITemplate.class);
@@ -64,44 +73,36 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
         clickMenu(tab);
     }
 
-    @Override
     public ProfileLayout getProfileLayout() {
         return profileLayout;
     }
 
-    @Override
     public HorizontalLayout getFilterLayout() {
         return filterLayout;
     }
 
-    @Override
     public MenuBar getActionMenuBar() {
         return actionMenuBar;
     }
 
-    @Override
     public void setHeader(String header) {
         headerLabel.setValue(header);
     }
 
-    @Override
     public void clickMenu(MenuTab tab) {
         MenuBar.MenuItem item = menuBar.getItems().get(tab.getIndex());
         item.getCommand().menuSelected(item);
     }
 
-    @Override
     public void clickActionMenu(MenuTab tab) {
         MenuBar.MenuItem item = actionMenuBar.getItems().get(tab.getIndex());
         item.getCommand().menuSelected(item);
     }
 
-    @Override
     public AbstractTab getTab() {
         return tabs.get(tab).get(actionTab);
     }
 
-    @Override
     public AbstractTab getTab(MenuTab actionTab) {
         if (tabs.get(tab).containsKey(actionTab)) {
             return tabs.get(tab).get(actionTab);
@@ -109,7 +110,6 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
         return null;
     }
 
-    @Override
     public AbstractTab getTab(MenuTab tab, MenuTab actionTab) {
         if (tabs.containsKey(tab) && tabs.get(tab).containsKey(actionTab)) {
             return tabs.get(tab).get(actionTab);
@@ -120,7 +120,6 @@ public class SberbankUITemplate extends VerticalLayout implements UITemplate {
     /**
      * TODO needs to be refactored (or removed)
      */
-    @Override
     public void poll() {
         SberbankUI.getWarningWindow().poll();
         getTab().poll();

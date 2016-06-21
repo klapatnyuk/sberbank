@@ -1,17 +1,21 @@
-package ru.klapatnyuk.sberbank.web;
+package ru.klapatnyuk.sberbank.web.tab;
 
 import com.vaadin.annotations.DesignRoot;
-import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.declarative.Design;
+import ru.klapatnyuk.sberbank.web.SberbankKey;
+import ru.klapatnyuk.sberbank.web.SberbankUI;
+import ru.klapatnyuk.sberbank.web.constant.StyleDimensions;
+import ru.klapatnyuk.sberbank.web.constant.StyleNames;
+import ru.klapatnyuk.sberbank.web.layout.TemplateLayout;
 
 /**
  * @author klapatnyuk
  */
 @DesignRoot
-public class DocumentTabView extends AbstractTabView {
+public class TemplateTabView extends AbstractTabView {
 
-    private static final long serialVersionUID = -2698683814256829227L;
+    private static final long serialVersionUID = -6788254175139485486L;
 
     @SuppressWarnings("unused")
     private VerticalLayout patternLayout;
@@ -22,25 +26,21 @@ public class DocumentTabView extends AbstractTabView {
     @SuppressWarnings("unused")
     private Label editLabel;
     @SuppressWarnings("unused")
-    private Panel documentContainer;
+    private Panel templateContainer;
     @SuppressWarnings("unused")
-    private VerticalLayout editDocumentLayout;
+    private VerticalLayout editTemplateLayout;
     @SuppressWarnings("unused")
     private Label verticalSeparatorLabel;
-    @SuppressWarnings("unused")
-    private Label templateLabel;
-    @SuppressWarnings("unused")
-    private ComboBox templateSelect;
-    @SuppressWarnings("unused")
-    private HorizontalLayout titleLayout;
     @SuppressWarnings("unused")
     private Label titleLabel;
     @SuppressWarnings("unused")
     private TextField titleField;
     @SuppressWarnings("unused")
-    private Label templateSeparatorLabel;
+    private Label titleSeparatorLabel;
     @SuppressWarnings("unused")
-    private DocumentLayout documentLayout;
+    private Label fieldsLabel;
+    @SuppressWarnings("unused")
+    private TemplateLayout templateLayout;
     @SuppressWarnings("unused")
     private Label submitSeparatorLabel;
     @SuppressWarnings("unused")
@@ -50,25 +50,13 @@ public class DocumentTabView extends AbstractTabView {
     @SuppressWarnings("unused")
     private Button removeButton;
 
-    public DocumentTabView() {
+    public TemplateTabView() {
         Design.read(this);
         init();
     }
 
-    public AbstractSelect getTemplateSelect() {
-        return templateSelect;
-    }
-
-    public AbstractOrderedLayout getTitleLayout() {
-        return titleLayout;
-    }
-
-    public DocumentLayout getTemplateLayout() {
-        return documentLayout;
-    }
-
-    public Label getTemplateSeparatorLabel() {
-        return templateSeparatorLabel;
+    public TemplateLayout getTemplateLayout() {
+        return templateLayout;
     }
 
     @Override
@@ -83,12 +71,12 @@ public class DocumentTabView extends AbstractTabView {
 
     @Override
     public SingleComponentContainer getEntityContainer() {
-        return documentContainer;
+        return templateContainer;
     }
 
     @Override
     public AbstractOrderedLayout getEditEntityLayout() {
-        return editDocumentLayout;
+        return editTemplateLayout;
     }
 
     @Override
@@ -124,29 +112,27 @@ public class DocumentTabView extends AbstractTabView {
         patternLayout.setHeight("100%");
 
         createButton.setWidth(StyleDimensions.WIDTH_L);
-        createButton.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_CREATE));
+        createButton.setCaption(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_MESSAGE_CREATE));
         createButton.addStyleName(StyleNames.BUTTON_ACTIVE);
 
         editSeparatorLabel.setWidth("100%");
         editSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
 
-        editLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_MESSAGE_EDIT));
+        editLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_EDIT));
 
         verticalSeparatorLabel.setWidth("1px");
-
-        templateLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_QUESTION));
-        templateLabel.setWidth(StyleDimensions.WIDTH_S);
-        templateSelect.setWidth("50%");
-        templateSelect.setFilteringMode(FilteringMode.CONTAINS);
-        templateSelect.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.Form.PTRN_POLL_PROMPT));
-
-        templateSeparatorLabel.setWidth("100%");
-        templateSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
 
         titleLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CUSTOM_LABEL));
         titleLabel.setWidth(StyleDimensions.WIDTH_S);
         titleField.setWidth("100%");
         titleField.setInputPrompt(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_CHOICE_CUSTOM_PROMPT));
+
+        titleSeparatorLabel.setWidth("100%");
+        titleSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);
+
+        fieldsLabel.setValue(SberbankUI.I18N.getString(SberbankKey.Form.MSGR_POLL_FIELDS_LABEL));
+        fieldsLabel.setWidth(StyleDimensions.WIDTH_S);
+        templateLayout.setWidth("100%");
 
         submitSeparatorLabel.setWidth("100%");
         submitSeparatorLabel.setHeight(StyleDimensions.SEPARATOR_HEIGHT);

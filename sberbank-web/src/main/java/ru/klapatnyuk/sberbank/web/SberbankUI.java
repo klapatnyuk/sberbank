@@ -16,6 +16,8 @@ import ru.klapatnyuk.sberbank.model.entity.User;
 import ru.klapatnyuk.sberbank.model.handler.UserHandler;
 import ru.klapatnyuk.sberbank.web.i18n.ResourceFactory;
 import ru.klapatnyuk.sberbank.web.i18n.ResourceProvider;
+import ru.klapatnyuk.sberbank.web.window.LoginWindow;
+import ru.klapatnyuk.sberbank.web.window.WarningWindow;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

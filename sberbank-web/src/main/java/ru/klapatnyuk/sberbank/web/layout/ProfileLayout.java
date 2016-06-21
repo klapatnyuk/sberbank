@@ -1,8 +1,12 @@
-package ru.klapatnyuk.sberbank.web;
+package ru.klapatnyuk.sberbank.web.layout;
 
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import ru.klapatnyuk.sberbank.web.ButtonLogout;
+import ru.klapatnyuk.sberbank.web.SberbankKey;
+import ru.klapatnyuk.sberbank.web.SberbankUI;
+import ru.klapatnyuk.sberbank.web.constant.StyleNames;
 
 /**
  * @author klapatnyuk

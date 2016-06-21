@@ -1,4 +1,4 @@
-package ru.klapatnyuk.sberbank.web;
+package ru.klapatnyuk.sberbank.web.notification;
 
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.ui.Component;

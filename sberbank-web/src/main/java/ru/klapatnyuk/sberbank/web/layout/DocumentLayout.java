@@ -1,7 +1,9 @@
-package ru.klapatnyuk.sberbank.web;
+package ru.klapatnyuk.sberbank.web.layout;
 
 import com.vaadin.ui.*;
 import ru.klapatnyuk.sberbank.model.entity.Field;
+import ru.klapatnyuk.sberbank.web.constant.StyleDimensions;
+import ru.klapatnyuk.sberbank.web.constant.StyleNames;
 
 import java.io.Serializable;
 import java.util.ArrayList;

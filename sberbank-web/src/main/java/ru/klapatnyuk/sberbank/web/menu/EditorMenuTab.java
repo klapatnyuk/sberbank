@@ -1,4 +1,4 @@
-package ru.klapatnyuk.sberbank.web;
+package ru.klapatnyuk.sberbank.web.menu;
 
 /**
  * @author klapatnyuk

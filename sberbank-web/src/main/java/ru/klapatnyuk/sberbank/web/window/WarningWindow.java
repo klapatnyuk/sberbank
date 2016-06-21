@@ -1,10 +1,16 @@
-package ru.klapatnyuk.sberbank.web;
+package ru.klapatnyuk.sberbank.web.window;
 
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.server.Page;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.shared.ui.window.WindowMode;
 import com.vaadin.ui.*;
+import ru.klapatnyuk.sberbank.web.*;
+import ru.klapatnyuk.sberbank.web.constant.StyleDimensions;
+import ru.klapatnyuk.sberbank.web.constant.StyleNames;
+import ru.klapatnyuk.sberbank.web.notification.Warning;
+import ru.klapatnyuk.sberbank.web.notification.WarningMessage;
+import ru.klapatnyuk.sberbank.web.notification.WarningMessageComparator;
 
 import java.util.ArrayList;
 import java.util.Iterator;

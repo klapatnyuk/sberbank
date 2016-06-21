@@ -1,8 +1,12 @@
 package ru.klapatnyuk.sberbank.web;
 
 import com.vaadin.ui.Button;
+import ru.klapatnyuk.sberbank.web.constant.StyleDimensions;
+import ru.klapatnyuk.sberbank.web.constant.StyleNames;
 
 /**
+ * TODO needs to be refactored
+ *
  * @author klapatnyuk
  */
 public class ButtonLogout extends Button {

@@ -1,4 +1,4 @@
-package ru.klapatnyuk.sberbank.web;
+package ru.klapatnyuk.sberbank.web.tab;
 
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.AbstractField;
@@ -14,6 +14,10 @@ import ru.klapatnyuk.sberbank.model.entity.Template;
 import ru.klapatnyuk.sberbank.model.exception.BusinessException;
 import ru.klapatnyuk.sberbank.model.handler.FieldHandler;
 import ru.klapatnyuk.sberbank.model.handler.TemplateHandler;
+import ru.klapatnyuk.sberbank.web.SberbankKey;
+import ru.klapatnyuk.sberbank.web.SberbankUI;
+import ru.klapatnyuk.sberbank.web.notification.WarningMessage;
+import ru.klapatnyuk.sberbank.web.menu.MenuTab;
 
 import java.util.ArrayList;
 import java.util.List;

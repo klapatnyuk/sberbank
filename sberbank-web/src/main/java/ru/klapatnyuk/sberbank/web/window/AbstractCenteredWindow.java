@@ -1,4 +1,4 @@
-package ru.klapatnyuk.sberbank.web;
+package ru.klapatnyuk.sberbank.web.window;
 
 import com.vaadin.server.Page;
 import com.vaadin.ui.Window;
