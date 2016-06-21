@@ -26,8 +26,19 @@ public class WarningMessage implements Comparable<WarningMessage> {
         this.source = source;
     }
 
+    public WarningMessage(String caption, Throwable throwable, Component.Focusable field, Component source) {
+        this.caption = caption;
+        this.listener = null;
+        while (throwable.getCause() != null) {
+            throwable = throwable.getCause();
+        }
+        this.description = throwable.getMessage();
+        this.field = field;
+        this.source = source;
+    }
+
     public WarningMessage(String caption, Component.Focusable field, Component source) {
-        this(caption, null, field, source);
+        this(caption, (String) null, field, source);
     }
 
     public WarningMessage(
@@ -36,6 +47,16 @@ public class WarningMessage implements Comparable<WarningMessage> {
         this.listener = listener;
         this.source = source;
         this.description = description;
+    }
+
+    public WarningMessage(String caption, Throwable throwable, Component source) {
+        this.caption = caption;
+        this.listener = null;
+        this.source = source;
+        while (throwable.getCause() != null) {
+            throwable = throwable.getCause();
+        }
+        this.description = throwable.getMessage();
     }
 
     public boolean isRemovable() {

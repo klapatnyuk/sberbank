@@ -15,15 +15,14 @@ import ru.klapatnyuk.sberbank.model.entity.Document;
 import ru.klapatnyuk.sberbank.model.entity.Field;
 import ru.klapatnyuk.sberbank.model.entity.Template;
 import ru.klapatnyuk.sberbank.model.entity.User;
-import ru.klapatnyuk.sberbank.model.exception.BusinessException;
 import ru.klapatnyuk.sberbank.model.handler.DocumentHandler;
 import ru.klapatnyuk.sberbank.model.handler.FieldHandler;
 import ru.klapatnyuk.sberbank.model.handler.TemplateHandler;
+import ru.klapatnyuk.sberbank.web.SberbankSession;
+import ru.klapatnyuk.sberbank.web.SberbankUI;
 import ru.klapatnyuk.sberbank.web.key.HeaderKey;
 import ru.klapatnyuk.sberbank.web.key.MenuKey;
 import ru.klapatnyuk.sberbank.web.key.NotificationKey;
-import ru.klapatnyuk.sberbank.web.SberbankSession;
-import ru.klapatnyuk.sberbank.web.SberbankUI;
 import ru.klapatnyuk.sberbank.web.notification.WarningMessage;
 
 import java.util.ArrayList;
@@ -62,9 +61,11 @@ public class DocumentTab extends AbstractTab<Document> {
             } else {
                 entities = documentService.get(SberbankSession.get().getUser());
             }
-        } catch (BusinessException e) {
-            LOGGER.error("Tab updating error", e);
-            // TODO display WarningMessage
+        } catch (Throwable th) {
+            LOGGER.error("Document tab updating error", th);
+            SberbankUI.getWarningWindow()
+                    .add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.DOCUMENT_GET_ERROR), th,
+                            design.getEntityContainer()));
         }
 
         updateEntityLayout();
@@ -143,9 +144,14 @@ public class DocumentTab extends AbstractTab<Document> {
         // business logic
         try {
             fields = documentService.getFields(entity.getId());
-        } catch (BusinessException e) {
-            LOGGER.error("Fields finding error", e);
-            // TODO display WarningMessage
+        } catch (Throwable th) {
+            LOGGER.error("Document fields finding error", th);
+            SberbankUI.getWarningWindow()
+                    .add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.DOCUMENT_FIELD_GET_ERROR), th,
+                            event.getSelectedButton()));
+            design.getSubmitButton().setEnabled(false);
+            design.getCancelButton().setEnabled(false);
+            design.getRemoveButton().setEnabled(false);
         }
 
         if (fields == null || fields.isEmpty()) {
@@ -184,9 +190,14 @@ public class DocumentTab extends AbstractTab<Document> {
         // business logic
         try {
             fields = documentService.getFields(entity.getId());
-        } catch (BusinessException e) {
-            LOGGER.error("Fields finding error", e);
-            // TODO display WarningMessage
+        } catch (Throwable th) {
+            LOGGER.error("Document fields finding error", th);
+            SberbankUI.getWarningWindow()
+                    .add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.DOCUMENT_FIELD_GET_ERROR), th,
+                            event.getButton()));
+            design.getSubmitButton().setEnabled(false);
+            design.getCancelButton().setEnabled(false);
+            design.getRemoveButton().setEnabled(false);
         }
 
         if (fields == null || fields.isEmpty()) {
@@ -217,9 +228,12 @@ public class DocumentTab extends AbstractTab<Document> {
             // business logic
             try {
                 documentService.update(document);
-            } catch (BusinessException e) {
-                LOGGER.error("Document updating error", e);
-                // TODO display WarningMessage
+            } catch (Throwable th) {
+                LOGGER.error("Document updating error", th);
+                SberbankUI.getWarningWindow()
+                        .add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.DOCUMENT_UPDATE_ERROR), th,
+                                design.getSubmitButton()));
+                return;
             }
 
             entity = document;
@@ -236,9 +250,12 @@ public class DocumentTab extends AbstractTab<Document> {
             // business logic
             try {
                 documentService.create(document);
-            } catch (BusinessException e) {
-                LOGGER.error("Document creation error", e);
-                // TODO display WarningMessage
+            } catch (Throwable th) {
+                LOGGER.error("Document creation error", th);
+                SberbankUI.getWarningWindow()
+                        .add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.DOCUMENT_CREATE_ERROR), th,
+                                design.getSubmitButton()));
+                return;
             }
 
             clear();
@@ -265,9 +282,12 @@ public class DocumentTab extends AbstractTab<Document> {
         // business logic
         try {
             documentService.remove(entity.getId());
-        } catch (BusinessException e) {
-            LOGGER.error("Document removing error", e);
-            // TODO display WarningMessage
+        } catch (Throwable th) {
+            LOGGER.error("Document removing error", th);
+            SberbankUI.getWarningWindow()
+                    .add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.DOCUMENT_REMOVE_ERROR), th,
+                            design.getEntityContainer()));
+            return;
         }
 
         clear();
@@ -286,9 +306,11 @@ public class DocumentTab extends AbstractTab<Document> {
         // business logic
         try {
             templates = templateService.getAll();
-        } catch (BusinessException e) {
-            LOGGER.error("Templates reading error", e);
-            // TODO display WarningMessage
+        } catch (Throwable th) {
+            LOGGER.error("Templates reading error", th);
+            SberbankUI.getWarningWindow()
+                    .add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.TEMPLATE_GET_ERROR), th,
+                            design.getEntityContainer()));
         }
 
         if (templates == null) {
@@ -326,9 +348,13 @@ public class DocumentTab extends AbstractTab<Document> {
             // business logic
             try {
                 fields = templateService.getFields(templateId);
-            } catch (BusinessException e) {
-                LOGGER.error("Template fields reading error", e);
-                // TODO display WarningMessage
+            } catch (Throwable th) {
+                LOGGER.error("Template fields reading error", th);
+                SberbankUI.getWarningWindow()
+                        .add(new WarningMessage(SberbankUI.I18N.getString(NotificationKey.TEMPLATE_FIELD_GET_ERROR), th,
+                                design.getEntityContainer()));
+                design.getSubmitButton().setEnabled(false);
+                design.getCancelButton().setEnabled(false);
             }
 
             if (fields == null || fields.isEmpty()) {

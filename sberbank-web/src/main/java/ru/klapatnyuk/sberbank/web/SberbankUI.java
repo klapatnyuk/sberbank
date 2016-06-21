@@ -16,13 +16,13 @@ import ru.klapatnyuk.sberbank.logic.TransactionalProxyService;
 import ru.klapatnyuk.sberbank.logic.UserServiceImpl;
 import ru.klapatnyuk.sberbank.logic.api.UserService;
 import ru.klapatnyuk.sberbank.model.entity.User;
-import ru.klapatnyuk.sberbank.model.exception.BusinessException;
 import ru.klapatnyuk.sberbank.model.handler.UserHandler;
 import ru.klapatnyuk.sberbank.web.i18n.ResourceFactory;
 import ru.klapatnyuk.sberbank.web.i18n.ResourceProvider;
 import ru.klapatnyuk.sberbank.web.key.ConfigKey;
 import ru.klapatnyuk.sberbank.web.key.HeaderKey;
 import ru.klapatnyuk.sberbank.web.key.NotificationKey;
+import ru.klapatnyuk.sberbank.web.notification.WarningMessage;
 import ru.klapatnyuk.sberbank.web.window.LoginWindow;
 import ru.klapatnyuk.sberbank.web.window.WarningWindow;
 
@@ -154,12 +154,15 @@ public class SberbankUI extends UI {
         // business logic
         try {
             user = userService.login(login, password);
-        } catch (BusinessException e) {
-            LOGGER.error("Login error", e);
-            // TODO display WarningMessage
+        } catch (Throwable th) {
+            LOGGER.error("Login error", th);
+            SberbankUI.getWarningWindow().add(new WarningMessage(I18N.getString(NotificationKey.LOGIN_ERROR), th,
+                    loginWindow.getLoginTextField(), loginWindow.getSubmitButton()));
+            return;
+        } finally {
+            loginWindow.getPasswordField().clear();
         }
 
-        loginWindow.getPasswordField().clear();
         if (user != null) {
             LOGGER.info("User is logged in");
             SberbankSession.get().setUser(user);
@@ -173,7 +176,7 @@ public class SberbankUI extends UI {
             addPollListener(pollListener);
 
         } else {
-            SberbankUI.getWarningWindow().add(SberbankUI.I18N.getString(NotificationKey.LOGIN_ERROR));
+            SberbankUI.getWarningWindow().add(SberbankUI.I18N.getString(NotificationKey.LOGIN_FAILED));
         }
     }
 
