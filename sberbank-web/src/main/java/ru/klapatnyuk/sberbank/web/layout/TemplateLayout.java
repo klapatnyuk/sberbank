@@ -267,14 +267,14 @@ public class TemplateLayout extends VerticalLayout {
 
         Button up = new Button();
         up.setEnabled(false);
-        up.setIcon(new ThemeResource("img/close-16x16.png"));
+        up.setIcon(new ThemeResource("img/arrow-up-16x16.png"));
         up.setWidth(StyleDimensions.WIDTH_XXS_BUTTON);
         up.setStyleName(StyleNames.BUTTON_TRANSPARENT);
         up.setDescription(SberbankUI.I18N.getString(FormKey.FIELD_UP));
 
         Button down = new Button();
         down.setEnabled(false);
-        down.setIcon(new ThemeResource("img/close-16x16.png"));
+        down.setIcon(new ThemeResource("img/arrow-down-16x16.png"));
         down.setWidth(StyleDimensions.WIDTH_XXS_BUTTON);
         down.setStyleName(StyleNames.BUTTON_TRANSPARENT);
         down.setDescription(SberbankUI.I18N.getString(FormKey.FIELD_DOWN));

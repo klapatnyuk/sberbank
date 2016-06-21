@@ -112,6 +112,10 @@
                     .v-button {
                         margin-right: 5px;
                     }
+
+                    .v-button.v-disabled {
+                        opacity: 0.25;
+                    }
                 }
             }
         }
