@@ -23,6 +23,7 @@ import ru.klapatnyuk.sberbank.web.SberbankUI;
 import ru.klapatnyuk.sberbank.web.key.HeaderKey;
 import ru.klapatnyuk.sberbank.web.key.MenuKey;
 import ru.klapatnyuk.sberbank.web.key.NotificationKey;
+import ru.klapatnyuk.sberbank.web.notification.Tray;
 import ru.klapatnyuk.sberbank.web.notification.WarningMessage;
 
 import java.util.ArrayList;
@@ -236,6 +237,7 @@ public class DocumentTab extends AbstractTab<Document> {
                 return;
             }
 
+            Tray.show(SberbankUI.I18N.getString(NotificationKey.DOCUMENT_UPDATED));
             entity = document;
 
         } else {
@@ -258,6 +260,7 @@ public class DocumentTab extends AbstractTab<Document> {
                 return;
             }
 
+            Tray.show(SberbankUI.I18N.getString(NotificationKey.DOCUMENT_CREATED));
             clear();
             design.getTitleLayout().setVisible(false);
         }
@@ -290,6 +293,7 @@ public class DocumentTab extends AbstractTab<Document> {
             return;
         }
 
+        Tray.show(SberbankUI.I18N.getString(NotificationKey.DOCUMENT_REMOVED));
         clear();
         design.getTitleLayout().setVisible(true);
         update();
