@@ -2,8 +2,10 @@ package ru.klapatnyuk.sberbank.web.layout;
 
 import com.vaadin.ui.*;
 import ru.klapatnyuk.sberbank.model.entity.Field;
+import ru.klapatnyuk.sberbank.web.SberbankUI;
 import ru.klapatnyuk.sberbank.web.constant.StyleDimensions;
 import ru.klapatnyuk.sberbank.web.constant.StyleNames;
+import ru.klapatnyuk.sberbank.web.key.FormKey;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -90,8 +92,7 @@ public class DocumentLayout extends VerticalLayout {
             label.setWidth(StyleDimensions.WIDTH_S);
             TextField textField = new TextField();
             textField.setWidth("50%");
-            // TODO replace by I18N string
-            textField.setInputPrompt("Enter string..");
+            textField.setInputPrompt(SberbankUI.I18N.getString(FormKey.DOCUMENT_LINE_PROMPT));
             textField.setValue(field.getValue() == null ? "" : field.getValue().toString());
             textField.setReadOnly(!field.isActive());
 
@@ -106,8 +107,7 @@ public class DocumentLayout extends VerticalLayout {
             TextArea textArea = new TextArea();
             textArea.setWidth("100%");
             textArea.setHeight("100px");
-            // TODO replace by I18N string
-            textArea.setInputPrompt("Enter text..");
+            textArea.setInputPrompt(SberbankUI.I18N.getString(FormKey.DOCUMENT_AREA_PROMPT));
             textArea.setStyleName(StyleNames.BODY_TEXT_AREA);
             textArea.setValue(field.getValue() == null ? "" : field.getValue().toString());
             textArea.setReadOnly(!field.isActive());
