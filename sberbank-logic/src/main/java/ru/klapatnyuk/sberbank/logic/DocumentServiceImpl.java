@@ -59,6 +59,7 @@ public class DocumentServiceImpl implements DocumentService {
         try {
             int id = documentHandler.createDocument(document);
             fieldHandler.createDocumentFields(id, document.getFields());
+
         } catch (SQLException e) {
             throw new BusinessException("Document creation error", e);
         }

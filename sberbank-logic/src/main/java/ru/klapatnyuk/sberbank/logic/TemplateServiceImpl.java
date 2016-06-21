@@ -1,6 +1,7 @@
 package ru.klapatnyuk.sberbank.logic;
 
 import ru.klapatnyuk.sberbank.logic.api.TemplateService;
+import ru.klapatnyuk.sberbank.model.entity.AbstractEntity;
 import ru.klapatnyuk.sberbank.model.entity.Field;
 import ru.klapatnyuk.sberbank.model.entity.Template;
 import ru.klapatnyuk.sberbank.model.exception.BusinessException;
@@ -10,6 +11,7 @@ import ru.klapatnyuk.sberbank.model.handler.TemplateHandler;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author klapatnyuk
@@ -39,6 +41,49 @@ public class TemplateServiceImpl implements TemplateService {
             return fieldHandler.findByTemplateId(id);
         } catch (SQLException e) {
             throw new BusinessException("Template fields finding error", e);
+        }
+    }
+
+    @Override
+    public void create(Template template) throws BusinessException {
+        try {
+            int id = templateHandler.createTemplate(template);
+            fieldHandler.createTemplateFields(id, template.getFields());
+
+        } catch (SQLException e) {
+            throw new BusinessException("Template creation error", e);
+        }
+    }
+
+    @Override
+    public void update(Template template) throws BusinessException {
+        try {
+            // compare edited
+            if (templateHandler.compareEdited(template.getId(), template.getEdited()) > 0) {
+                throw new SQLException("Concurrency editing detected");
+            }
+
+            // update template
+            templateHandler.updateTemplate(template);
+
+            // remove fields
+            List<Integer> ids = template.getFields().stream().map(AbstractEntity::getId).collect(Collectors.toList());
+            fieldHandler.removeTemplateFieldsExcept(template.getId(), ids);
+
+            // update fields
+            fieldHandler.insertAndUpdateTemplateFields(template.getId(), template.getFields());
+
+        } catch (SQLException e) {
+            throw new BusinessException("Template edition error", e);
+        }
+    }
+
+    @Override
+    public void remove(int id) throws BusinessException {
+        try {
+            templateHandler.removeTemplate(id);
+        } catch (SQLException e) {
+            throw new BusinessException("Template removing error", e);
         }
     }
 

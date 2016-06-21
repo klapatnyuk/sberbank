@@ -14,4 +14,10 @@ public interface TemplateService extends BusinessService {
     List<Template> getAll() throws BusinessException;
 
     List<Field> getFields(int id) throws BusinessException;
+
+    void create(Template template) throws BusinessException;
+
+    void update(Template template) throws BusinessException;
+
+    void remove(int id) throws BusinessException;
 }
