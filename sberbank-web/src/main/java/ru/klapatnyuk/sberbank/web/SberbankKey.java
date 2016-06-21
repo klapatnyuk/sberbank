@@ -159,7 +159,7 @@ public interface SberbankKey {
 
         @Override
         public String getKey() {
-            return "form." + KeyConverter.convert(this);
+            return "form." + ResourceKey.convert(this);
         }
     }
 
@@ -181,7 +181,7 @@ public interface SberbankKey {
 
         @Override
         public String getKey() {
-            return "menu." + KeyConverter.convert(this);
+            return "menu." + ResourceKey.convert(this);
         }
     }
 
@@ -322,7 +322,7 @@ public interface SberbankKey {
 
         @Override
         public String getKey() {
-            return "noti." + KeyConverter.convert(this);
+            return "noti." + ResourceKey.convert(this);
         }
     }
 
@@ -365,7 +365,7 @@ public interface SberbankKey {
 
         @Override
         public String getKey() {
-            return "head." + KeyConverter.convert(this);
+            return "head." + ResourceKey.convert(this);
         }
     }
 }

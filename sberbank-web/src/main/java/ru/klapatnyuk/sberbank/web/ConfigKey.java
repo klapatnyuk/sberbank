@@ -55,6 +55,6 @@ public enum ConfigKey implements ResourceKey {
 
     @Override
     public String getKey() {
-        return KeyConverter.convert(this);
+        return ResourceKey.convert(this);
     }
 }
