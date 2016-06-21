@@ -1,35 +1,7 @@
 @charset "UTF-8";
 
-@import "container/chat.scss";
-@import "container/history.scss";
-@import "container/incoming.scss";
-@import "container/license.scss";
-@import "container/licenses.scss";
-@import "container/outgoing.scss";
-@import "container/poll.scss";
-@import "container/polls.scss";
-@import "container/request.scss";
-@import "container/requests.scss";
-@import "container/video.scss";
-@import "container/pattern-message.scss";
 @import "container/pattern-poll.scss";
-@import "container/pattern-style.scss";
 
 @mixin container {
-
-    @include container-chat;
-    @include container-history;
-    @include container-incoming;
-    @include container-license;
-    @include container-licenses;
-    @include container-outgoing;
-    @include container-poll;
-    @include container-polls;
-    @include container-request;
-    @include container-requests;
-    @include container-video;
-
-    @include container-pattern-message;
     @include container-pattern-poll;
-    @include container-pattern-style;
 }

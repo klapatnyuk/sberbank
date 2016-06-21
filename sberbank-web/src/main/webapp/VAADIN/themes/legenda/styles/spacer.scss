@@ -2,7 +2,6 @@
 
 @import "spacer/bottom.scss";
 @import "spacer/left.scss";
-@import "spacer/left-small.scss";
 @import "spacer/right.scss";
 @import "spacer/right-small.scss";
 @import "spacer/top.scss";
@@ -11,7 +10,6 @@
 @mixin spacer {
     @include spacer-bottom;
     @include spacer-left;
-    @include spacer-left-small;
     @include spacer-right;
     @include spacer-right-small;
     @include spacer-top;
