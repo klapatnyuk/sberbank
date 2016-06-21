@@ -71,8 +71,8 @@ public class DocumentTab extends AbstractTab<Document> {
 
     @Override
     public String getHeader() {
-        return SberbankUI.I18N.getString(SberbankKey.Header.H2, SberbankUI.I18N.getString(SberbankKey.Menu.MSGR),
-                SberbankUI.I18N.getString(SberbankKey.Header.PTRN_POLL));
+        return SberbankUI.I18N.getString(SberbankKey.HeaderKey.H2, SberbankUI.I18N.getString(SberbankKey.MenuKey.MSGR),
+                SberbankUI.I18N.getString(SberbankKey.HeaderKey.PTRN_POLL));
     }
 
     @Override
@@ -81,7 +81,7 @@ public class DocumentTab extends AbstractTab<Document> {
 
         if (entityIndex < 0 && design.getTemplateSelect().getValue() == null) {
             // validate template
-            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_TEMPLATE_VALIDATE),
+            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.NotificationKey.PTRN_POLL_TEMPLATE_VALIDATE),
                     design.getTemplateSelect(), getValidationSource()));
         } else {
             // validate title

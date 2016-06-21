@@ -15,6 +15,7 @@ public class ButtonLogout extends Button {
 
     public ButtonLogout(String caption) {
         super(caption);
+
         setWidth("100px");
         setHeight(StyleDimensions.HEIGHT_S);
         addStyleName(StyleNames.BUTTON_STANDARD);

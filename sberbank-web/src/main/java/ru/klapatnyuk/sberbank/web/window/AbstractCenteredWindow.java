@@ -3,8 +3,6 @@ package ru.klapatnyuk.sberbank.web.window;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Window;
 
-import java.util.ResourceBundle;
-
 /**
  * @author klapatnyuk
  */
@@ -12,14 +10,11 @@ abstract public class AbstractCenteredWindow extends Window {
 
     private static final long serialVersionUID = 7861330826953738391L;
 
-    protected final ResourceBundle bundle;
-
     private Page.BrowserWindowResizeListener resizeListener;
 
-
-    public AbstractCenteredWindow(ResourceBundle bundle, String caption) {
+    public AbstractCenteredWindow(String caption) {
         super(caption);
-        this.bundle = bundle;
+
         init();
     }
 

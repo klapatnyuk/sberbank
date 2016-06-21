@@ -54,8 +54,8 @@ public class TemplateTab extends AbstractTab<Template> {
 
     @Override
     public String getHeader() {
-        return SberbankUI.I18N.getString(SberbankKey.Header.H2, SberbankUI.I18N.getString(SberbankKey.Menu.MSGR),
-                SberbankUI.I18N.getString(SberbankKey.Header.PTRN_MESSAGE));
+        return SberbankUI.I18N.getString(SberbankKey.HeaderKey.H2, SberbankUI.I18N.getString(SberbankKey.MenuKey.MSGR),
+                SberbankUI.I18N.getString(SberbankKey.HeaderKey.PTRN_MESSAGE));
     }
 
     @Override
@@ -67,15 +67,15 @@ public class TemplateTab extends AbstractTab<Template> {
 
         // validate template body
         if (design.getTemplateLayout().isEmpty()) {
-            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CHOICES_REQUIRED),
+            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.NotificationKey.PTRN_POLL_CHOICES_REQUIRED),
                     design.getTemplateLayout().getEmptyRowsField(), getValidationSource()));
         } else if (design.getTemplateLayout().hasDuplicates()) {
-            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CHOICES_DUPLICATES),
+            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.NotificationKey.PTRN_POLL_CHOICES_DUPLICATES),
                     design.getTemplateLayout().getFirstDuplicateField(), getValidationSource()));
         }
         AbstractField emptyField = design.getTemplateLayout().getFirstEmptyField();
         if (emptyField != null) {
-            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.Notification.PTRN_POLL_CUSTOM_REQUIRED),
+            messages.add(new WarningMessage(SberbankUI.I18N.getString(SberbankKey.NotificationKey.PTRN_POLL_CUSTOM_REQUIRED),
                     emptyField, getValidationSource()));
         }
 

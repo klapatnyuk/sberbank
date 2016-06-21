@@ -18,16 +18,14 @@ public class MigrationListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        LOGGER.debug("Inside MigrationListener.contextInitialized");
-
         Flyway flyway = new Flyway();
+        // TODO get from config.properties
         flyway.setDataSource("jdbc:h2:mem:sberbank;DB_CLOSE_DELAY=-1", "sberbank", "sberbank");
         flyway.migrate();
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent event) {
-        LOGGER.debug("Inside MigrationListener.contextDestroyed");
-
+        // nothing to do
     }
 }

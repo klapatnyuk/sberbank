@@ -16,12 +16,12 @@ public class ProfileLayout extends HorizontalLayout {
     private static final long serialVersionUID = 6933490056199145771L;
 
     private Label nameLabel = new Label("");
-    private ButtonLogout logoutButton = new ButtonLogout(SberbankUI.I18N.getString(SberbankKey.Form.PROFILE_LOGOUT));
+    private ButtonLogout logoutButton = new ButtonLogout(SberbankUI.I18N.getString(SberbankKey.FormKey.PROFILE_LOGOUT));
 
     public ProfileLayout() {
         addStyleName(StyleNames.BAR_PROFILE);
 
-        Label status = new Label(SberbankUI.I18N.getString(SberbankKey.Form.PROFILE_STATUS));
+        Label status = new Label(SberbankUI.I18N.getString(SberbankKey.FormKey.PROFILE_STATUS));
         addComponent(status);
         addComponent(nameLabel);
         addComponent(logoutButton);

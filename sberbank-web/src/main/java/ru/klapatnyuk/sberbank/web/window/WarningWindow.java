@@ -31,8 +31,6 @@ public class WarningWindow extends Window {
     private final VerticalLayout layout = new VerticalLayout();
 
     public WarningWindow() {
-        super();
-
         setClosable(false);
         setModal(false);
         setDraggable(false);
@@ -55,30 +53,6 @@ public class WarningWindow extends Window {
         }
         setPositionY(top);
         setPositionX(left);
-    }
-
-    public void add(WarningMessage message) {
-        if (SberbankUI.getCurrent().isModalWindowAttached()) {
-            clear();
-            Warning.show(message.getCaption());
-            return;
-        }
-
-        WarningMessage duplicate = findDuplicate(message.getCaption());
-        if (duplicate != null) {
-            duplicate.setRemovable(false);
-            duplicate.setTime(System.nanoTime());
-            duplicate.setDescription(message.getDescription());
-            duplicate.setField(message.getField());
-            messages.sort(COMPARATOR);
-            reload();
-            return;
-        }
-
-        messages.add(new WarningMessage(message.getCaption(), message.getDescription(), message.getField(),
-                message.getSource()));
-        messages.sort(COMPARATOR);
-        reload();
     }
 
     public void add(String caption) {
@@ -113,12 +87,6 @@ public class WarningWindow extends Window {
         }
     }
 
-    public void clear() {
-        messages.clear();
-        layout.removeAllComponents();
-        close();
-    }
-
     public void clear(Component source) {
         List<WarningMessage> removable = messages.stream().filter(message -> message.getSource() == source)
                 .collect(Collectors.toList());
@@ -126,7 +94,7 @@ public class WarningWindow extends Window {
         reload();
     }
 
-    public void reload() {
+    private void reload() {
 
         layout.removeAllComponents();
         for (WarningMessage message : messages) {
@@ -150,6 +118,36 @@ public class WarningWindow extends Window {
         } else {
             close();
         }
+    }
+
+    private void clear() {
+        messages.clear();
+        layout.removeAllComponents();
+        close();
+    }
+
+    private void add(WarningMessage message) {
+        if (SberbankUI.getCurrent().isModalWindowAttached()) {
+            clear();
+            Warning.show(message.getCaption());
+            return;
+        }
+
+        WarningMessage duplicate = findDuplicate(message.getCaption());
+        if (duplicate != null) {
+            duplicate.setRemovable(false);
+            duplicate.setTime(System.nanoTime());
+            duplicate.setDescription(message.getDescription());
+            duplicate.setField(message.getField());
+            messages.sort(COMPARATOR);
+            reload();
+            return;
+        }
+
+        messages.add(new WarningMessage(message.getCaption(), message.getDescription(), message.getField(),
+                message.getSource()));
+        messages.sort(COMPARATOR);
+        reload();
     }
 
     private WarningMessage findDuplicate(String caption) {
