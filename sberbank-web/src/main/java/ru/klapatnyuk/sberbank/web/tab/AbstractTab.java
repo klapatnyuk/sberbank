@@ -11,7 +11,7 @@ import ru.klapatnyuk.sberbank.model.entity.AbstractEntity;
 import ru.klapatnyuk.sberbank.model.entity.User;
 import ru.klapatnyuk.sberbank.web.SberbankSession;
 import ru.klapatnyuk.sberbank.web.SberbankUI;
-import ru.klapatnyuk.sberbank.web.constant.StyleNames;
+import ru.klapatnyuk.sberbank.web.style.StyleNames;
 import ru.klapatnyuk.sberbank.web.key.FormKey;
 import ru.klapatnyuk.sberbank.web.key.NotificationKey;
 import ru.klapatnyuk.sberbank.web.notification.WarningMessage;

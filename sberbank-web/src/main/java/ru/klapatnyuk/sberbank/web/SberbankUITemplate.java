@@ -7,7 +7,7 @@ import com.vaadin.ui.declarative.Design;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.klapatnyuk.sberbank.model.entity.User;
-import ru.klapatnyuk.sberbank.web.constant.StyleNames;
+import ru.klapatnyuk.sberbank.web.style.StyleNames;
 import ru.klapatnyuk.sberbank.web.key.HeaderKey;
 import ru.klapatnyuk.sberbank.web.key.MenuKey;
 import ru.klapatnyuk.sberbank.web.layout.ProfileLayout;

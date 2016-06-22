@@ -5,8 +5,8 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.declarative.Design;
 import ru.klapatnyuk.sberbank.web.key.FormKey;
 import ru.klapatnyuk.sberbank.web.SberbankUI;
-import ru.klapatnyuk.sberbank.web.constant.StyleDimensions;
-import ru.klapatnyuk.sberbank.web.constant.StyleNames;
+import ru.klapatnyuk.sberbank.web.style.StyleDimensions;
+import ru.klapatnyuk.sberbank.web.style.StyleNames;
 import ru.klapatnyuk.sberbank.web.layout.TemplateLayout;
 
 /**

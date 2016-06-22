@@ -5,8 +5,8 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import ru.klapatnyuk.sberbank.web.SberbankUI;
-import ru.klapatnyuk.sberbank.web.constant.StyleDimensions;
-import ru.klapatnyuk.sberbank.web.constant.StyleNames;
+import ru.klapatnyuk.sberbank.web.style.StyleDimensions;
+import ru.klapatnyuk.sberbank.web.style.StyleNames;
 import ru.klapatnyuk.sberbank.web.key.FormKey;
 
 /**

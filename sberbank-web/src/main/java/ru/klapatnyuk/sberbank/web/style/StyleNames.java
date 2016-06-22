@@ -1,4 +1,4 @@
-package ru.klapatnyuk.sberbank.web.constant;
+package ru.klapatnyuk.sberbank.web.style;
 
 /**
  * @author klapatnyuk
