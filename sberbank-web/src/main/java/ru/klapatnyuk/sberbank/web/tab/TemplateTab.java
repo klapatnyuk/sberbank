@@ -237,6 +237,7 @@ public class TemplateTab extends AbstractTab<Template> {
             Tray.show(SberbankUI.I18N.getString(NotificationKey.TEMPLATE_REMOVED));
             clear();
             update();
+            confirmWindow.close();
         });
     }
 

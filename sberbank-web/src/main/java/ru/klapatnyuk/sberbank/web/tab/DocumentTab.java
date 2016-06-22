@@ -74,7 +74,6 @@ public class DocumentTab extends AbstractTab<Document> {
         }
 
         updateEntityLayout();
-        updateTemplateSelect();
     }
 
     @Override
