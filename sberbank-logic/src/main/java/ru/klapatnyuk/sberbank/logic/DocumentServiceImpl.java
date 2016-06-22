@@ -57,7 +57,7 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public void create(Document document) throws BusinessException {
         try {
-            int id = documentHandler.createDocument(document);
+            int id = documentHandler.create(document);
             fieldHandler.createDocumentFields(id, document.getFields());
 
         } catch (SQLException e) {
@@ -95,7 +95,7 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public void remove(int id) throws BusinessException {
         try {
-            documentHandler.removeDocument(id);
+            documentHandler.remove(id);
         } catch (SQLException e) {
             throw new BusinessException("Document removing error", e);
         }

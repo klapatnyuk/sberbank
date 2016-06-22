@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author klapatnyuk
  */
-public class FieldHandler extends AbstractHandler {
+public class FieldHandler extends AbstractHandler<Field> {
 
     public static final String TABLE_TEMPLATE = "template_field";
     public static final String TABLE_DOCUMENT = "document_field";
@@ -31,7 +31,7 @@ public class FieldHandler extends AbstractHandler {
     }
 
     public List<Field> findByTemplateId(int id) throws SQLException {
-        LOGGER.debug("Entering FieldHandler.findByTemplateId(" + id + ")");
+        LOGGER.debug("Entering findByTemplateId(" + id + ")");
 
         String sql = "SELECT t.id, t.title, t.label, t.type, t.\"order\", c.count " +
                 "FROM ( " +
@@ -74,7 +74,7 @@ public class FieldHandler extends AbstractHandler {
     }
 
     public List<Field> findByDocumentId(int id) throws SQLException {
-        LOGGER.debug("Entering FieldHandler.findByDocumentId(" + id + ")");
+        LOGGER.debug("Entering findByDocumentId(" + id + ")");
 
         String sql = "SELECT d.id, t.label, t.type, t.active, t.id, d.value " +
                 "FROM (" +
@@ -134,7 +134,7 @@ public class FieldHandler extends AbstractHandler {
     }
 
     public void createDocumentFields(int documentId, List<Field> fields) throws SQLException {
-        LOGGER.debug("Entering FieldHandler.createDocumentFields(" + documentId + ", List<Field>)");
+        LOGGER.debug("Entering createDocumentFields(" + documentId + ", List<Field>)");
         if (fields.isEmpty()) {
             return;
         }
@@ -159,7 +159,7 @@ public class FieldHandler extends AbstractHandler {
     }
 
     public void createTemplateFields(int templateId, List<Field> fields) throws SQLException {
-        LOGGER.debug("Entering FieldHandler.createTemplateFields(" + templateId + ", List<Field>)");
+        LOGGER.debug("Entering createTemplateFields(" + templateId + ", List<Field>)");
         if (fields.isEmpty()) {
             return;
         }
@@ -181,7 +181,7 @@ public class FieldHandler extends AbstractHandler {
     }
 
     public void removeDocumentFieldsExcept(int documentId, List<Integer> ids) throws SQLException {
-        LOGGER.debug("Entering FieldHandler.removeDocumentFieldsExcept(" + documentId + ", " + ids + ")");
+        LOGGER.debug("Entering removeDocumentFieldsExcept(" + documentId + ", " + ids + ")");
         if (ids.isEmpty()) {
             return;
         }
@@ -206,7 +206,7 @@ public class FieldHandler extends AbstractHandler {
     }
 
     public void removeTemplateFieldsExcept(int templateId, List<Integer> ids) throws SQLException {
-        LOGGER.debug("Entering FieldHandler.removeTemplateFieldsExcept(" + templateId + ", " + ids + ")");
+        LOGGER.debug("Entering removeTemplateFieldsExcept(" + templateId + ", " + ids + ")");
         if (ids.isEmpty()) {
             return;
         }
@@ -231,7 +231,7 @@ public class FieldHandler extends AbstractHandler {
     }
 
     public void removeDocumentFields(int documentId) throws SQLException {
-        LOGGER.debug("Entering FieldHandler.removeDocumentFields(" + documentId + ")");
+        LOGGER.debug("Entering removeDocumentFields(" + documentId + ")");
 
         String sql = "UPDATE document_field " +
                 "SET active = FALSE " +
@@ -243,7 +243,7 @@ public class FieldHandler extends AbstractHandler {
     }
 
     public void insertAndUpdateDocumentFields(int documentId, List<Field> fields) throws SQLException {
-        LOGGER.debug("Entering FieldHandler.insertAndUpdateDocumentFields(" + documentId + ", List<Field>)");
+        LOGGER.debug("Entering insertAndUpdateDocumentFields(" + documentId + ", List<Field>)");
 
         String insertSql = "INSERT INTO document_field (document_id, template_field_id, value) " +
                 "VALUES (?, ?, ?)";
@@ -279,7 +279,7 @@ public class FieldHandler extends AbstractHandler {
     }
 
     public void insertAndUpdateTemplateFields(int templateId, List<Field> fields) throws SQLException {
-        LOGGER.debug("Entering FieldHandler.insertAndUpdateTemplateFields(" + templateId + ", List<Field>)");
+        LOGGER.debug("Entering insertAndUpdateTemplateFields(" + templateId + ", List<Field>)");
 
         String insertSql = "INSERT INTO template_field (template_id, title, label, type, \"order\") " +
                 "VALUES (?, ?, ?, ?, ?)";
@@ -310,6 +310,14 @@ public class FieldHandler extends AbstractHandler {
                 }
             }
         }
+    }
+
+    /**
+     * TODO implement if necessary
+     */
+    @Override
+    public List<Field> findAll() throws SQLException {
+        return null;
     }
 
     @Override

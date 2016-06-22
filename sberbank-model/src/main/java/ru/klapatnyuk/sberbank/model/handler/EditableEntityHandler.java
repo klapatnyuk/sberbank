@@ -18,7 +18,7 @@ public abstract class EditableEntityHandler<T extends Entity> extends AbstractHa
     private static final Logger LOGGER = LoggerFactory.getLogger(EditableEntityHandler.class);
 
     public void update(T entity) throws SQLException {
-        LOGGER.debug("Entering EditableEntityHandler.update");
+        LOGGER.debug("Entering update");
 
         String sql = "UPDATE " + getTable() + " " +
                 "SET title = ?, edited = ? " +
@@ -34,8 +34,9 @@ public abstract class EditableEntityHandler<T extends Entity> extends AbstractHa
         }
     }
 
+
     public int compareEdited(int id, LocalDateTime edited) throws SQLException {
-        LOGGER.debug("Entering TemplateHandler.compareEdited(" + id + ", " + edited + ")");
+        LOGGER.debug("Entering compareEdited(" + id + ", " + edited + ")");
 
         String sql = "SELECT edited " +
                 "FROM " + getTable() + " " +
@@ -48,6 +49,18 @@ public abstract class EditableEntityHandler<T extends Entity> extends AbstractHa
                 }
                 throw new SQLException("Checking concurrency updating failed (record not exists)");
             }
+        }
+    }
+
+    public void remove(int id) throws SQLException {
+        LOGGER.debug("Entering remove(" + id + ")");
+
+        String sql = "UPDATE " + getTable() + " " +
+                "SET active = FALSE " +
+                "WHERE active = TRUE AND id = ?";
+        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
+            statement.setInt(1, id);
+            statement.executeUpdate();
         }
     }
 }

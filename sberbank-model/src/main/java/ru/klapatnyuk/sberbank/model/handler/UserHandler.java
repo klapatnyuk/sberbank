@@ -9,18 +9,19 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * @author klapatnyuk
  */
-public class UserHandler extends AbstractHandler {
+public class UserHandler extends AbstractHandler<User> {
 
     public static final String TABLE = "user";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserHandler.class);
 
     public User login(String login, String password) throws SQLException {
-        LOGGER.debug("Entering UserHandler.login");
+        LOGGER.debug("Entering login");
 
         String sql = "SELECT id, role " +
                 "FROM \"user\" " +
@@ -40,6 +41,14 @@ public class UserHandler extends AbstractHandler {
                 }
             }
         }
+        return null;
+    }
+
+    /**
+     * TODO implement if necessary
+     */
+    @Override
+    public List<User> findAll() throws SQLException {
         return null;
     }
 

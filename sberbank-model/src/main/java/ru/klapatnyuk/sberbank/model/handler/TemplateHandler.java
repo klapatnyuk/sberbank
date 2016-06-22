@@ -20,8 +20,28 @@ public class TemplateHandler extends EditableEntityHandler<Template> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TemplateHandler.class);
 
+    public int create(Template template) throws SQLException {
+        LOGGER.debug("Entering create");
+
+        String sql = "INSERT INTO template (title) " +
+                "VALUES (?)";
+
+        try (PreparedStatement statement = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, template.getTitle());
+            statement.executeUpdate();
+            try (ResultSet resultSet = statement.getGeneratedKeys()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt(1);
+                } else {
+                    throw new SQLException("Creating record failed, no id obtained");
+                }
+            }
+        }
+    }
+
+    @Override
     public List<Template> findAll() throws SQLException {
-        LOGGER.debug("Entering TemplateHandler.findAll");
+        LOGGER.debug("Entering findAll");
 
         String sql = "SELECT id, title, edited " +
                 "FROM template " +
@@ -42,37 +62,6 @@ public class TemplateHandler extends EditableEntityHandler<Template> {
             }
         }
         return result;
-    }
-
-    public int createTemplate(Template template) throws SQLException {
-        LOGGER.debug("Entering TemplateHandler.createTemplate");
-
-        String sql = "INSERT INTO template (title) " +
-                "VALUES (?)";
-
-        try (PreparedStatement statement = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, template.getTitle());
-            statement.executeUpdate();
-            try (ResultSet resultSet = statement.getGeneratedKeys()) {
-                if (resultSet.next()) {
-                    return resultSet.getInt(1);
-                } else {
-                    throw new SQLException("Creating record failed, no id obtained");
-                }
-            }
-        }
-    }
-
-    public void removeTemplate(int id) throws SQLException {
-        LOGGER.debug("Entering DocumentHandler.removeTemplate(" + id + ")");
-
-        String sql = "UPDATE template " +
-                "SET active = FALSE " +
-                "WHERE active = TRUE AND id = ?";
-        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
-            statement.setInt(1, id);
-            statement.executeUpdate();
-        }
     }
 
     @Override

@@ -47,7 +47,7 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public void create(Template template) throws BusinessException {
         try {
-            int id = templateHandler.createTemplate(template);
+            int id = templateHandler.create(template);
             fieldHandler.createTemplateFields(id, template.getFields());
 
         } catch (SQLException e) {
@@ -81,7 +81,7 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public void remove(int id) throws BusinessException {
         try {
-            templateHandler.removeTemplate(id);
+            templateHandler.remove(id);
         } catch (SQLException e) {
             throw new BusinessException("Template removing error", e);
         }

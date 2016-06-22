@@ -22,45 +22,8 @@ public class DocumentHandler extends EditableEntityHandler<Document> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentHandler.class);
 
-    public List<Document> findAll() throws SQLException {
-        LOGGER.debug("Entering DocumentHandler.findAll");
-
-        String sql = "SELECT d.id, d.title, d.edited, d.template_id, t.title, t.active, d.owner_id " +
-                "FROM document d, template t " +
-                "WHERE d.active = TRUE AND d.template_id = t.id " +
-                "ORDER BY t.active DESC, d.id DESC";
-
-        List<Document> result = new ArrayList<>();
-        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
-            try (ResultSet resultSet = statement.executeQuery()) {
-                Document entity;
-                Template template;
-                User user;
-                while (resultSet.next()) {
-                    entity = new Document();
-                    entity.setId(resultSet.getInt(1));
-                    entity.setTitle(resultSet.getString(2));
-                    entity.setEdited(resultSet.getTimestamp(3).toLocalDateTime());
-
-                    template = new Template();
-                    template.setId(resultSet.getInt(4));
-                    template.setTitle(resultSet.getString(5));
-                    template.setActive(resultSet.getBoolean(6));
-                    entity.setTemplate(template);
-
-                    user = new User();
-                    user.setId(resultSet.getInt(7));
-                    entity.setOwner(user);
-
-                    result.add(entity);
-                }
-            }
-        }
-        return result;
-    }
-
     public List<Document> findByOwnerId(int ownerId) throws SQLException {
-        LOGGER.debug("Entering DocumentHandler.findByOwnerId(" + ownerId + ")");
+        LOGGER.debug("Entering findByOwnerId(" + ownerId + ")");
 
         String sql = "SELECT d.id, d.title, d.edited, d.template_id, t.title, t.active " +
                 "FROM document d, template t " +
@@ -98,8 +61,8 @@ public class DocumentHandler extends EditableEntityHandler<Document> {
         return result;
     }
 
-    public int createDocument(Document document) throws SQLException {
-        LOGGER.debug("Entering DocumentHandler.createDocument");
+    public int create(Document document) throws SQLException {
+        LOGGER.debug("Entering create");
 
         String sql = "INSERT INTO document (template_id, title, owner_id) " +
                 "VALUES (?, ?, ?)";
@@ -119,16 +82,42 @@ public class DocumentHandler extends EditableEntityHandler<Document> {
         }
     }
 
-    public void removeDocument(int id) throws SQLException {
-        LOGGER.debug("Entering DocumentHandler.removeDocument(" + id + ")");
+    @Override
+    public List<Document> findAll() throws SQLException {
+        LOGGER.debug("Entering findAll");
 
-        String sql = "UPDATE document " +
-                "SET active = FALSE " +
-                "WHERE active = TRUE AND id = ?";
+        String sql = "SELECT d.id, d.title, d.edited, d.template_id, t.title, t.active, d.owner_id " +
+                "FROM document d, template t " +
+                "WHERE d.active = TRUE AND d.template_id = t.id " +
+                "ORDER BY t.active DESC, d.id DESC";
+
+        List<Document> result = new ArrayList<>();
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
-            statement.setInt(1, id);
-            statement.executeUpdate();
+            try (ResultSet resultSet = statement.executeQuery()) {
+                Document entity;
+                Template template;
+                User user;
+                while (resultSet.next()) {
+                    entity = new Document();
+                    entity.setId(resultSet.getInt(1));
+                    entity.setTitle(resultSet.getString(2));
+                    entity.setEdited(resultSet.getTimestamp(3).toLocalDateTime());
+
+                    template = new Template();
+                    template.setId(resultSet.getInt(4));
+                    template.setTitle(resultSet.getString(5));
+                    template.setActive(resultSet.getBoolean(6));
+                    entity.setTemplate(template);
+
+                    user = new User();
+                    user.setId(resultSet.getInt(7));
+                    entity.setOwner(user);
+
+                    result.add(entity);
+                }
+            }
         }
+        return result;
     }
 
     @Override
