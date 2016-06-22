@@ -40,10 +40,12 @@ public class DocumentTab extends AbstractTab<Document> {
     private static final long serialVersionUID = 5490116135419202151L;
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentTab.class);
 
-    private final DocumentService documentServiceImpl = new DocumentServiceImpl(new DocumentHandler(), new FieldHandler());
+    private final DocumentService documentServiceImpl =
+            new DocumentServiceImpl(new DocumentHandler(), new FieldHandler(FieldHandler.TABLE_DOCUMENT));
     private final DocumentService documentService =
             TransactionalProxyService.newInstance(documentServiceImpl, SberbankUI.connectionPool, DocumentService.class);
-    private final TemplateService templateServiceImpl = new TemplateServiceImpl(new TemplateHandler(), new FieldHandler());
+    private final TemplateService templateServiceImpl =
+            new TemplateServiceImpl(new TemplateHandler(), new FieldHandler(FieldHandler.TABLE_TEMPLATE));
     private final TemplateService templateService =
             TransactionalProxyService.newInstance(templateServiceImpl, SberbankUI.connectionPool, TemplateService.class);
 

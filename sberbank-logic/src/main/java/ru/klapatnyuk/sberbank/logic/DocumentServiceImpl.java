@@ -74,7 +74,7 @@ public class DocumentServiceImpl implements DocumentService {
             }
 
             // update document
-            documentHandler.updateDocument(document);
+            documentHandler.update(document);
 
             // remove fields
             List<Integer> ids = document.getFields().stream().map(AbstractEntity::getId).collect(Collectors.toList());

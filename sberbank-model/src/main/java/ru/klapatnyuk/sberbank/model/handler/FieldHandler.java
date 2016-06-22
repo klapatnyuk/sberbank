@@ -13,11 +13,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * TODO needs to be refactored
+ *
  * @author klapatnyuk
  */
 public class FieldHandler extends AbstractHandler {
 
+    public static final String TABLE_TEMPLATE = "template_field";
+    public static final String TABLE_DOCUMENT = "document_field";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(FieldHandler.class);
+
+    private final String tableName;
+
+    public FieldHandler(String tableName) {
+        this.tableName = tableName;
+    }
 
     public List<Field> findByTemplateId(int id) throws SQLException {
         LOGGER.debug("Entering FieldHandler.findByTemplateId(" + id + ")");
@@ -72,7 +83,7 @@ public class FieldHandler extends AbstractHandler {
                 "   WHERE active = TRUE" +
                 ") d " +
                 "RIGHT OUTER JOIN (" +
-                "   SELECT tf.id as id, tf.label as label, tf.type as type, tf.active as active, tf.\"order\" as \"order\" " +
+                "   SELECT tf.id AS id, tf.label AS label, tf.type AS type, tf.active AS active, tf.\"order\" AS \"order\" " +
                 "   FROM template_field tf " +
                 "       JOIN template t ON tf.template_id = t.id " +
                 "       JOIN document d ON d.template_id = t.id " +
@@ -299,5 +310,10 @@ public class FieldHandler extends AbstractHandler {
                 }
             }
         }
+    }
+
+    @Override
+    protected String getTable() {
+        return tableName;
     }
 }

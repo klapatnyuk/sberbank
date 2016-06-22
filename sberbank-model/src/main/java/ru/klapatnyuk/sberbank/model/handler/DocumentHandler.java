@@ -6,15 +6,19 @@ import ru.klapatnyuk.sberbank.model.entity.Document;
 import ru.klapatnyuk.sberbank.model.entity.Template;
 import ru.klapatnyuk.sberbank.model.entity.User;
 
-import java.sql.*;
-import java.time.LocalDateTime;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author klapatnyuk
  */
-public class DocumentHandler extends AbstractHandler {
+public class DocumentHandler extends EditableEntityHandler<Document> {
+
+    public static final String TABLE = "document";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentHandler.class);
 
@@ -115,23 +119,6 @@ public class DocumentHandler extends AbstractHandler {
         }
     }
 
-    public void updateDocument(Document document) throws SQLException {
-        LOGGER.debug("Entering DocumentHandler.updateDocument");
-
-        String sql = "UPDATE document " +
-                "SET title = ?, edited = ? " +
-                "WHERE active = TRUE AND id = ?";
-
-        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
-            statement.setString(1, document.getTitle());
-            statement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
-            statement.setInt(3, document.getId());
-            if (statement.executeUpdate() == 0) {
-                throw new SQLException("Editing 'document' record failed, no affected records");
-            }
-        }
-    }
-
     public void removeDocument(int id) throws SQLException {
         LOGGER.debug("Entering DocumentHandler.removeDocument(" + id + ")");
 
@@ -144,20 +131,8 @@ public class DocumentHandler extends AbstractHandler {
         }
     }
 
-    public int compareEdited(int id, LocalDateTime edited) throws SQLException {
-        LOGGER.debug("Entering DocumentHandler.compareEdited(" + id + ", " + edited + ")");
-
-        String sql = "SELECT edited " +
-                "FROM document " +
-                "WHERE active = TRUE AND id = ?";
-        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
-            statement.setInt(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getTimestamp(1).toLocalDateTime().compareTo(edited);
-                }
-                throw new SQLException("Checking concurrency updating failed (record not exists)");
-            }
-        }
+    @Override
+    protected String getTable() {
+        return TABLE;
     }
 }

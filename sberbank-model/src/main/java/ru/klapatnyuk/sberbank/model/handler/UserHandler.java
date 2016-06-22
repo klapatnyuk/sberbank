@@ -15,6 +15,8 @@ import java.sql.SQLException;
  */
 public class UserHandler extends AbstractHandler {
 
+    public static final String TABLE = "user";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(UserHandler.class);
 
     public User login(String login, String password) throws SQLException {
@@ -39,6 +41,11 @@ public class UserHandler extends AbstractHandler {
             }
         }
         return null;
+    }
+
+    @Override
+    protected String getTable() {
+        return TABLE;
     }
 
     private static String getHash(String password) {

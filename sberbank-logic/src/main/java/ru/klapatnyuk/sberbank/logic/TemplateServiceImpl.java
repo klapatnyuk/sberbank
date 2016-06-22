@@ -64,7 +64,7 @@ public class TemplateServiceImpl implements TemplateService {
             }
 
             // update template
-            templateHandler.updateTemplate(template);
+            templateHandler.update(template);
 
             // remove fields
             List<Integer> ids = template.getFields().stream().map(AbstractEntity::getId).collect(Collectors.toList());

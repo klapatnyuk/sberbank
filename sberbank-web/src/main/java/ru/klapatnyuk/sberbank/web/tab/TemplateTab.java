@@ -34,7 +34,8 @@ public class TemplateTab extends AbstractTab<Template> {
     private static final long serialVersionUID = 621247325187983282L;
     private static final Logger LOGGER = LoggerFactory.getLogger(TemplateTab.class);
 
-    private final TemplateService templateServiceImpl = new TemplateServiceImpl(new TemplateHandler(), new FieldHandler());
+    private final TemplateService templateServiceImpl =
+            new TemplateServiceImpl(new TemplateHandler(), new FieldHandler(FieldHandler.TABLE_TEMPLATE));
     private final TemplateService templateService =
             TransactionalProxyService.newInstance(templateServiceImpl, SberbankUI.connectionPool, TemplateService.class);
 

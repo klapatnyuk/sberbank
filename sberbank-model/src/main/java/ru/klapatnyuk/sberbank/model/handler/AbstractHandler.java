@@ -16,4 +16,6 @@ public abstract class AbstractHandler {
     public void setConnection(Connection connection) {
         this.connection = connection;
     }
+
+    protected abstract String getTable();
 }

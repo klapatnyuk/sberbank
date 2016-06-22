@@ -4,15 +4,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.klapatnyuk.sberbank.model.entity.Template;
 
-import java.sql.*;
-import java.time.LocalDateTime;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author klapatnyuk
  */
-public class TemplateHandler extends AbstractHandler {
+public class TemplateHandler extends EditableEntityHandler<Template> {
+
+    public static final String TABLE = "template";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TemplateHandler.class);
 
@@ -59,23 +63,6 @@ public class TemplateHandler extends AbstractHandler {
         }
     }
 
-    public void updateTemplate(Template template) throws SQLException {
-        LOGGER.debug("Entering TemplateHandler.updateTemplate");
-
-        String sql = "UPDATE template " +
-                "SET title = ?, edited = ? " +
-                "WHERE active = TRUE AND id = ?";
-
-        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
-            statement.setString(1, template.getTitle());
-            statement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
-            statement.setInt(3, template.getId());
-            if (statement.executeUpdate() == 0) {
-                throw new SQLException("Editing 'template' record failed, no affected records");
-            }
-        }
-    }
-
     public void removeTemplate(int id) throws SQLException {
         LOGGER.debug("Entering DocumentHandler.removeTemplate(" + id + ")");
 
@@ -88,20 +75,8 @@ public class TemplateHandler extends AbstractHandler {
         }
     }
 
-    public int compareEdited(int id, LocalDateTime edited) throws SQLException {
-        LOGGER.debug("Entering TemplateHandler.compareEdited(" + id + ", " + edited + ")");
-
-        String sql = "SELECT edited " +
-                "FROM template " +
-                "WHERE active = TRUE AND id = ?";
-        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
-            statement.setInt(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getTimestamp(1).toLocalDateTime().compareTo(edited);
-                }
-                throw new SQLException("Checking concurrency updating failed (record not exists)");
-            }
-        }
+    @Override
+    protected String getTable() {
+        return TABLE;
     }
 }
