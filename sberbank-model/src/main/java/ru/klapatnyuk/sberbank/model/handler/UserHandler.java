@@ -46,8 +46,7 @@ public class UserHandler extends AbstractHandler {
         try {
             message = MessageDigest.getInstance("SHA");
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            // TODO add NoSuchAlgorithmException to log
+            LOGGER.error("Wrong algorithm", e);
             return null;
         }
         message.update(password.getBytes());
