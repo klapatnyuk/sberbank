@@ -1,6 +1,5 @@
 package ru.klapatnyuk.sberbank.web.tab;
 
-import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.UI;
@@ -36,9 +35,8 @@ public class TemplateTab extends AbstractTab<Template> {
     private static final Logger LOGGER = LoggerFactory.getLogger(TemplateTab.class);
 
     private final TemplateService templateServiceImpl = new TemplateServiceImpl(new TemplateHandler(), new FieldHandler());
-    private final TemplateService templateService = TransactionalProxyService.newInstance(
-            templateServiceImpl, SberbankUI.connectionPool, TemplateService.class,
-            VaadinServlet.getCurrent().getServletContext().getClassLoader());
+    private final TemplateService templateService =
+            TransactionalProxyService.newInstance(templateServiceImpl, SberbankUI.connectionPool, TemplateService.class);
 
     private ConfirmWindow confirmWindow;
     private TemplateTabView design;

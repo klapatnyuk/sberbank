@@ -51,9 +51,8 @@ public class SberbankUI extends UI {
     private static final Logger LOGGER = LoggerFactory.getLogger(SberbankUI.class);
 
     private final UserService userServiceImpl = new UserServiceImpl(new UserHandler());
-    private final UserService userService = TransactionalProxyService.newInstance(
-            userServiceImpl, SberbankUI.connectionPool, UserService.class,
-            VaadinServlet.getCurrent().getServletContext().getClassLoader());
+    private final UserService userService =
+            TransactionalProxyService.newInstance(userServiceImpl, SberbankUI.connectionPool, UserService.class);
 
     private WarningWindow warningWindow;
     private LoginWindow loginWindow;

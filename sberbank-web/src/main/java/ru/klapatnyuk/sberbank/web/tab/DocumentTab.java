@@ -1,7 +1,6 @@
 package ru.klapatnyuk.sberbank.web.tab;
 
 import com.vaadin.data.Property;
-import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.UI;
 import org.slf4j.Logger;
@@ -42,13 +41,11 @@ public class DocumentTab extends AbstractTab<Document> {
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentTab.class);
 
     private final DocumentService documentServiceImpl = new DocumentServiceImpl(new DocumentHandler(), new FieldHandler());
-    private final DocumentService documentService = TransactionalProxyService.newInstance(
-            documentServiceImpl, SberbankUI.connectionPool, DocumentService.class,
-            VaadinServlet.getCurrent().getServletContext().getClassLoader());
+    private final DocumentService documentService =
+            TransactionalProxyService.newInstance(documentServiceImpl, SberbankUI.connectionPool, DocumentService.class);
     private final TemplateService templateServiceImpl = new TemplateServiceImpl(new TemplateHandler(), new FieldHandler());
-    private final TemplateService templateService = TransactionalProxyService.newInstance(
-            templateServiceImpl, SberbankUI.connectionPool, TemplateService.class,
-            VaadinServlet.getCurrent().getServletContext().getClassLoader());
+    private final TemplateService templateService =
+            TransactionalProxyService.newInstance(templateServiceImpl, SberbankUI.connectionPool, TemplateService.class);
 
     private final Property.ValueChangeListener templateListener = new TemplateChangeListener();
 

@@ -1,6 +1,7 @@
 package ru.klapatnyuk.sberbank.logic;
 
 import com.vaadin.data.util.sqlcontainer.connection.JDBCConnectionPool;
+import com.vaadin.server.VaadinServlet;
 import ru.klapatnyuk.sberbank.logic.api.BusinessService;
 
 import java.lang.reflect.InvocationHandler;
@@ -30,7 +31,8 @@ public class TransactionalProxyService implements InvocationHandler {
 
     public static <T extends BusinessService> T newInstance(
             T service, JDBCConnectionPool connectionPool, Class<T> interfaces) {
-        return newInstance(service, connectionPool, interfaces, ClassLoader.getSystemClassLoader());
+        return newInstance(service, connectionPool, interfaces,
+                VaadinServlet.getCurrent().getServletContext().getClassLoader());
     }
 
     @Override
