@@ -15,7 +15,8 @@ public enum ConfigKey implements ResourceKey {
 
     TIME_INACTIVE_INTERVAL,
     TIME_POLL_INTERVAL,
-    WARNING_LIMIT;
+    WARNING_LIMIT,
+    INPUT_STRING_LENGTH;
 
     @Override
     public String getKey() {

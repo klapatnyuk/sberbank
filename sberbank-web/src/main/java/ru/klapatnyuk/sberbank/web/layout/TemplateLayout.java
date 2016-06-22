@@ -8,7 +8,7 @@ import ru.klapatnyuk.sberbank.model.entity.Field;
 import ru.klapatnyuk.sberbank.web.*;
 import ru.klapatnyuk.sberbank.web.constant.StyleDimensions;
 import ru.klapatnyuk.sberbank.web.constant.StyleNames;
-import ru.klapatnyuk.sberbank.web.constant.ValidatePattern;
+import ru.klapatnyuk.sberbank.web.key.ConfigKey;
 import ru.klapatnyuk.sberbank.web.key.FormKey;
 
 import java.util.*;
@@ -26,6 +26,9 @@ public class TemplateLayout extends VerticalLayout {
     private static final int UP = 0;
     private static final int DOWN = 1;
     private static final int REMOVE = 2;
+
+    private static final int INPUT_STRING_LENGTH =
+            Integer.parseInt(SberbankUI.CONFIG.getString(ConfigKey.INPUT_STRING_LENGTH.getKey()));
 
     private final List<FieldLayout> layouts = new ArrayList<>();
     private final BlurListener blurListener = new BlurListener();
@@ -247,13 +250,13 @@ public class TemplateLayout extends VerticalLayout {
         title.setInputPrompt(SberbankUI.I18N.getString(FormKey.FIELD_TITLE_PROMPT));
         title.setWidth("100%");
         title.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
-        title.setMaxLength(ValidatePattern.TAGLIKE_STRINGS_LENGTH);
+        title.setMaxLength(INPUT_STRING_LENGTH);
 
         TextField label = new TextField();
         label.setInputPrompt(SberbankUI.I18N.getString(FormKey.FIELD_LABEL_PROMPT));
         label.setWidth("100%");
         label.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
-        label.setMaxLength(ValidatePattern.TAGLIKE_STRINGS_LENGTH);
+        label.setMaxLength(INPUT_STRING_LENGTH);
 
         ComboBox type = new ComboBox();
         type.setInputPrompt(SberbankUI.I18N.getString(FormKey.FIELD_TYPE_PROMPT));
