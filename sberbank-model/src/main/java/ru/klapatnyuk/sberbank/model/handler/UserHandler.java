@@ -18,7 +18,7 @@ public class UserHandler extends AbstractHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserHandler.class);
 
     public User login(String login, String password) throws SQLException {
-        LOGGER.debug("Inside UserHandler.login");
+        LOGGER.debug("Entering UserHandler.login");
 
         String sql = "SELECT id, role " +
                 "FROM \"user\" " +

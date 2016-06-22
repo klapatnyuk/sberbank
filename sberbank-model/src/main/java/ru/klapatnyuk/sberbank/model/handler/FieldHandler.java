@@ -20,23 +20,24 @@ public class FieldHandler extends AbstractHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(FieldHandler.class);
 
     public List<Field> findByTemplateId(int id) throws SQLException {
-        LOGGER.debug("Inside FieldHandler.findByTemplateId(" + id + ")");
+        LOGGER.debug("Entering FieldHandler.findByTemplateId(" + id + ")");
 
         String sql = "SELECT t.id, t.title, t.label, t.type, t.\"order\", c.count " +
                 "FROM ( " +
-                "  SELECT id, title, label, type, \"order\" " +
-                "  FROM template_field " +
-                "  WHERE active = TRUE AND template_id = ? " +
+                "   SELECT id, title, label, type, \"order\" " +
+                "   FROM template_field " +
+                "   WHERE active = TRUE AND template_id = ? " +
                 ") t " +
                 "LEFT OUTER JOIN ( " +
-                "  SELECT t_f.id, COUNT(*) AS count " +
-                "  FROM document_field d_f " +
-                "    JOIN document d ON d_f.document_id = d.id AND d.active = TRUE " +
-                "    JOIN template t ON d.template_id = t.id AND t.id = ? " +
-                "    JOIN template_field t_f ON d_f.template_field_id = t_f.id AND t_f.active = TRUE " +
-                "  WHERE d_f.active = TRUE " +
-                "  GROUP BY t_f.id " +
-                ") c ON c.id = t.id " +
+                "   SELECT t_f.id, COUNT(*) AS count " +
+                "   FROM document_field d_f " +
+                "       JOIN document d ON d_f.document_id = d.id AND d.active = TRUE " +
+                "       JOIN template t ON d.template_id = t.id AND t.id = ? " +
+                "       JOIN template_field t_f ON d_f.template_field_id = t_f.id AND t_f.active = TRUE " +
+                "   WHERE d_f.active = TRUE " +
+                "   GROUP BY t_f.id " +
+                ") c " +
+                "ON c.id = t.id " +
                 "ORDER BY \"order\";";
 
         List<Field> result = new ArrayList<>();
@@ -62,7 +63,7 @@ public class FieldHandler extends AbstractHandler {
     }
 
     public List<Field> findByDocumentId(int id) throws SQLException {
-        LOGGER.debug("Inside FieldHandler.findByDocumentId(" + id + ")");
+        LOGGER.debug("Entering FieldHandler.findByDocumentId(" + id + ")");
 
         String sql = "SELECT d.id, t.label, t.type, t.active, t.id, d.value " +
                 "FROM (" +
@@ -122,7 +123,7 @@ public class FieldHandler extends AbstractHandler {
     }
 
     public void createDocumentFields(int documentId, List<Field> fields) throws SQLException {
-        LOGGER.debug("Inside FieldHandler.createDocumentFields");
+        LOGGER.debug("Entering FieldHandler.createDocumentFields(" + documentId + ", List<Field>)");
         if (fields.isEmpty()) {
             return;
         }
@@ -147,7 +148,7 @@ public class FieldHandler extends AbstractHandler {
     }
 
     public void createTemplateFields(int templateId, List<Field> fields) throws SQLException {
-        LOGGER.debug("Inside FieldHandler.createTemplateFields");
+        LOGGER.debug("Entering FieldHandler.createTemplateFields(" + templateId + ", List<Field>)");
         if (fields.isEmpty()) {
             return;
         }
@@ -169,7 +170,7 @@ public class FieldHandler extends AbstractHandler {
     }
 
     public void removeDocumentFieldsExcept(int documentId, List<Integer> ids) throws SQLException {
-        LOGGER.debug("Inside FieldHandler.removeDocumentFieldsExcept(" + documentId + ", List<Integer>)");
+        LOGGER.debug("Entering FieldHandler.removeDocumentFieldsExcept(" + documentId + ", " + ids + ")");
         if (ids.isEmpty()) {
             return;
         }
@@ -194,7 +195,7 @@ public class FieldHandler extends AbstractHandler {
     }
 
     public void removeTemplateFieldsExcept(int templateId, List<Integer> ids) throws SQLException {
-        LOGGER.debug("Inside FieldHandler.removeTemplateFieldsExcept(" + templateId + ", List<Integer>)");
+        LOGGER.debug("Entering FieldHandler.removeTemplateFieldsExcept(" + templateId + ", " + ids + ")");
         if (ids.isEmpty()) {
             return;
         }
@@ -219,7 +220,7 @@ public class FieldHandler extends AbstractHandler {
     }
 
     public void removeDocumentFields(int documentId) throws SQLException {
-        LOGGER.debug("Inside FieldHandler.removeDocumentFields(" + documentId + ")");
+        LOGGER.debug("Entering FieldHandler.removeDocumentFields(" + documentId + ")");
 
         String sql = "UPDATE document_field " +
                 "SET active = FALSE " +
@@ -231,7 +232,7 @@ public class FieldHandler extends AbstractHandler {
     }
 
     public void insertAndUpdateDocumentFields(int documentId, List<Field> fields) throws SQLException {
-        LOGGER.debug("Inside FieldHandler.insertAndUpdateDocumentFields(" + documentId + ", List<Field>)");
+        LOGGER.debug("Entering FieldHandler.insertAndUpdateDocumentFields(" + documentId + ", List<Field>)");
 
         String insertSql = "INSERT INTO document_field (document_id, template_field_id, value) " +
                 "VALUES (?, ?, ?)";
@@ -267,7 +268,7 @@ public class FieldHandler extends AbstractHandler {
     }
 
     public void insertAndUpdateTemplateFields(int templateId, List<Field> fields) throws SQLException {
-        LOGGER.debug("Inside FieldHandler.insertAndUpdateTemplateFields(" + templateId + ", List<Field>)");
+        LOGGER.debug("Entering FieldHandler.insertAndUpdateTemplateFields(" + templateId + ", List<Field>)");
 
         String insertSql = "INSERT INTO template_field (template_id, title, label, type, \"order\") " +
                 "VALUES (?, ?, ?, ?, ?)";

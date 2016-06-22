@@ -17,7 +17,7 @@ public class TemplateHandler extends AbstractHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(TemplateHandler.class);
 
     public List<Template> findAll() throws SQLException {
-        LOGGER.debug("Inside TemplateHandler.findAll");
+        LOGGER.debug("Entering TemplateHandler.findAll");
 
         String sql = "SELECT id, title, edited " +
                 "FROM template " +
@@ -41,7 +41,7 @@ public class TemplateHandler extends AbstractHandler {
     }
 
     public int createTemplate(Template template) throws SQLException {
-        LOGGER.debug("Inside TemplateHandler.createTemplate");
+        LOGGER.debug("Entering TemplateHandler.createTemplate");
 
         String sql = "INSERT INTO template (title) " +
                 "VALUES (?)";
@@ -60,7 +60,7 @@ public class TemplateHandler extends AbstractHandler {
     }
 
     public void updateTemplate(Template template) throws SQLException {
-        LOGGER.debug("Inside TemplateHandler.updateTemplate");
+        LOGGER.debug("Entering TemplateHandler.updateTemplate");
 
         String sql = "UPDATE template " +
                 "SET title = ?, edited = ? " +
@@ -77,7 +77,7 @@ public class TemplateHandler extends AbstractHandler {
     }
 
     public void removeTemplate(int id) throws SQLException {
-        LOGGER.debug("Inside DocumentHandler.removeTemplate(" + id + ")");
+        LOGGER.debug("Entering DocumentHandler.removeTemplate(" + id + ")");
 
         String sql = "UPDATE template " +
                 "SET active = FALSE " +
@@ -89,7 +89,7 @@ public class TemplateHandler extends AbstractHandler {
     }
 
     public int compareEdited(int id, LocalDateTime edited) throws SQLException {
-        LOGGER.debug("Inside TemplateHandler.compareEdited(" + id + ", " + edited + ")");
+        LOGGER.debug("Entering TemplateHandler.compareEdited(" + id + ", " + edited + ")");
 
         String sql = "SELECT edited " +
                 "FROM template " +

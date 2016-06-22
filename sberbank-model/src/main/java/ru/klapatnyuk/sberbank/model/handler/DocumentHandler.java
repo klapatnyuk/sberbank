@@ -19,7 +19,7 @@ public class DocumentHandler extends AbstractHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentHandler.class);
 
     public List<Document> findAll() throws SQLException {
-        LOGGER.debug("Inside DocumentHandler.findAll");
+        LOGGER.debug("Entering DocumentHandler.findAll");
 
         String sql = "SELECT d.id, d.title, d.edited, d.template_id, t.title, t.active, d.owner_id " +
                 "FROM document d, template t " +
@@ -56,7 +56,7 @@ public class DocumentHandler extends AbstractHandler {
     }
 
     public List<Document> findByOwnerId(int ownerId) throws SQLException {
-        LOGGER.debug("Inside DocumentHandler.findByOwnerId(" + ownerId + ")");
+        LOGGER.debug("Entering DocumentHandler.findByOwnerId(" + ownerId + ")");
 
         String sql = "SELECT d.id, d.title, d.edited, d.template_id, t.title, t.active " +
                 "FROM document d, template t " +
@@ -95,7 +95,7 @@ public class DocumentHandler extends AbstractHandler {
     }
 
     public int createDocument(Document document) throws SQLException {
-        LOGGER.debug("Inside DocumentHandler.createDocument");
+        LOGGER.debug("Entering DocumentHandler.createDocument");
 
         String sql = "INSERT INTO document (template_id, title, owner_id) " +
                 "VALUES (?, ?, ?)";
@@ -116,7 +116,7 @@ public class DocumentHandler extends AbstractHandler {
     }
 
     public void updateDocument(Document document) throws SQLException {
-        LOGGER.debug("Inside DocumentHandler.updateDocument");
+        LOGGER.debug("Entering DocumentHandler.updateDocument");
 
         String sql = "UPDATE document " +
                 "SET title = ?, edited = ? " +
@@ -133,7 +133,7 @@ public class DocumentHandler extends AbstractHandler {
     }
 
     public void removeDocument(int id) throws SQLException {
-        LOGGER.debug("Inside DocumentHandler.removeDocument(" + id + ")");
+        LOGGER.debug("Entering DocumentHandler.removeDocument(" + id + ")");
 
         String sql = "UPDATE document " +
                 "SET active = FALSE " +
@@ -145,7 +145,7 @@ public class DocumentHandler extends AbstractHandler {
     }
 
     public int compareEdited(int id, LocalDateTime edited) throws SQLException {
-        LOGGER.debug("Inside DocumentHandler.compareEdited(" + id + ", " + edited + ")");
+        LOGGER.debug("Entering DocumentHandler.compareEdited(" + id + ", " + edited + ")");
 
         String sql = "SELECT edited " +
                 "FROM document " +
