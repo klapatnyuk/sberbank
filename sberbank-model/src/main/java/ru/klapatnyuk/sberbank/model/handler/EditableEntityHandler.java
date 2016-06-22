@@ -34,7 +34,6 @@ public abstract class EditableEntityHandler<T extends Entity> extends AbstractHa
         }
     }
 
-
     public int compareEdited(int id, LocalDateTime edited) throws SQLException {
         LOGGER.debug("Entering compareEdited(" + id + ", " + edited + ")");
 

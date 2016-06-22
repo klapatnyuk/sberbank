@@ -173,10 +173,8 @@ public class WarningWindow extends Window {
 
         if (message.getField() != null) {
             messageLayout.addLayoutClickListener(new FocusLayoutClickListener(message.getField()));
-        } else if (message.getListener() == null) {
-            messageLayout.addLayoutClickListener(new RemoveLayoutClickListener(message));
         } else {
-            messageLayout.addLayoutClickListener(message.getListener());
+            messageLayout.addLayoutClickListener(new RemoveLayoutClickListener(message));
         }
         return messageLayout;
     }

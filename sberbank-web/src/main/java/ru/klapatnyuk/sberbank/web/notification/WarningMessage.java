@@ -1,6 +1,5 @@
 package ru.klapatnyuk.sberbank.web.notification;
 
-import com.vaadin.event.LayoutEvents;
 import com.vaadin.ui.Component;
 
 /**
@@ -9,7 +8,6 @@ import com.vaadin.ui.Component;
 public class WarningMessage implements Comparable<WarningMessage> {
 
     private final String caption;
-    private final LayoutEvents.LayoutClickListener listener;
     private final Component source;
 
     private String description;
@@ -20,7 +18,6 @@ public class WarningMessage implements Comparable<WarningMessage> {
 
     public WarningMessage(String caption, String description, Component.Focusable field, Component source) {
         this.caption = caption;
-        this.listener = null;
         this.description = description;
         this.field = field;
         this.source = source;
@@ -28,7 +25,6 @@ public class WarningMessage implements Comparable<WarningMessage> {
 
     public WarningMessage(String caption, Throwable throwable, Component.Focusable field, Component source) {
         this.caption = caption;
-        this.listener = null;
         while (throwable.getCause() != null) {
             throwable = throwable.getCause();
         }
@@ -41,17 +37,8 @@ public class WarningMessage implements Comparable<WarningMessage> {
         this(caption, (String) null, field, source);
     }
 
-    public WarningMessage(
-            String caption, String description, LayoutEvents.LayoutClickListener listener, Component source) {
-        this.caption = caption;
-        this.listener = listener;
-        this.source = source;
-        this.description = description;
-    }
-
     public WarningMessage(String caption, Throwable throwable, Component source) {
         this.caption = caption;
-        this.listener = null;
         this.source = source;
         while (throwable.getCause() != null) {
             throwable = throwable.getCause();
@@ -97,10 +84,6 @@ public class WarningMessage implements Comparable<WarningMessage> {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public LayoutEvents.LayoutClickListener getListener() {
-        return listener;
     }
 
     @Override

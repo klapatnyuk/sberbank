@@ -22,12 +22,4 @@ public class Warning extends Notification {
         notification.setDelayMsec(10000);
         notification.show(Page.getCurrent());
     }
-
-    public static void show(String caption, String description) {
-        Notification notification = new Notification(caption, description, Type.WARNING_MESSAGE);
-        notification.setHtmlContentAllowed(true);
-        notification.setPosition(Position.TOP_RIGHT);
-        notification.setDelayMsec(10000);
-        notification.show(Page.getCurrent());
-    }
 }
