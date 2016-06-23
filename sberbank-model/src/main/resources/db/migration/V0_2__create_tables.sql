@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS template_field (
     title       VARCHAR NOT NULL,
     label       VARCHAR NOT NULL,
     type        VARCHAR NOT NULL DEFAULT 'LINE',
+    -- TODO rename column 'order' to 'index'
     "order"     INTEGER NOT NULL DEFAULT 0,
     active      BOOLEAN NOT NULL DEFAULT TRUE,
     CONSTRAINT template_field_pk PRIMARY KEY (id),
