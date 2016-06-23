@@ -3,6 +3,7 @@ package ru.klapatnyuk.sberbank.model.handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.klapatnyuk.sberbank.model.entity.api.Entity;
+import ru.klapatnyuk.sberbank.model.handler.api.RemovableEntityHandler;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 /**
  * @author klapatnyuk
  */
-public abstract class EditableEntityHandler<T extends Entity> extends AbstractHandler {
+public abstract class EditableEntityHandler<T extends Entity> extends AbstractHandler implements RemovableEntityHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EditableEntityHandler.class);
 
@@ -51,6 +52,7 @@ public abstract class EditableEntityHandler<T extends Entity> extends AbstractHa
         }
     }
 
+    @Override
     public void remove(int id) throws SQLException {
         LOGGER.debug("Entering remove(" + id + ")");
 

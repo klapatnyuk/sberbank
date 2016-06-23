@@ -6,8 +6,8 @@ import ru.klapatnyuk.sberbank.model.entity.Document;
 import ru.klapatnyuk.sberbank.model.entity.Field;
 import ru.klapatnyuk.sberbank.model.entity.User;
 import ru.klapatnyuk.sberbank.model.exception.BusinessException;
+import ru.klapatnyuk.sberbank.model.handler.DocumentFieldHandler;
 import ru.klapatnyuk.sberbank.model.handler.DocumentHandler;
-import ru.klapatnyuk.sberbank.model.handler.FieldHandler;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 public class DocumentServiceImpl implements DocumentService {
 
     private final DocumentHandler documentHandler;
-    private final FieldHandler fieldHandler;
+    private final DocumentFieldHandler fieldHandler;
 
-    public DocumentServiceImpl(DocumentHandler documentHandler, FieldHandler fieldHandler) {
+    public DocumentServiceImpl(DocumentHandler documentHandler, DocumentFieldHandler fieldHandler) {
         this.documentHandler = documentHandler;
         this.fieldHandler = fieldHandler;
     }
@@ -48,7 +48,7 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public List<Field> getFields(int id) throws BusinessException {
         try {
-            return fieldHandler.findByDocumentId(id);
+            return fieldHandler.findByEntityId(id);
         } catch (SQLException e) {
             throw new BusinessException("Document fields finding error", e);
         }
@@ -58,7 +58,7 @@ public class DocumentServiceImpl implements DocumentService {
     public void create(Document document) throws BusinessException {
         try {
             int id = documentHandler.create(document);
-            fieldHandler.createDocumentFields(id, document.getFields());
+            fieldHandler.create(id, document.getFields());
 
         } catch (SQLException e) {
             throw new BusinessException("Document creation error", e);
@@ -79,13 +79,13 @@ public class DocumentServiceImpl implements DocumentService {
             // remove fields
             List<Integer> ids = document.getFields().stream().map(AbstractEntity::getId).collect(Collectors.toList());
             if (ids.isEmpty()) {
-                fieldHandler.removeDocumentFields(document.getId());
+                fieldHandler.remove(document.getId());
             } else {
-                fieldHandler.removeDocumentFieldsExcept(document.getId(), ids);
+                fieldHandler.removeExcept(document.getId(), ids);
             }
 
             // update fields
-            fieldHandler.insertAndUpdateDocumentFields(document.getId(), document.getFields());
+            fieldHandler.createOrUpdate(document.getId(), document.getFields());
 
         } catch (SQLException e) {
             throw new BusinessException("Document edition error", e);
