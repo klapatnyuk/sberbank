@@ -3,6 +3,7 @@ package ru.klapatnyuk.sberbank.model.handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.klapatnyuk.sberbank.model.entity.Field;
+import ru.klapatnyuk.sberbank.model.handler.api.RemovableEntityHandler;
 import ru.klapatnyuk.sberbank.model.type.Boolean;
 
 import java.io.Serializable;
@@ -15,13 +16,27 @@ import java.util.List;
 /**
  * @author klapatnyuk
  */
-public class DocumentFieldHandler extends FieldHandler {
+public class DocumentFieldHandler extends FieldHandler implements RemovableEntityHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentFieldHandler.class);
     private static final String TABLE = "document_field";
 
-    public List<Field> findByDocumentId(int id) throws SQLException {
-        LOGGER.debug("Entering findByDocumentId(" + id + ")");
+    @Override
+    public void remove(int documentId) throws SQLException {
+        LOGGER.debug("Entering remove(" + documentId + ")");
+
+        String sql = "UPDATE document_field " +
+                "SET active = FALSE " +
+                "WHERE active = TRUE AND document_id = ?";
+        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
+            statement.setInt(1, documentId);
+            statement.executeUpdate();
+        }
+    }
+
+    @Override
+    public List<Field> findByEntityId(int id) throws SQLException {
+        LOGGER.debug("Entering findByEntityId(" + id + ")");
 
         String sql = "SELECT d.id, t.label, t.type, t.active, t.id, d.value " +
                 "FROM (" +
@@ -80,8 +95,9 @@ public class DocumentFieldHandler extends FieldHandler {
         return result;
     }
 
-    public void createDocumentFields(int documentId, List<Field> fields) throws SQLException {
-        LOGGER.debug("Entering createDocumentFields(" + documentId + ", List<Field>)");
+    @Override
+    public void create(int entityId, List<Field> fields) throws SQLException {
+        LOGGER.debug("Entering create(" + entityId + ", List<Field>)");
         if (fields.isEmpty()) {
             return;
         }
@@ -92,7 +108,7 @@ public class DocumentFieldHandler extends FieldHandler {
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
             Serializable value;
             for (Field field : fields) {
-                statement.setInt(1, documentId);
+                statement.setInt(1, entityId);
                 statement.setInt(2, field.getReferenceId());
                 value = field.getValue();
                 if (value instanceof String) {
@@ -105,8 +121,9 @@ public class DocumentFieldHandler extends FieldHandler {
         }
     }
 
-    public void removeDocumentFieldsExcept(int documentId, List<Integer> ids) throws SQLException {
-        LOGGER.debug("Entering removeDocumentFieldsExcept(" + documentId + ", " + ids + ")");
+    @Override
+    public void removeExcept(int entityId, List<Integer> ids) throws SQLException {
+        LOGGER.debug("Entering removeExcept(" + entityId + ", " + ids + ")");
         if (ids.isEmpty()) {
             return;
         }
@@ -122,7 +139,7 @@ public class DocumentFieldHandler extends FieldHandler {
         }
         sql.append(")");
         try (PreparedStatement statement = getConnection().prepareStatement(sql.toString())) {
-            statement.setInt(1, documentId);
+            statement.setInt(1, entityId);
             for (int a = 0; a < ids.size(); a++) {
                 statement.setInt(a + 2, ids.get(a));
             }
@@ -130,20 +147,9 @@ public class DocumentFieldHandler extends FieldHandler {
         }
     }
 
-    public void removeDocumentFields(int documentId) throws SQLException {
-        LOGGER.debug("Entering removeDocumentFields(" + documentId + ")");
-
-        String sql = "UPDATE document_field " +
-                "SET active = FALSE " +
-                "WHERE active = TRUE AND document_id = ?";
-        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
-            statement.setInt(1, documentId);
-            statement.executeUpdate();
-        }
-    }
-
-    public void insertAndUpdateDocumentFields(int documentId, List<Field> fields) throws SQLException {
-        LOGGER.debug("Entering insertAndUpdateDocumentFields(" + documentId + ", List<Field>)");
+    @Override
+    public void insertOrUpdate(int entityId, List<Field> fields) throws SQLException {
+        LOGGER.debug("Entering insertOrUpdate(" + entityId + ", List<Field>)");
 
         String insertSql = "INSERT INTO document_field (document_id, template_field_id, value) " +
                 "VALUES (?, ?, ?)";
@@ -155,7 +161,7 @@ public class DocumentFieldHandler extends FieldHandler {
             for (Field field : fields) {
                 if (field.getId() == 0) {
                     // add new fields
-                    insertStatement.setInt(1, documentId);
+                    insertStatement.setInt(1, entityId);
                     insertStatement.setInt(2, field.getReferenceId());
                     if (field.getValue() instanceof String) {
                         insertStatement.setString(3, field.getValue().toString());

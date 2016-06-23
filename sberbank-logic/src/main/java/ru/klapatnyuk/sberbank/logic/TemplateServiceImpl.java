@@ -38,7 +38,7 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public List<Field> getFields(int id) throws BusinessException {
         try {
-            return fieldHandler.findByTemplateId(id);
+            return fieldHandler.findByEntityId(id);
         } catch (SQLException e) {
             throw new BusinessException("Template fields finding error", e);
         }
@@ -48,7 +48,7 @@ public class TemplateServiceImpl implements TemplateService {
     public void create(Template template) throws BusinessException {
         try {
             int id = templateHandler.create(template);
-            fieldHandler.createTemplateFields(id, template.getFields());
+            fieldHandler.create(id, template.getFields());
 
         } catch (SQLException e) {
             throw new BusinessException("Template creation error", e);
@@ -68,10 +68,10 @@ public class TemplateServiceImpl implements TemplateService {
 
             // remove fields
             List<Integer> ids = template.getFields().stream().map(AbstractEntity::getId).collect(Collectors.toList());
-            fieldHandler.removeTemplateFieldsExcept(template.getId(), ids);
+            fieldHandler.removeExcept(template.getId(), ids);
 
             // update fields
-            fieldHandler.insertAndUpdateTemplateFields(template.getId(), template.getFields());
+            fieldHandler.insertOrUpdate(template.getId(), template.getFields());
 
         } catch (SQLException e) {
             throw new BusinessException("Template edition error", e);

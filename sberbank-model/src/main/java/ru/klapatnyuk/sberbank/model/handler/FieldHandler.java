@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * TODO needs to be refactored
- *
  * @author klapatnyuk
  */
 public abstract class FieldHandler extends AbstractHandler<Field> {
@@ -19,4 +17,12 @@ public abstract class FieldHandler extends AbstractHandler<Field> {
     public List<Field> findAll() throws SQLException {
         return null;
     }
+
+    public abstract List<Field> findByEntityId(int id) throws SQLException;
+
+    public abstract void create(int entityId, List<Field> fields) throws SQLException;
+
+    public abstract void removeExcept(int entityId, List<Integer> ids) throws SQLException;
+
+    public abstract void insertOrUpdate(int entityId, List<Field> fields) throws SQLException;
 }
