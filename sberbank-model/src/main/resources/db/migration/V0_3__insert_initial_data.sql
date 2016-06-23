@@ -8,7 +8,7 @@ INSERT INTO template (id, title) VALUES
     (1, 'Контракт'),
     (2, 'Заявка');
 
-INSERT INTO template_field (id, template_id, title, label, type, "order") VALUES
+INSERT INTO template_field (id, template_id, title, label, type, index) VALUES
     (1, 1, 'surname', 'Фамилия', 'LINE', 0),
     (2, 1, 'name', 'Имя', 'LINE', 1),
     (3, 1, 'description', 'Описание', 'AREA', 2),

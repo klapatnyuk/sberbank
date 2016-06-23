@@ -23,9 +23,9 @@ public class TemplateFieldHandler extends FieldHandler {
     public List<Field> findByEntityId(int id) throws SQLException {
         LOGGER.debug("Entering findByEntityId(" + id + ")");
 
-        String sql = "SELECT t.id, t.title, t.label, t.type, t.\"order\", c.count " +
+        String sql = "SELECT t.id, t.title, t.label, t.type, t.index, c.count " +
                 "FROM ( " +
-                "   SELECT id, title, label, type, \"order\" " +
+                "   SELECT id, title, label, type, index " +
                 "   FROM template_field " +
                 "   WHERE active = TRUE AND template_id = ? " +
                 ") t " +
@@ -39,7 +39,7 @@ public class TemplateFieldHandler extends FieldHandler {
                 "   GROUP BY t_f.id " +
                 ") c " +
                 "ON c.id = t.id " +
-                "ORDER BY \"order\";";
+                "ORDER BY index";
 
         List<Field> result = new ArrayList<>();
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
@@ -54,7 +54,7 @@ public class TemplateFieldHandler extends FieldHandler {
                     entity.setTitle(resultSet.getString(2));
                     entity.setLabel(resultSet.getString(3));
                     entity.setType(Field.Type.find(resultSet.getString(4)));
-                    entity.setOrder(resultSet.getInt(5));
+                    entity.setIndex(resultSet.getInt(5));
                     entity.setRelated(resultSet.getInt(6));
                     result.add(entity);
                 }
@@ -70,17 +70,17 @@ public class TemplateFieldHandler extends FieldHandler {
             return;
         }
 
-        String sql = "INSERT INTO template_field (template_id, title, label, type, \"order\") " +
+        String sql = "INSERT INTO template_field (template_id, title, label, type, index) " +
                 "VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
-            int order = 0;
+            int index = 0;
             for (Field field : fields) {
                 statement.setInt(1, entityId);
                 statement.setString(2, field.getTitle());
                 statement.setString(3, field.getLabel());
                 statement.setString(4, field.getType().toString());
-                statement.setInt(5, order++);
+                statement.setInt(5, index++);
                 statement.executeUpdate();
             }
         }
@@ -90,14 +90,14 @@ public class TemplateFieldHandler extends FieldHandler {
     public void createOrUpdate(int entityId, List<Field> fields) throws SQLException {
         LOGGER.debug("Entering insertOrUpdate(" + entityId + ", List<Field>)");
 
-        String insertSql = "INSERT INTO template_field (template_id, title, label, type, \"order\") " +
+        String insertSql = "INSERT INTO template_field (template_id, title, label, type, index) " +
                 "VALUES (?, ?, ?, ?, ?)";
         String updateSql = "UPDATE template_field " +
-                "SET template_id = ?, title = ?, label = ?, type = ?, \"order\" = ? " +
+                "SET template_id = ?, title = ?, label = ?, type = ?, index = ? " +
                 "WHERE active = TRUE AND id = ?";
         try (PreparedStatement insertStatement = getConnection().prepareStatement(insertSql);
              PreparedStatement updateStatement = getConnection().prepareStatement(updateSql)) {
-            int order = 0;
+            int index = 0;
             for (Field field : fields) {
                 if (field.getId() == 0) {
                     // add new fields
@@ -105,7 +105,7 @@ public class TemplateFieldHandler extends FieldHandler {
                     insertStatement.setString(2, field.getTitle());
                     insertStatement.setString(3, field.getLabel());
                     insertStatement.setString(4, field.getType().toString());
-                    insertStatement.setInt(5, order++);
+                    insertStatement.setInt(5, index++);
                     insertStatement.executeUpdate();
                 } else {
                     // edit existed fields
@@ -113,7 +113,7 @@ public class TemplateFieldHandler extends FieldHandler {
                     updateStatement.setString(2, field.getTitle());
                     updateStatement.setString(3, field.getLabel());
                     updateStatement.setString(4, field.getType().toString());
-                    updateStatement.setInt(5, order++);
+                    updateStatement.setInt(5, index++);
                     updateStatement.setInt(6, field.getId());
                     updateStatement.executeUpdate();
                 }

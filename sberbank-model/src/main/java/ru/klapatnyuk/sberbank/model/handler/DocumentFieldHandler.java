@@ -33,14 +33,14 @@ public class DocumentFieldHandler extends FieldHandler implements RemovableEntit
                 "   WHERE active = TRUE" +
                 ") d " +
                 "RIGHT OUTER JOIN (" +
-                "   SELECT tf.id AS id, tf.label AS label, tf.type AS type, tf.active AS active, tf.\"order\" AS \"order\" " +
+                "   SELECT tf.id AS id, tf.label AS label, tf.type AS type, tf.active AS active, tf.index AS index " +
                 "   FROM template_field tf " +
                 "       JOIN template t ON tf.template_id = t.id " +
                 "       JOIN document d ON d.template_id = t.id " +
                 "   WHERE d.id = ?" +
                 ") t " +
                 "ON d.template_field_id = t.id AND d.document_id = ? " +
-                "ORDER BY t.active DESC, t.\"order\"";
+                "ORDER BY t.active DESC, t.index";
 
         List<Field> result = new ArrayList<>();
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
