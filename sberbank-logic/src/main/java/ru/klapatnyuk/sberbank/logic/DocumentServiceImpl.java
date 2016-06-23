@@ -85,7 +85,7 @@ public class DocumentServiceImpl implements DocumentService {
             }
 
             // update fields
-            fieldHandler.insertOrUpdate(document.getId(), document.getFields());
+            fieldHandler.createOrUpdate(document.getId(), document.getFields());
 
         } catch (SQLException e) {
             throw new BusinessException("Document edition error", e);

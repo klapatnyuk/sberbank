@@ -20,19 +20,7 @@ public class DocumentFieldHandler extends FieldHandler implements RemovableEntit
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentFieldHandler.class);
     private static final String TABLE = "document_field";
-
-    @Override
-    public void remove(int documentId) throws SQLException {
-        LOGGER.debug("Entering remove(" + documentId + ")");
-
-        String sql = "UPDATE document_field " +
-                "SET active = FALSE " +
-                "WHERE active = TRUE AND document_id = ?";
-        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
-            statement.setInt(1, documentId);
-            statement.executeUpdate();
-        }
-    }
+    private static final String ENTITY_COLUMN = "document_id";
 
     @Override
     public List<Field> findByEntityId(int id) throws SQLException {
@@ -122,33 +110,7 @@ public class DocumentFieldHandler extends FieldHandler implements RemovableEntit
     }
 
     @Override
-    public void removeExcept(int entityId, List<Integer> ids) throws SQLException {
-        LOGGER.debug("Entering removeExcept(" + entityId + ", " + ids + ")");
-        if (ids.isEmpty()) {
-            return;
-        }
-
-        StringBuilder sql = new StringBuilder("UPDATE document_field " +
-                "SET active = FALSE " +
-                "WHERE active = TRUE AND document_id = ? AND id NOT IN (");
-        for (int a = 0; a < ids.size(); a++) {
-            if (a > 0) {
-                sql.append(", ");
-            }
-            sql.append("?");
-        }
-        sql.append(")");
-        try (PreparedStatement statement = getConnection().prepareStatement(sql.toString())) {
-            statement.setInt(1, entityId);
-            for (int a = 0; a < ids.size(); a++) {
-                statement.setInt(a + 2, ids.get(a));
-            }
-            statement.executeUpdate();
-        }
-    }
-
-    @Override
-    public void insertOrUpdate(int entityId, List<Field> fields) throws SQLException {
+    public void createOrUpdate(int entityId, List<Field> fields) throws SQLException {
         LOGGER.debug("Entering insertOrUpdate(" + entityId + ", List<Field>)");
 
         String insertSql = "INSERT INTO document_field (document_id, template_field_id, value) " +
@@ -185,7 +147,25 @@ public class DocumentFieldHandler extends FieldHandler implements RemovableEntit
     }
 
     @Override
+    public void remove(int documentId) throws SQLException {
+        LOGGER.debug("Entering remove(" + documentId + ")");
+
+        String sql = "UPDATE document_field " +
+                "SET active = FALSE " +
+                "WHERE active = TRUE AND document_id = ?";
+        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
+            statement.setInt(1, documentId);
+            statement.executeUpdate();
+        }
+    }
+
+    @Override
     protected String getTable() {
         return TABLE;
+    }
+
+    @Override
+    protected String getEntityColumn() {
+        return ENTITY_COLUMN;
     }
 }

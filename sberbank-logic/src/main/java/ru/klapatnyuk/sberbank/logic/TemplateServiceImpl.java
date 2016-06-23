@@ -71,7 +71,7 @@ public class TemplateServiceImpl implements TemplateService {
             fieldHandler.removeExcept(template.getId(), ids);
 
             // update fields
-            fieldHandler.insertOrUpdate(template.getId(), template.getFields());
+            fieldHandler.createOrUpdate(template.getId(), template.getFields());
 
         } catch (SQLException e) {
             throw new BusinessException("Template edition error", e);

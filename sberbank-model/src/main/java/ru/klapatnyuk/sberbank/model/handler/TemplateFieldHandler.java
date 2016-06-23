@@ -17,6 +17,7 @@ public class TemplateFieldHandler extends FieldHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TemplateFieldHandler.class);
     private static final String TABLE = "template_field";
+    private static final String ENTITY_COLUMN = "template_id";
 
     @Override
     public List<Field> findByEntityId(int id) throws SQLException {
@@ -86,33 +87,7 @@ public class TemplateFieldHandler extends FieldHandler {
     }
 
     @Override
-    public void removeExcept(int entityId, List<Integer> ids) throws SQLException {
-        LOGGER.debug("Entering removeExcept(" + entityId + ", " + ids + ")");
-        if (ids.isEmpty()) {
-            return;
-        }
-
-        StringBuilder sql = new StringBuilder("UPDATE template_field " +
-                "SET active = FALSE " +
-                "WHERE active = TRUE AND template_id = ? AND id NOT IN (");
-        for (int a = 0; a < ids.size(); a++) {
-            if (a > 0) {
-                sql.append(", ");
-            }
-            sql.append("?");
-        }
-        sql.append(")");
-        try (PreparedStatement statement = getConnection().prepareStatement(sql.toString())) {
-            statement.setInt(1, entityId);
-            for (int a = 0; a < ids.size(); a++) {
-                statement.setInt(a + 2, ids.get(a));
-            }
-            statement.executeUpdate();
-        }
-    }
-
-    @Override
-    public void insertOrUpdate(int entityId, List<Field> fields) throws SQLException {
+    public void createOrUpdate(int entityId, List<Field> fields) throws SQLException {
         LOGGER.debug("Entering insertOrUpdate(" + entityId + ", List<Field>)");
 
         String insertSql = "INSERT INTO template_field (template_id, title, label, type, \"order\") " +
@@ -149,5 +124,10 @@ public class TemplateFieldHandler extends FieldHandler {
     @Override
     protected String getTable() {
         return TABLE;
+    }
+
+    @Override
+    protected String getEntityColumn() {
+        return ENTITY_COLUMN;
     }
 }
