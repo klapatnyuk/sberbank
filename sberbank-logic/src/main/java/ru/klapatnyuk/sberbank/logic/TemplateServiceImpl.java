@@ -5,7 +5,7 @@ import ru.klapatnyuk.sberbank.model.entity.AbstractEntity;
 import ru.klapatnyuk.sberbank.model.entity.Field;
 import ru.klapatnyuk.sberbank.model.entity.Template;
 import ru.klapatnyuk.sberbank.model.exception.BusinessException;
-import ru.klapatnyuk.sberbank.model.handler.FieldHandler;
+import ru.klapatnyuk.sberbank.model.handler.TemplateFieldHandler;
 import ru.klapatnyuk.sberbank.model.handler.TemplateHandler;
 
 import java.sql.Connection;
@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
 public class TemplateServiceImpl implements TemplateService {
 
     private final TemplateHandler templateHandler;
-    private final FieldHandler fieldHandler;
+    private final TemplateFieldHandler fieldHandler;
 
-    public TemplateServiceImpl(TemplateHandler templateHandler, FieldHandler fieldHandler) {
+    public TemplateServiceImpl(TemplateHandler templateHandler, TemplateFieldHandler fieldHandler) {
         this.templateHandler = templateHandler;
         this.fieldHandler = fieldHandler;
     }

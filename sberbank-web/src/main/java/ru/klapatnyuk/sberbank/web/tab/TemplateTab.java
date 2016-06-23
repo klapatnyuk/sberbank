@@ -11,7 +11,7 @@ import ru.klapatnyuk.sberbank.logic.TransactionalProxyService;
 import ru.klapatnyuk.sberbank.logic.api.TemplateService;
 import ru.klapatnyuk.sberbank.model.entity.Field;
 import ru.klapatnyuk.sberbank.model.entity.Template;
-import ru.klapatnyuk.sberbank.model.handler.FieldHandler;
+import ru.klapatnyuk.sberbank.model.handler.TemplateFieldHandler;
 import ru.klapatnyuk.sberbank.model.handler.TemplateHandler;
 import ru.klapatnyuk.sberbank.web.SberbankUI;
 import ru.klapatnyuk.sberbank.web.key.FormKey;
@@ -35,7 +35,7 @@ public class TemplateTab extends AbstractTab<Template> {
     private static final Logger LOGGER = LoggerFactory.getLogger(TemplateTab.class);
 
     private final TemplateService templateServiceImpl =
-            new TemplateServiceImpl(new TemplateHandler(), new FieldHandler(FieldHandler.TABLE_TEMPLATE));
+            new TemplateServiceImpl(new TemplateHandler(), new TemplateFieldHandler());
     private final TemplateService templateService =
             TransactionalProxyService.newInstance(templateServiceImpl, SberbankUI.connectionPool, TemplateService.class);
 

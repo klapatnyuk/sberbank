@@ -6,8 +6,8 @@ import ru.klapatnyuk.sberbank.model.entity.Document;
 import ru.klapatnyuk.sberbank.model.entity.Field;
 import ru.klapatnyuk.sberbank.model.entity.User;
 import ru.klapatnyuk.sberbank.model.exception.BusinessException;
+import ru.klapatnyuk.sberbank.model.handler.DocumentFieldHandler;
 import ru.klapatnyuk.sberbank.model.handler.DocumentHandler;
-import ru.klapatnyuk.sberbank.model.handler.FieldHandler;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 public class DocumentServiceImpl implements DocumentService {
 
     private final DocumentHandler documentHandler;
-    private final FieldHandler fieldHandler;
+    private final DocumentFieldHandler fieldHandler;
 
-    public DocumentServiceImpl(DocumentHandler documentHandler, FieldHandler fieldHandler) {
+    public DocumentServiceImpl(DocumentHandler documentHandler, DocumentFieldHandler fieldHandler) {
         this.documentHandler = documentHandler;
         this.fieldHandler = fieldHandler;
     }
