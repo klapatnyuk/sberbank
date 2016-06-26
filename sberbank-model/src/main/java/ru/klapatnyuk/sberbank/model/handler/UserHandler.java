@@ -16,8 +16,7 @@ import java.util.List;
  */
 public class UserHandler extends AbstractHandler<User> {
 
-    public static final String TABLE = "user";
-
+    private static final String TABLE = "user";
     private static final Logger LOGGER = LoggerFactory.getLogger(UserHandler.class);
 
     public User login(String login, String password) throws SQLException {
