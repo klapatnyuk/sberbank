@@ -3,9 +3,9 @@ package ru.klapatnyuk.sberbank.web.layout;
 import com.vaadin.ui.*;
 import ru.klapatnyuk.sberbank.model.entity.Field;
 import ru.klapatnyuk.sberbank.web.SberbankUI;
+import ru.klapatnyuk.sberbank.web.key.FormKey;
 import ru.klapatnyuk.sberbank.web.style.StyleDimensions;
 import ru.klapatnyuk.sberbank.web.style.StyleNames;
-import ru.klapatnyuk.sberbank.web.key.FormKey;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,17 +22,16 @@ public class DocumentLayout extends VerticalLayout {
 
     public List<Field> getFields() {
         List<Field> fields = new ArrayList<>();
-        Field<Serializable> field;
         for (Component item : this) {
             FieldLayout row = (FieldLayout) item;
             if (isEmptyRow(row)) {
                 continue;
             }
-            field = new Field<>();
-            field.setId(row.getFieldId());
-            field.setReferenceId(row.getTemplateFieldId());
-            field.setValue(getRowValue(row));
-            fields.add(field);
+            fields.add(Field.newBuilder()
+                    .setId(row.getFieldId())
+                    .setReferenceId(row.getTemplateFieldId())
+                    .setValue(getRowValue(row))
+                    .build());
         }
         return fields;
     }

@@ -9,9 +9,17 @@ public interface Entity extends Serializable {
 
     int getId();
 
-    void setId(int id);
-
     String getTitle();
 
-    void setTitle(String title);
+    /**
+     * @author klapatnyuk
+     */
+    interface EntityBuilder {
+
+        EntityBuilder setId(int id);
+
+        EntityBuilder setTitle(String title);
+
+        Entity build();
+    }
 }

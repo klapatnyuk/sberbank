@@ -5,11 +5,11 @@ import com.vaadin.event.FieldEvents;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import ru.klapatnyuk.sberbank.model.entity.Field;
-import ru.klapatnyuk.sberbank.web.*;
-import ru.klapatnyuk.sberbank.web.style.StyleDimensions;
-import ru.klapatnyuk.sberbank.web.style.StyleNames;
+import ru.klapatnyuk.sberbank.web.SberbankUI;
 import ru.klapatnyuk.sberbank.web.key.ConfigKey;
 import ru.klapatnyuk.sberbank.web.key.FormKey;
+import ru.klapatnyuk.sberbank.web.style.StyleDimensions;
+import ru.klapatnyuk.sberbank.web.style.StyleNames;
 
 import java.util.*;
 
@@ -55,18 +55,17 @@ public class TemplateLayout extends VerticalLayout {
 
     public List<Field> getFields() {
         List<Field> fields = new ArrayList<>();
-        Field field;
         for (Component item : this) {
             FieldLayout row = (FieldLayout) item;
             if (isEmptyRow(row)) {
                 continue;
             }
-            field = new Field();
-            field.setId(row.getTemplateFieldId());
-            field.setTitle(((TextField) row.getComponent(TITLE)).getValue().trim());
-            field.setLabel(((TextField) row.getComponent(LABEL)).getValue().trim());
-            field.setType((Field.Type) ((ComboBox) row.getComponent(TYPE)).getValue());
-            fields.add(field);
+            fields.add(Field.newBuilder()
+                    .setId(row.getTemplateFieldId())
+                    .setTitle(((TextField) row.getComponent(TITLE)).getValue().trim())
+                    .setLabel(((TextField) row.getComponent(LABEL)).getValue().trim())
+                    .setType((Field.Type) ((ComboBox) row.getComponent(TYPE)).getValue())
+                    .build());
         }
         return fields;
     }

@@ -47,16 +47,15 @@ public class TemplateFieldHandler extends FieldHandler {
             statement.setInt(2, id);
 
             try (ResultSet resultSet = statement.executeQuery()) {
-                Field entity;
                 while (resultSet.next()) {
-                    entity = new Field();
-                    entity.setId(resultSet.getInt(1));
-                    entity.setTitle(resultSet.getString(2));
-                    entity.setLabel(resultSet.getString(3));
-                    entity.setType(Field.Type.find(resultSet.getString(4)));
-                    entity.setIndex(resultSet.getInt(5));
-                    entity.setRelated(resultSet.getInt(6));
-                    result.add(entity);
+                    result.add(Field.newBuilder()
+                            .setId(resultSet.getInt(1))
+                            .setTitle(resultSet.getString(2))
+                            .setLabel(resultSet.getString(3))
+                            .setType(Field.Type.find(resultSet.getString(4)))
+                            .setIndex(resultSet.getInt(5))
+                            .setRelated(resultSet.getInt(6))
+                            .build());
                 }
             }
         }

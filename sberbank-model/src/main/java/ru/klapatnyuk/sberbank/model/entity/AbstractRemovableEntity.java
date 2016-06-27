@@ -14,8 +14,15 @@ public abstract class AbstractRemovableEntity extends AbstractEntity implements 
         return active;
     }
 
-    @Override
-    public void setActive(boolean active) {
-        this.active = active;
+    /**
+     * @author klapatnyuk
+     */
+    public abstract class AbstractRemovableBuilder extends AbstractBuilder implements RemovableBuilder {
+
+        @Override
+        public AbstractRemovableBuilder setActive(boolean active) {
+            AbstractRemovableEntity.this.active = active;
+            return this;
+        }
     }
 }

@@ -15,7 +15,10 @@ import ru.klapatnyuk.sberbank.model.entity.Document;
 import ru.klapatnyuk.sberbank.model.entity.Field;
 import ru.klapatnyuk.sberbank.model.entity.Template;
 import ru.klapatnyuk.sberbank.model.entity.User;
-import ru.klapatnyuk.sberbank.model.handler.*;
+import ru.klapatnyuk.sberbank.model.handler.DocumentFieldHandler;
+import ru.klapatnyuk.sberbank.model.handler.DocumentHandler;
+import ru.klapatnyuk.sberbank.model.handler.TemplateFieldHandler;
+import ru.klapatnyuk.sberbank.model.handler.TemplateHandler;
 import ru.klapatnyuk.sberbank.web.SberbankSession;
 import ru.klapatnyuk.sberbank.web.SberbankUI;
 import ru.klapatnyuk.sberbank.web.key.FormKey;
@@ -29,6 +32,7 @@ import ru.klapatnyuk.sberbank.web.window.ConfirmWindow;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * @author klapatnyuk
@@ -220,11 +224,12 @@ public class DocumentTab extends AbstractTab<Document> {
         }
 
         if (entityIndex >= 0) {
-            Document document = new Document();
-            document.setId(entity.getId());
-            document.setEdited(entity.getEdited());
-            document.setTitle(design.getTitleField().getValue().trim());
-            document.setFields(design.getTemplateLayout().getFields());
+            Document document = Document.newBuilder()
+                    .setId(entity.getId())
+                    .setEdited(entity.getEdited())
+                    .setTitle(design.getTitleField().getValue().trim())
+                    .setFields(design.getTemplateLayout().getFields())
+                    .build();
 
             // business logic
             try {
@@ -241,13 +246,14 @@ public class DocumentTab extends AbstractTab<Document> {
             entity = document;
 
         } else {
-            Document document = new Document();
-            Template template = new Template();
-            template.setId((int) design.getTemplateSelect().getValue());
-            document.setTemplate(template);
-            document.setTitle(design.getTitleField().getValue().trim());
-            document.setFields(design.getTemplateLayout().getFields());
-            document.setOwner(SberbankSession.get().getUser());
+            Document document = Document.newBuilder()
+                    .setTemplate(Template.newBuilder()
+                            .setId((int) design.getTemplateSelect().getValue())
+                            .build())
+                    .setTitle(design.getTitleField().getValue().trim())
+                    .setFields(design.getTemplateLayout().getFields())
+                    .setOwner(SberbankSession.get().getUser())
+                    .build();
 
             // business logic
             try {
@@ -378,10 +384,19 @@ public class DocumentTab extends AbstractTab<Document> {
                 return;
             }
             // move ids to referenceIds
-            fields.forEach(item -> {
-                item.setReferenceId(item.getId());
-                item.setId(0);
-            });
+            fields = fields.stream()
+                    .map(item -> Field.newBuilder()
+                            // set id = 0
+                            .setId(0)
+                            // set referenceId = id
+                            .setReferenceId(item.getId())
+                            .setTitle(item.getTitle())
+                            .setLabel(item.getLabel())
+                            .setType(item.getType())
+                            .setIndex(item.getIndex())
+                            .setRelated(item.getRelated())
+                            .build())
+                    .collect(Collectors.toList());
 
             design.getTemplateSeparatorLabel().setVisible(true);
             design.getTemplateLayout().setVisible(true);

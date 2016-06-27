@@ -163,11 +163,12 @@ public class TemplateTab extends AbstractTab<Template> {
             return;
         }
         if (entityIndex >= 0) {
-            Template template = new Template();
-            template.setId(entity.getId());
-            template.setEdited(entity.getEdited());
-            template.setTitle(design.getTitleField().getValue().trim());
-            template.setFields(design.getTemplateLayout().getFields());
+            Template template = Template.newBuilder()
+                    .setId(entity.getId())
+                    .setEdited(entity.getEdited())
+                    .setTitle(design.getTitleField().getValue().trim())
+                    .setFields(design.getTemplateLayout().getFields())
+                    .build();
 
             // business logic
             try {
@@ -184,9 +185,10 @@ public class TemplateTab extends AbstractTab<Template> {
             entity = template;
 
         } else {
-            Template template = new Template();
-            template.setTitle(design.getTitleField().getValue().trim());
-            template.setFields(design.getTemplateLayout().getFields());
+            Template template = Template.newBuilder()
+                    .setTitle(design.getTitleField().getValue().trim())
+                    .setFields(design.getTemplateLayout().getFields())
+                    .build();
 
             // business logic
             try {

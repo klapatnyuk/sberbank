@@ -11,28 +11,64 @@ public class User extends AbstractEntity {
     private String password;
     private Role role;
 
-    public String getLogin() {
-        return login;
+    private User() {
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public static Builder newBuilder() {
+        return new User().new Builder();
+    }
+
+    public String getLogin() {
+        return login;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Role getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    /**
+     * @author klapatnyuk
+     */
+    public class Builder extends AbstractBuilder {
+
+        private Builder() {
+        }
+
+        public Builder setLogin(String login) {
+            User.this.login = login;
+            return this;
+        }
+
+        public Builder setPassword(String password) {
+            User.this.password = password;
+            return this;
+        }
+
+        public Builder setRole(Role role) {
+            User.this.role = role;
+            return this;
+        }
+
+        @Override
+        public Builder setId(int id) {
+            super.setId(id);
+            return this;
+        }
+
+        @Override
+        public Builder setTitle(String title) {
+            super.setTitle(title);
+            return this;
+        }
+
+        @Override
+        public User build() {
+            return User.this;
+        }
     }
 
     /**
