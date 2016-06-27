@@ -20,16 +20,6 @@ public abstract class AbstractEntity implements Entity {
         return title;
     }
 
-    @Deprecated
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Deprecated
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {

@@ -21,10 +21,11 @@ public class UserServiceTest {
         String login = "client";
         String password = "client";
 
-        User user = new User();
-        user.setId(2);
-        user.setLogin(login);
-        user.setRole(User.Role.CLIENT);
+        User user = User.newBuilder()
+                .setId(2)
+                .setLogin(login)
+                .setRole(User.Role.CLIENT)
+                .build();
 
         // build user handler mock
 

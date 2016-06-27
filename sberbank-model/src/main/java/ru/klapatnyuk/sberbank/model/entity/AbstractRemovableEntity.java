@@ -14,11 +14,6 @@ public abstract class AbstractRemovableEntity extends AbstractEntity implements 
         return active;
     }
 
-    @Deprecated
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
     /**
      * @author klapatnyuk
      */

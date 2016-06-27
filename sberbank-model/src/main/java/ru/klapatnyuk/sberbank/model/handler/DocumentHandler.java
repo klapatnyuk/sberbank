@@ -35,11 +35,7 @@ public class DocumentHandler extends EditableEntityHandler<Document> {
             statement.setInt(1, ownerId);
 
             try (ResultSet resultSet = statement.executeQuery()) {
-                User user;
                 while (resultSet.next()) {
-                    user = new User();
-                    user.setId(ownerId);
-
                     result.add(Document.newBuilder()
                             .setId(resultSet.getInt(1))
                             .setTitle(resultSet.getString(2))
@@ -49,7 +45,9 @@ public class DocumentHandler extends EditableEntityHandler<Document> {
                                     .setTitle(resultSet.getString(5))
                                     .setActive(resultSet.getBoolean(6))
                                     .build())
-                            .setOwner(user)
+                            .setOwner(User.newBuilder()
+                                    .setId(ownerId)
+                                    .build())
                             .build());
                 }
             }
@@ -90,11 +88,7 @@ public class DocumentHandler extends EditableEntityHandler<Document> {
         List<Document> result = new ArrayList<>();
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
             try (ResultSet resultSet = statement.executeQuery()) {
-                User user;
                 while (resultSet.next()) {
-                    user = new User();
-                    user.setId(resultSet.getInt(7));
-
                     result.add(Document.newBuilder()
                             .setId(resultSet.getInt(1))
                             .setTitle(resultSet.getString(2))
@@ -104,7 +98,9 @@ public class DocumentHandler extends EditableEntityHandler<Document> {
                                     .setTitle(resultSet.getString(5))
                                     .setActive(resultSet.getBoolean(6))
                                     .build())
-                            .setOwner(user)
+                            .setOwner(User.newBuilder()
+                                    .setId(resultSet.getInt(7))
+                                    .build())
                             .build());
                 }
             }

@@ -32,11 +32,11 @@ public class UserHandler extends AbstractHandler<User> {
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    User entity = new User();
-                    entity.setId(resultSet.getInt(1));
-                    entity.setLogin(login);
-                    entity.setRole(User.Role.find(resultSet.getString(2)));
-                    return entity;
+                    return User.newBuilder()
+                            .setId(resultSet.getInt(1))
+                            .setLogin(login)
+                            .setRole(User.Role.find(resultSet.getString(2)))
+                            .build();
                 }
             }
         }
