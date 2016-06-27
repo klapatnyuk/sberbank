@@ -51,13 +51,12 @@ public class TemplateHandler extends EditableEntityHandler<Template> {
         List<Template> result = new ArrayList<>();
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
             try (ResultSet resultSet = statement.executeQuery()) {
-                Template entity;
                 while (resultSet.next()) {
-                    entity = new Template();
-                    entity.setId(resultSet.getInt(1));
-                    entity.setTitle(resultSet.getString(2));
-                    entity.setEdited(resultSet.getTimestamp(3).toLocalDateTime());
-                    result.add(entity);
+                    result.add(Template.newBuilder()
+                            .setId(resultSet.getInt(1))
+                            .setTitle(resultSet.getString(2))
+                            .setEdited(resultSet.getTimestamp(3).toLocalDateTime())
+                            .build());
                 }
             }
         }

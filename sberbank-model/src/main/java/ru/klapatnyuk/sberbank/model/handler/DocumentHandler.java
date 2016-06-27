@@ -35,26 +35,22 @@ public class DocumentHandler extends EditableEntityHandler<Document> {
             statement.setInt(1, ownerId);
 
             try (ResultSet resultSet = statement.executeQuery()) {
-                Document entity;
-                Template template;
                 User user;
                 while (resultSet.next()) {
-                    entity = new Document();
-                    entity.setId(resultSet.getInt(1));
-                    entity.setTitle(resultSet.getString(2));
-                    entity.setEdited(resultSet.getTimestamp(3).toLocalDateTime());
-
-                    template = new Template();
-                    template.setId(resultSet.getInt(4));
-                    template.setTitle(resultSet.getString(5));
-                    template.setActive(resultSet.getBoolean(6));
-                    entity.setTemplate(template);
-
                     user = new User();
                     user.setId(ownerId);
-                    entity.setOwner(user);
 
-                    result.add(entity);
+                    result.add(Document.newBuilder()
+                            .setId(resultSet.getInt(1))
+                            .setTitle(resultSet.getString(2))
+                            .setEdited(resultSet.getTimestamp(3).toLocalDateTime())
+                            .setTemplate(Template.newBuilder()
+                                    .setId(resultSet.getInt(4))
+                                    .setTitle(resultSet.getString(5))
+                                    .setActive(resultSet.getBoolean(6))
+                                    .build())
+                            .setOwner(user)
+                            .build());
                 }
             }
         }
@@ -94,26 +90,22 @@ public class DocumentHandler extends EditableEntityHandler<Document> {
         List<Document> result = new ArrayList<>();
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
             try (ResultSet resultSet = statement.executeQuery()) {
-                Document entity;
-                Template template;
                 User user;
                 while (resultSet.next()) {
-                    entity = new Document();
-                    entity.setId(resultSet.getInt(1));
-                    entity.setTitle(resultSet.getString(2));
-                    entity.setEdited(resultSet.getTimestamp(3).toLocalDateTime());
-
-                    template = new Template();
-                    template.setId(resultSet.getInt(4));
-                    template.setTitle(resultSet.getString(5));
-                    template.setActive(resultSet.getBoolean(6));
-                    entity.setTemplate(template);
-
                     user = new User();
                     user.setId(resultSet.getInt(7));
-                    entity.setOwner(user);
 
-                    result.add(entity);
+                    result.add(Document.newBuilder()
+                            .setId(resultSet.getInt(1))
+                            .setTitle(resultSet.getString(2))
+                            .setEdited(resultSet.getTimestamp(3).toLocalDateTime())
+                            .setTemplate(Template.newBuilder()
+                                    .setId(resultSet.getInt(4))
+                                    .setTitle(resultSet.getString(5))
+                                    .setActive(resultSet.getBoolean(6))
+                                    .build())
+                            .setOwner(user)
+                            .build());
                 }
             }
         }

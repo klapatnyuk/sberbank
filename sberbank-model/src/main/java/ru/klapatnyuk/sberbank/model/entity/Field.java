@@ -19,6 +19,10 @@ public class Field<M extends Serializable> extends AbstractRemovableEntity {
     private Field() {
     }
 
+    public static <M extends Serializable> Field<M>.Builder<M> newBuilder() {
+        return new Field<M>().new Builder<>();
+    }
+
     public String getLabel() {
         return label;
     }
@@ -41,10 +45,6 @@ public class Field<M extends Serializable> extends AbstractRemovableEntity {
 
     public M getValue() {
         return value;
-    }
-
-    public static <M extends Serializable> Field<M>.Builder<M> newBuilder() {
-        return new Field<M>().new Builder<>();
     }
 
     /**
