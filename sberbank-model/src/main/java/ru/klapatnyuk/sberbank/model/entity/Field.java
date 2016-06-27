@@ -7,61 +7,106 @@ import java.io.Serializable;
 /**
  * @author klapatnyuk
  */
-public class Field<T extends Serializable> extends AbstractRemovableEntity {
+public class Field<M extends Serializable> extends AbstractRemovableEntity {
 
     private String label;
     private Type type;
     private int index;
     private int related;
     private int referenceId;
-    private T value;
+    private M value;
+
+    private Field() {
+    }
 
     public String getLabel() {
         return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
     }
 
     public Type getType() {
         return type;
     }
 
-    public void setType(Type type) {
-        this.type = type;
-    }
-
     public int getIndex() {
         return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
     }
 
     public int getRelated() {
         return related;
     }
 
-    public void setRelated(int related) {
-        this.related = related;
-    }
-
     public int getReferenceId() {
         return referenceId;
     }
 
-    public void setReferenceId(int id) {
-        this.referenceId = id;
-    }
-
-    public T getValue() {
+    public M getValue() {
         return value;
     }
 
-    public void setValue(T value) {
-        this.value = value;
+    public static <M extends Serializable> Field<M>.Builder<M> newBuilder() {
+        return new Field<M>().new Builder<>();
+    }
+
+    /**
+     * @author klapatnyuk
+     */
+    public class Builder<T extends Serializable> extends AbstractRemovableBuilder {
+
+        private Builder() {
+        }
+
+        public Builder<T> setLabel(String label) {
+            Field.this.label = label;
+            return this;
+        }
+
+        public Builder<T> setType(Type type) {
+            Field.this.type = type;
+            return this;
+        }
+
+        public Builder<T> setIndex(int index) {
+            Field.this.index = index;
+            return this;
+        }
+
+        public Builder<T> setRelated(int related) {
+            Field.this.related = related;
+            return this;
+        }
+
+        public Builder<T> setReferenceId(int id) {
+            Field.this.referenceId = id;
+            return this;
+        }
+
+        public Builder<T> setValue(M value) {
+            Field.this.value = value;
+            return this;
+        }
+
+        @Override
+        public Builder<T> setId(int id) {
+            super.setId(id);
+            return this;
+        }
+
+        @Override
+        public Builder<T> setTitle(String title) {
+            super.setTitle(title);
+            return this;
+        }
+
+        @Override
+        public Builder<T> setActive(boolean active) {
+            super.setActive(active);
+            return this;
+        }
+
+        @Override
+        public Field<M> build() {
+            return Field.this;
+        }
     }
 
     /**

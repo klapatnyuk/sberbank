@@ -7,5 +7,11 @@ public interface RemovableEntity extends Entity {
 
     boolean isActive();
 
-    void setActive(boolean active);
+    /**
+     * @author klapatnyuk
+     */
+    interface RemovableBuilder extends EntityBuilder {
+
+        RemovableBuilder setActive(boolean active);
+    }
 }

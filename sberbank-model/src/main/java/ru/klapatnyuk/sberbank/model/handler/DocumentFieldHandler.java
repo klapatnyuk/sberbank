@@ -53,27 +53,25 @@ public class DocumentFieldHandler extends FieldHandler implements RemovableEntit
                     switch (type) {
                         case LINE:
                         case AREA: {
-                            Field<String> entity = new Field<>();
-                            entity.setId(resultSet.getInt(1));
-                            entity.setLabel(resultSet.getString(2));
-                            entity.setType(type);
-                            entity.setActive(resultSet.getBoolean(4));
-                            entity.setReferenceId(resultSet.getInt(5));
-                            entity.setValue(resultSet.getString(6));
-
-                            result.add(entity);
+                            result.add(Field.<String>newBuilder()
+                                    .setId(resultSet.getInt(1))
+                                    .setLabel(resultSet.getString(2))
+                                    .setType(type)
+                                    .setActive(resultSet.getBoolean(4))
+                                    .setReferenceId(resultSet.getInt(5))
+                                    .setValue(resultSet.getString(6))
+                                    .build());
                             break;
                         }
                         case CHECKBOX: {
-                            Field<java.lang.Boolean> entity = new Field<>();
-                            entity.setId(resultSet.getInt(1));
-                            entity.setLabel(resultSet.getString(2));
-                            entity.setType(type);
-                            entity.setActive(resultSet.getBoolean(4));
-                            entity.setReferenceId(resultSet.getInt(5));
-                            entity.setValue(Boolean.find(resultSet.getString(6)));
-
-                            result.add(entity);
+                            result.add(Field.<java.lang.Boolean>newBuilder()
+                                    .setId(resultSet.getInt(1))
+                                    .setLabel(resultSet.getString(2))
+                                    .setType(type)
+                                    .setActive(resultSet.getBoolean(4))
+                                    .setReferenceId(resultSet.getInt(5))
+                                    .setValue(Boolean.find(resultSet.getString(6)))
+                                    .build());
                             break;
                         }
                     }

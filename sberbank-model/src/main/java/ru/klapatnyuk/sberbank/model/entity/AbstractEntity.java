@@ -16,16 +16,16 @@ public abstract class AbstractEntity implements Entity {
     }
 
     @Override
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Override
     public String getTitle() {
         return title;
     }
 
-    @Override
+    @Deprecated
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Deprecated
     public void setTitle(String title) {
         this.title = title;
     }
@@ -45,5 +45,23 @@ public abstract class AbstractEntity implements Entity {
     @Override
     public int hashCode() {
         return getId();
+    }
+
+    /**
+     * @author klapatnyuk
+     */
+    public abstract class AbstractBuilder implements EntityBuilder {
+
+        @Override
+        public AbstractBuilder setId(int id) {
+            AbstractEntity.this.id = id;
+            return this;
+        }
+
+        @Override
+        public AbstractBuilder setTitle(String title) {
+            AbstractEntity.this.title = title;
+            return this;
+        }
     }
 }
